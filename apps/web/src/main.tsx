@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { UIProvider, theme } from '@twitt-duck/ui'
 import App from './App'
-import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <UIProvider theme={theme}>
+      <App />
+    </UIProvider>
   </React.StrictMode>
 )
