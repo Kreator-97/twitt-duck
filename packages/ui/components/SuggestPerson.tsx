@@ -7,13 +7,14 @@ export const SuggestPersons = () => {
       bg='white'
       minHeight={'40vh'}
       p='4'
+      boxShadow='md'
     >
       <Text
         as='h2'
         fontSize='xl'
         fontWeight='bold'
         textAlign='center'
-        mb='6'
+        mb='2'
       >A quien seguir</Text>
       <Box>
         <Follow name='Prince James' />

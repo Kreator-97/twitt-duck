@@ -1,5 +1,15 @@
 import { ChakraProvider as UIProvider} from '@chakra-ui/react'
-import { Navbar, NewPost, Post, SuggestPersons, Tendencies } from './components'
+import {
+  Navbar,
+  NewPost,
+  Post,
+  SuggestPersons,
+  Tendencies,
+  UserDetail,
+  ProfileOption,
+  Toolbar
+} from './components'
+
 import { theme } from './theme'
 
 export {
@@ -8,6 +18,9 @@ export {
   NewPost,
   Post,
   Tendencies,
-  SuggestPersons as SuggestPerson,
+  SuggestPersons,
+  ProfileOption,
+  UserDetail,
+  Toolbar,
   theme
 }

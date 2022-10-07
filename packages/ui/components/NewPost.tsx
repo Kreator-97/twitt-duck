@@ -27,6 +27,7 @@ export const NewPost = () => {
         borderTop={'1px solid #ddd'}
         padding='.5rem'>
         <Button
+          size='sm'
           bg='cyan.500'
           color='gray.100'
           _hover={{ bg: 'cyan.700'}}
