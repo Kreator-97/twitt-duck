@@ -1,0 +1,6 @@
+.textarea {
+  padding: .5rem;
+  outline: none;
+  border: '1px solid transparent';
+  resize: none;
+}
