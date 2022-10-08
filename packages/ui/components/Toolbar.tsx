@@ -9,17 +9,19 @@ export const Toolbar = () => {
       direction='column'
       justify='space-between'
       bg='white'
-      padding='1rem'
+      padding={{sm: '.5rem', lg: '1rem'}}
       boxShadow='md'
       position='sticky'
       top='.5rem'
       left='0'
+      display={{ base: 'none', md: 'block' }}
     >
       <Box>
         <ToolbarOption
           Icon={HiOutlineHome}
           title='Home'
           url={'/'}
+          active
         />
           
         <ToolbarOption
@@ -51,7 +53,10 @@ export const Toolbar = () => {
             aria-label='Buscar'
             icon={ <HiOutlineSearch /> }
           ></IconButton>
-          <Input placeholder='Buscar' />
+          <Input
+            placeholder='Buscar'
+            display={{sm: 'none', lg: 'block'}}
+          />
         </Flex>
       </Box>
     </Flex>

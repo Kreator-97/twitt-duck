@@ -14,7 +14,7 @@ export const ProfileOption: FC<Props> = ({title, to, active = false}) => {
     <Box
       borderLeft='2px solid transparent'
       borderLeftColor={ active ? 'cyan.500' : 'transparent'}
-      margin='1rem 0'
+      margin='.5rem 0'
       p='.5rem 1rem'
     >
       <Link to={to}>

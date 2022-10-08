@@ -7,9 +7,10 @@ interface Props {
   Icon : IconType;
   title: string;
   url ?: string;
+  active?: boolean; 
 }
 
-export const ToolbarOption: FC<Props> = ({Icon, title, url}) => {
+export const ToolbarOption: FC<Props> = ({Icon, title, url, active}) => {
 
   const navigate = useNavigate()
 
@@ -20,8 +21,9 @@ export const ToolbarOption: FC<Props> = ({Icon, title, url}) => {
   return (
     <Flex
       alignItems='center'
-      gap='1rem'
-      mb='4'
+      gap={{sm: '.5rem', lg: '1rem'}}
+      mb={{sm: '2', lg: '4'}}
+      color={ active ? 'cyan.600' : 'inherit' }
       cursor='pointer'
       _hover={{ backgroundColor: 'gray.200', color: 'red.400' }}
       transition='all .2s ease-in-out'
@@ -32,7 +34,11 @@ export const ToolbarOption: FC<Props> = ({Icon, title, url}) => {
         aria-label='Inicio'
         icon={ <Icon /> }
       />
-      <Text fontWeight='bold' fontSize='lg'>{title}</Text>
+      <Text
+        fontWeight='bold'
+        fontSize='lg'
+        display={{sm: 'none', lg: 'block'}}
+      >{title}</Text>
     </Flex>
   )
 }

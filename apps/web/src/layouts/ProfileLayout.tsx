@@ -1,5 +1,7 @@
 import { FC } from 'react'
 import { Navbar } from '@twitt-duck/ui'
+import { Box } from '@chakra-ui/react'
+import { BottomBar, FloatingActionButton } from '@twitt-duck/ui/components'
 
 interface Props {
   children: React.ReactNode;
@@ -7,13 +9,20 @@ interface Props {
 
 export const ProfileLayout: FC<Props> = ({ children }) => {
   return (
-    <div style={{ margin: '0 auto 0', padding: '0 1rem' }}>
+    <Box
+      p={{ base: '0 .5rem', md: '0 1rem' }}
+      m={{ margin: '0 auto 0'}}
+    >
       <Navbar />
-      <main>
+      <Box as='main'
+        marginBottom='64px'
+      >
         {
           children
         }
-      </main>
-    </div>
+      </Box>
+      <FloatingActionButton />
+      <BottomBar />
+    </Box>
   )
 }

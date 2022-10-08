@@ -4,12 +4,11 @@ import {  IconType } from 'react-icons'
 
 interface Props {
   title?: string;
-  size?: string;
   count?: number;
-  icon?: IconType
+  icon?: IconType;
 }
 
-export const PostIcon: FC<Props> = ({ icon, title, count, size = '1rem' }) => {
+export const PostIcon: FC<Props> = ({ icon, title, count }) => {
   return (
     <Flex
       title={title}
@@ -23,7 +22,13 @@ export const PostIcon: FC<Props> = ({ icon, title, count, size = '1rem' }) => {
         bg: 'gray.200',
       }}
     >
-      <Icon as={icon} boxSize={size}/>
+      <Icon
+        as={icon}
+        boxSize={{
+          sm: '1rem',
+          md: '1.2rem',
+        }}
+      />
       {
         count && (
           <Text fontWeight='normal'>{count}</Text>

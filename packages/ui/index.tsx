@@ -7,20 +7,26 @@ import {
   Tendencies,
   UserDetail,
   ProfileOption,
-  Toolbar
+  Toolbar,
+  UserAvatar,
+  FloatingActionButton,
+  CustomTabs
 } from './components'
 
 import { theme } from './theme'
 
 export {
   UIProvider,
+  CustomTabs,
+  FloatingActionButton,
   Navbar,
   NewPost,
   Post,
   Tendencies,
   SuggestPersons,
   ProfileOption,
-  UserDetail,
   Toolbar,
+  UserAvatar,
+  UserDetail,
   theme
 }
