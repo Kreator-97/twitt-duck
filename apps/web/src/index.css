@@ -1,2 +1,5 @@
 /* globals styles */
 
+input:focus {
+  outline: none
+}

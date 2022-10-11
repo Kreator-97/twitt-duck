@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Navbar } from '@twitt-duck/ui'
 import { Box } from '@chakra-ui/react'
-import { BottomBar, FloatingActionButton } from '@twitt-duck/ui/components'
+import { BottomBar, FloatingActionButton, SearchModal } from '@twitt-duck/ui/components'
 
 interface Props {
   children: React.ReactNode;
@@ -23,6 +23,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
       </Box>
       <FloatingActionButton />
       <BottomBar />
+      <SearchModal />
     </Box>
   )
 }

@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Navbar, SuggestPersons, Tendencies, Toolbar } from '@twitt-duck/ui'
 import { Box, Grid } from '@chakra-ui/react'
-import { BottomBar, FloatingActionButton } from '@twitt-duck/ui/components'
+import { BottomBar, FloatingActionButton, SearchModal } from '@twitt-duck/ui/components'
 
 interface Props {
   children: React.ReactNode;
@@ -53,6 +53,7 @@ export const AppLayout: FC<Props> = ({children }) => {
       </Grid>
       <BottomBar />
       <FloatingActionButton />
+      <SearchModal />
     </Box>
   )
 }
