@@ -1,32 +1,41 @@
-import { ChakraProvider as UIProvider} from '@chakra-ui/react'
+import { ChakraProvider} from '@chakra-ui/react'
+import { UIContext, UIProvider } from './context/UIContext'
 import {
+  CustomTabs,
+  FloatingActionButton,
+  FormInput,
   Navbar,
   NewPost,
   Post,
+  ProfileOption,
+  ScrollToTop,
+  SearchModal,
   SuggestPersons,
   Tendencies,
-  UserDetail,
-  ProfileOption,
   Toolbar,
   UserAvatar,
-  FloatingActionButton,
-  CustomTabs
+  UserDetail,
 } from './components'
 
 import { theme } from './theme'
 
 export {
-  UIProvider,
+  ChakraProvider,
   CustomTabs,
   FloatingActionButton,
+  FormInput,
   Navbar,
   NewPost,
   Post,
-  Tendencies,
-  SuggestPersons,
   ProfileOption,
+  ScrollToTop,
+  SearchModal,
+  SuggestPersons,
+  Tendencies,
+  theme,
   Toolbar,
+  UIContext,
+  UIProvider,
   UserAvatar,
   UserDetail,
-  theme
 }

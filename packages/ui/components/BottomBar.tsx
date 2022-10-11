@@ -2,8 +2,11 @@ import { Box, Flex } from '@chakra-ui/react'
 import { HiOutlineBell, HiOutlineHashtag, HiOutlineHome, HiOutlineSearch, HiOutlineUser } from 'react-icons/hi'
 import { RiMessage3Line } from 'react-icons/ri'
 import { BottomBarIcon } from './'
+import { useContext} from 'react'
+import { UIContext } from '../context/UIContext'
 
 export const BottomBar = () => {
+  const { openSearchBar } = useContext( UIContext )
   return (
     <Box
       width={'100vw'}
@@ -23,17 +26,24 @@ export const BottomBar = () => {
           Icon={ HiOutlineHome }
           label='Home'
           to='/'
-          active
         />
 
         <BottomBarIcon
           Icon={ HiOutlineBell }
           label='Notificaciones'
+          to='/notification'
         />
 
         <BottomBarIcon
           Icon={ HiOutlineHashtag }
           label='Explorar'
+          to='/explore'
+        />
+
+        <BottomBarIcon
+          Icon={ RiMessage3Line }
+          label='Mensajes'
+          to='/messages'
         />
 
         <BottomBarIcon
@@ -43,13 +53,9 @@ export const BottomBar = () => {
         />
 
         <BottomBarIcon
-          Icon={ RiMessage3Line }
-          label='Mensajes'
-        />
-
-        <BottomBarIcon
           Icon={ HiOutlineSearch }
           label='Buscar'
+          onClick={ () => openSearchBar() }
         />
       </Flex>
     </Box>

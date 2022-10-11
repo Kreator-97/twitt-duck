@@ -1,18 +1,18 @@
 import { FC } from 'react'
 import { Flex, IconButton, Text } from '@chakra-ui/react'
 import { IconType} from 'react-icons'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 interface Props {
   Icon : IconType;
   title: string;
   url ?: string;
-  active?: boolean; 
 }
 
-export const ToolbarOption: FC<Props> = ({Icon, title, url, active}) => {
+export const ToolbarOption: FC<Props> = ({Icon, title, url}) => {
 
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const goToPage = () => {
     if ( url ) navigate(url)
@@ -23,7 +23,7 @@ export const ToolbarOption: FC<Props> = ({Icon, title, url, active}) => {
       alignItems='center'
       gap={{sm: '.5rem', lg: '1rem'}}
       mb={{sm: '2', lg: '4'}}
-      color={ active ? 'cyan.600' : 'inherit' }
+      color={ url === pathname  ? 'cyan.600' : 'inherit' }
       cursor='pointer'
       _hover={{ backgroundColor: 'gray.200', color: 'red.400' }}
       transition='all .2s ease-in-out'

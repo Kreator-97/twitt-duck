@@ -5,11 +5,10 @@ export const UserDetail = () => {
     <Grid
       templateColumns={{ base: '48px 1fr', md: '64px 1fr 48px 48px'}}
       maxW='1280'
-      m='0 auto 1rem'
-      bg='white'
+      m={{base: '-50px auto .5rem', md: '-50px auto 1rem' }}
       p={{ base: '.5rem', md: '1rem'}}
+      bg='white'
       boxShadow='md'
-      mt='-50px'
       rounded='md'
       gap={'.5rem'}
     >
@@ -68,6 +67,7 @@ export const UserDetail = () => {
           size='sm'
           width='100%'
           display='block'
+          _hover={{ backgroundColor: 'cyan.600' }}
         >Seguir</Button>
       </Box>
     </Grid>

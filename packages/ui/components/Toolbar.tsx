@@ -1,9 +1,26 @@
-import { Box, Flex, Input, IconButton } from '@chakra-ui/react'
+import { useState, FormEvent, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box, Flex, Input, IconButton, FormControl } from '@chakra-ui/react'
 import { HiOutlineHome, HiOutlineBell, HiOutlineHashtag, HiOutlineSearch, HiOutlineUser } from 'react-icons/hi'
 import { RiMessage3Line } from 'react-icons/ri'
+
 import { ToolbarOption } from './ToolbarOption'
+import { UIContext } from '../context/UIContext'
 
 export const Toolbar = () => {
+  const { openSearchBar } = useContext( UIContext )
+  const [ query, setQuery] = useState('')
+  
+  const navigate = useNavigate()
+
+  const onSearch = (e: FormEvent ) => {
+    e.preventDefault()
+
+    if( query.trim() === '' ) return
+
+    navigate(`/search?query=${query}`)
+  }
+
   return (
     <Flex
       direction='column'
@@ -21,7 +38,6 @@ export const Toolbar = () => {
           Icon={HiOutlineHome}
           title='Home'
           url={'/'}
-          active
         />
           
         <ToolbarOption
@@ -47,17 +63,30 @@ export const Toolbar = () => {
           title='Perfil'
           url={'/profile'}
         />
-          
-        <Flex align='center' gap='1rem'>
-          <IconButton
-            aria-label='Buscar'
-            icon={ <HiOutlineSearch /> }
-          ></IconButton>
-          <Input
-            placeholder='Buscar'
-            display={{sm: 'none', lg: 'block'}}
-          />
-        </Flex>
+        
+        <FormControl as='form'
+          onSubmit={ onSearch }
+        >
+          <Flex align='center' gap='1rem'>
+            <IconButton
+              aria-label='Buscar'
+              icon={ <HiOutlineSearch /> }
+              type='submit'
+              display={{base: 'none', lg: 'inline-flex'}}
+            />
+            <IconButton
+              display={{base: 'inline-flex', lg: 'none'}}
+              aria-label='Buscar'
+              icon={ <HiOutlineSearch /> }
+              onClick={ () => openSearchBar() }
+            />
+            <Input
+              placeholder='Buscar'
+              display={{sm: 'none', lg: 'block'}}
+              onChange={ (e) => setQuery(e.target.value) }
+            />
+          </Flex>
+        </FormControl>
       </Box>
     </Flex>
   )
