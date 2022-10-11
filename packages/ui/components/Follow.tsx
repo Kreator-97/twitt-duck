@@ -1,5 +1,5 @@
-import { Avatar, Button, Flex, Text } from '@chakra-ui/react'
 import { FC } from 'react'
+import { Avatar, Button, Flex, Text } from '@chakra-ui/react'
 
 interface Props {
   name: string;
@@ -16,8 +16,10 @@ export const Follow: FC<Props> = ({name}) => {
       />
       <Text fontWeight='bold' fontSize='md'>{ name }</Text>
       <Button
-        bg='cyan.400'
-        size='sm'color='white'
+        boxShadow='md'
+        bg='cyan.500'
+        size='sm'
+        color='gray.100'
         _hover={{ bg: 'cyan.700'}}>
           Seguir
       </Button>

@@ -5,7 +5,6 @@ export const SuggestPersons = () => {
   return (
     <Box
       bg='white'
-      minHeight={'40vh'}
       p='4'
       boxShadow='md'
     >
@@ -21,7 +20,6 @@ export const SuggestPersons = () => {
         <Follow name='Henril Cavill' />
         <Follow name='John Doe' />
         <Follow name='Diego Gomez' />
-
       </Box>
     </Box>
   )

@@ -4,7 +4,6 @@ export const Tendencies = () => {
   return (
     <Box
       bg='white'
-      minHeight={'40vh'}
       p='4'
       boxShadow='md'
     >
