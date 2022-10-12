@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  fullname    String
+  password    String
+  provider    Provider  @default(CREDENTIALS)
+  username    String    @unique
+  online      Boolean   @default(false)
+  description String?
+  profilePic  String?
+  followers   Int       @default(0)
+  following   Int       @default(0)
+  posts       Post[]
+  role        Role      @default(USER)
+}
+
+model Post {
+  id          String      @id @default(uuid())
+  content     String
+  visibility  Visibility  @default(VISIBLE)
+  createdAt   DateTime    @default(now())
+  author      User        @relation(fields: [authorId], references: [id])
+  authorId    String
+  privacy     Privacy     @default(ALL)
+  comments    Int         @default(0)
+  likes       Int         @default(0)
+  reposts     Int         @default(0)
+  // TODO: agregar imagenes del post 
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Provider {
+  CREDENTIALS
+  GOOGLE
+}
+
+enum Visibility {
+  HIDDEN
+  VISIBLE
+}
+
+enum Privacy {
+  ONLY_ME
+  ONLY_FOLLOWERS
+  ALL
+}

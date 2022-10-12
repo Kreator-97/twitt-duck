@@ -3,13 +3,15 @@ import { createServer, Server as HTTPServer} from 'http'
 import { Server as SocketServer } from 'socket.io'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import morgan from 'morgan'
 
+import { AuthRouter, PostRouter } from '../routes'
 import { Socket } from './Socket'
 dotenv.config()
 
 export class Server {
   app: Express
-  port: Number
+  port: number
   server: HTTPServer
   io: SocketServer
 
@@ -33,9 +35,13 @@ export class Server {
     this.app.use( cors() )
     this.app.use( express.json() )
     this.app.use( express.static('./src/public') )
+    this.app.use( morgan('dev') )
   }
 
-  routes() {}
+  routes() {
+    this.app.use('/api/auth/', AuthRouter )
+    this.app.use('/api/post/', PostRouter )
+  }
 
   sockets () {
     new Socket(this.io)
