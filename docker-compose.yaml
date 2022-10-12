@@ -1,0 +1,18 @@
+version: '3.1'
+services:
+  twitt-duck-db:
+    image: mysql:8.0
+    ports:
+      - 3307:3306
+    volumes:
+      - /var/lib/app/twitt-duck-db/sql-data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  twitt-duck-db-test:
+    image: mysql:8.0
+    ports:
+      - 3308:3306
+    volumes:
+      - /var/lib/app/twitt-duck-db-test/sql-data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
