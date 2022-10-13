@@ -48,7 +48,7 @@ export const register = async (req: Request, res: Response<UserResponse>) => {
       ok: true,
       msg: 'new user created',
       token,
-      user,
+      user: { ...user, password: '' },
     })
   }
   catch (error: any ) { // eslint-disable-line 
@@ -64,7 +64,7 @@ export const register = async (req: Request, res: Response<UserResponse>) => {
 export const login = async (req: Request, res: Response<UserResponse>) => {
   const { email, password } = req.body
 
-  const user = await prisma.user.findUnique({ where: { email }})
+  const user = await prisma.user.findUnique({ where: { email } })
 
   if( !user ) {
     return res.status(404).json({
@@ -87,9 +87,10 @@ export const login = async (req: Request, res: Response<UserResponse>) => {
   return res.status(200).json({
     ok : true,
     msg: 'user logged successfully',
-    token
+    token,
+    user: {...user, password: '' }
   })
-} 
+}
 
 export const renewToken = async (req: Request, res: Response) => {
   const userId = req.userId

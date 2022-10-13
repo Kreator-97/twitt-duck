@@ -35,7 +35,7 @@ export const getPostsByUser = async (req: Request, res: Response<PostResponse >)
 }
 
 export const createPost = async (req: Request, res: Response<PostResponse> ) => {
-  const { title, content, privacy: privacyTemp } = req.body
+  const { content, privacy: privacyTemp } = req.body
 
   let privacy = privacyTemp
   if( !PRIVACY_VALUES.includes(privacyTemp) ) {
@@ -54,7 +54,6 @@ export const createPost = async (req: Request, res: Response<PostResponse> ) => 
   }
 
   const post = await prisma.post.create({ data: {
-    title,
     content,
     privacy,
     authorId: user.id
@@ -66,7 +65,6 @@ export const createPost = async (req: Request, res: Response<PostResponse> ) => 
     post,
   })
 }
-
 
 export const updatePostPrivacy = async (req: Request, res: Response<PostResponse>) => {
 
