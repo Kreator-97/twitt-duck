@@ -1,4 +1,4 @@
-import { Server } from './classes/Server';
+import { Server } from './classes/Server'
 
 const expressServer = new Server
 
