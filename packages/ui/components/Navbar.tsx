@@ -1,13 +1,12 @@
 import { Flex, Text, IconButton, Input, Grid } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
 import { HiOutlineSearch } from 'react-icons/hi'
-import { useContext } from 'react'
+import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
 
-import { UserAvatar } from './UserAvatar'
-import { UIContext } from '../context/UIContext'
+import { UserAvatar } from './'
 
 export const Navbar = () => {
-  const { openSearchBar } = useContext(UIContext)
+  const dispatch = useAppDispatch()
 
   return (
     <Flex
@@ -50,7 +49,7 @@ export const Navbar = () => {
           <IconButton
             aria-label='Buscar'
             icon={ <HiOutlineSearch /> }
-            onClick={ () => openSearchBar() }
+            onClick={ () => dispatch(openSearchBar()) }
           ></IconButton>
         </Flex>
       </Grid>

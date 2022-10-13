@@ -1,12 +1,12 @@
+import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
 import { Box, Flex } from '@chakra-ui/react'
 import { HiOutlineBell, HiOutlineHashtag, HiOutlineHome, HiOutlineSearch, HiOutlineUser } from 'react-icons/hi'
 import { RiMessage3Line } from 'react-icons/ri'
 import { BottomBarIcon } from './'
-import { useContext} from 'react'
-import { UIContext } from '../context/UIContext'
 
 export const BottomBar = () => {
-  const { openSearchBar } = useContext( UIContext )
+  const dispatch = useAppDispatch()
+
   return (
     <Box
       width={'100vw'}
@@ -55,7 +55,7 @@ export const BottomBar = () => {
         <BottomBarIcon
           Icon={ HiOutlineSearch }
           label='Buscar'
-          onClick={ () => openSearchBar() }
+          onClick={ () => dispatch(openSearchBar()) }
         />
       </Flex>
     </Box>

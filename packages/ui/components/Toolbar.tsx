@@ -1,14 +1,14 @@
-import { useState, FormEvent, useContext } from 'react'
+import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Flex, Input, IconButton, FormControl } from '@chakra-ui/react'
 import { HiOutlineHome, HiOutlineBell, HiOutlineHashtag, HiOutlineSearch, HiOutlineUser } from 'react-icons/hi'
 import { RiMessage3Line } from 'react-icons/ri'
+import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
 
 import { ToolbarOption } from './ToolbarOption'
-import { UIContext } from '../context/UIContext'
 
 export const Toolbar = () => {
-  const { openSearchBar } = useContext( UIContext )
+  const dispatch = useAppDispatch()
   const [ query, setQuery] = useState('')
   
   const navigate = useNavigate()
@@ -78,7 +78,7 @@ export const Toolbar = () => {
               display={{base: 'inline-flex', lg: 'none'}}
               aria-label='Buscar'
               icon={ <HiOutlineSearch /> }
-              onClick={ () => openSearchBar() }
+              onClick={ () => dispatch(openSearchBar()) }
             />
             <Input
               placeholder='Buscar'

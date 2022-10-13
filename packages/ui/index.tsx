@@ -1,5 +1,4 @@
 import { ChakraProvider} from '@chakra-ui/react'
-import { UIContext, UIProvider } from './context/UIContext'
 import {
   CustomTabs,
   FloatingActionButton,
@@ -16,7 +15,6 @@ import {
   UserAvatar,
   UserDetail,
 } from './components'
-
 import { theme } from './theme'
 
 export {
@@ -34,8 +32,6 @@ export {
   Tendencies,
   theme,
   Toolbar,
-  UIContext,
-  UIProvider,
   UserAvatar,
   UserDetail,
 }
