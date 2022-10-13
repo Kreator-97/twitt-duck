@@ -1,15 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ChakraProvider, theme, UIProvider } from '@twitt-duck/ui'
+import { ChakraProvider, theme } from '@twitt-duck/ui'
+import { Provider, store } from '@twitt-duck/state'
 
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <UIProvider>
+      <Provider store={store}>
         <App />
-      </UIProvider>
+      </Provider>
     </ChakraProvider>
   </React.StrictMode>
 )

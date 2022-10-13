@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { ScrollToTop } from '@twitt-duck/ui'
+import { useAppSelector } from '@twitt-duck/state'
 
 import { PrivateRoutes } from './PrivatesRoutes'
 import { PublicRoutes } from './PublicRoutes'
 
 export const AppRouter = () => {
-  const isAuthenticated = true
+  const { logged } = useAppSelector( state => state.auth )
+  const isAuthenticated = logged
 
   return (
     <Router>
