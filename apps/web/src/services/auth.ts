@@ -1,10 +1,11 @@
 import { request } from '../utils/request'
+import { User } from '@twitt-duck/state'
 
 type Response = {
   ok    : true;
   msg   : string;
   token : string;
-  user  : any; // eslint-disable-line
+  user  : User;
 } | {
   ok      : false;
   errors? : any[]; // eslint-disable-line
@@ -35,5 +36,19 @@ export const loginRequest = async(email: string, password: string) => {
     return Promise.reject(data.msg || 'Ocurrió un error')
   }
 
+  return data
+}
+
+export const googleRequest = async (token: string) => {
+  const data = await request<Response>('/api/auth/google', {
+    method: 'POST',
+    body: { id_token: token }
+  })
+
+  if( !data.ok ) {
+    if( data.errors ) console.error(data.errors)
+    return Promise.reject(data.msg || 'Ocurrió un error')
+  }
+  
   return data
 }

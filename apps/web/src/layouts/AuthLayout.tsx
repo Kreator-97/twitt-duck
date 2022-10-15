@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, Grid } from '@chakra-ui/react'
 
 import background from '../assets/subtle-prism.svg'
 
@@ -9,19 +9,21 @@ interface Props {
 
 export const AuthLayout: FC<Props> = ({children}) => {
   return (
-    <Box
+    <Grid
       bgImage={background}
+      minH='100vh'
     >
       <Box
         maxW='480px'
+        width='100%'
+        minH='800px'
         p='1rem'
-        minH='100vh'
-        m='0 auto'
+        m={{base: '0 auto', md: 'auto auto'}}
         boxShadow='md'
         bg='white'
       >
         { children }
       </Box>
-    </Box>
+    </Grid>
   )
 }

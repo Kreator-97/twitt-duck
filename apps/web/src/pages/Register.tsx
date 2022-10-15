@@ -2,12 +2,12 @@ import { FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import { Box, Button, FormControl, Text, FormLabel, Grid, Heading, Flex, useToast } from '@chakra-ui/react'
-import { FormInput } from '@twitt-duck/ui'
+import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
 
 import { AuthLayout } from '../layouts'
 import { useForm } from '../hooks/useForm'
-import { registerRequest } from '../services/auth'
+import { googleRequest, registerRequest } from '../services/auth'
 
 const validations = {
   fullname: {
@@ -61,9 +61,12 @@ export const RegisterPage = () => {
         isClosable: true,
       })
 
+      localStorage.setItem('token', JSON.stringify(token))
+      localStorage.setItem('user', JSON.stringify(user))
+
       // TODO: guardar token actualizar, auth state
       console.log({user, token})
-      dispatch( login() )
+      dispatch( login(user) )
       onResetForm()
     } catch (error: any) { // eslint-disable-line
       console.error(error)
@@ -79,6 +82,41 @@ export const RegisterPage = () => {
   }
 
   const navigate = useNavigate()
+
+  const onGoogleSignIn = async (googleToken: string) => {
+
+    try {
+      const { user, token } = await googleRequest(googleToken)
+
+      toast({
+        title: 'Inicio de sesión.',
+        description: 'Has iniciado sessión exitosamente',
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        isClosable: true,
+      })
+  
+      // TODO: Enviar datos del usuario al login
+      dispatch( login(user) )
+
+      localStorage.setItem('token', JSON.stringify(token))
+      localStorage.setItem('user', JSON.stringify(user))
+
+      navigate('/')
+      
+    } catch (error: any) { //eslint-disable-line
+      console.log(error)
+      toast({
+        title: 'No se pudo crear la cuenta',
+        description: error,
+        status: 'error',
+        duration: 3000,
+        position: 'top',
+        isClosable: true,
+      })
+    }
+  }
 
   return (
     <AuthLayout>
@@ -181,6 +219,11 @@ export const RegisterPage = () => {
             transform: 'scale(1.02)',
           }}
         >Crear cuenta</Button>
+
+        <Flex justify='center' align='center' mt={8} direction='column' gap='1rem'>
+          <Heading size='md' textAlign='center' color='gray.600'>Inicia sesión con tu cuenta Google</Heading>
+          <GoogleButton onSignIn={ onGoogleSignIn } />
+        </Flex>
 
         <Box mt='4'>
           <Text

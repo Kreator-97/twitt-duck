@@ -2,12 +2,12 @@ import { FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Box, Button, FormControl, Text, FormLabel, Grid, Heading, Flex, useToast } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
-import { FormInput } from '@twitt-duck/ui'
+import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
 
 import { useForm } from '../hooks/useForm'
 import { AuthLayout } from '../layouts'
-import { loginRequest } from '../services/auth'
+import { googleRequest, loginRequest } from '../services/auth'
 
 const validations = {
   email: {
@@ -47,14 +47,17 @@ export const LoginPage = () => {
         title: 'Inicio de sesión.',
         description: 'Has iniciado sessión exitosamente',
         status: 'success',
-        duration: 5000,
+        duration: 3000,
         position: 'top',
         isClosable: true,
       })
 
-      // TODO: guardar token actualizar, auth state
       console.log({user, token})
-      dispatch( login() )
+      localStorage.setItem('token', JSON.stringify(token))
+      localStorage.setItem('user', JSON.stringify(user))
+
+      // TODO: guardar token, enviar datos del usuario al login
+      dispatch( login(user) )
       onResetForm()
       navigate('/')
     } catch (error: any) { // eslint-disable-line
@@ -63,7 +66,40 @@ export const LoginPage = () => {
         title: 'No se pudo crear la cuenta',
         description: error,
         status: 'error',
-        duration: 5000,
+        duration: 3000,
+        position: 'top',
+        isClosable: true,
+      })
+    }
+  }
+
+  const onGoogleSignIn = async (googleToken: string) => {
+
+    try {
+      const { user, token } = await googleRequest(googleToken)
+
+      toast({
+        title: 'Inicio de sesión.',
+        description: 'Has iniciado sessión exitosamente',
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        isClosable: true,
+      })
+  
+      // TODO: Enviar datos del usuario al login
+      dispatch( login(user) )
+      navigate('/')
+      localStorage.setItem('token', JSON.stringify(token))
+      localStorage.setItem('user', JSON.stringify(user))
+      
+    } catch (error: any) { //eslint-disable-line
+      console.log(error)
+      toast({
+        title: 'No se pudo crear la cuenta',
+        description: error,
+        status: 'error',
+        duration: 3000,
         position: 'top',
         isClosable: true,
       })
@@ -142,8 +178,13 @@ export const LoginPage = () => {
             transform: 'scale(1.02)',
           }}
         >
-          Crear cuenta
+          Iniciar sesión
         </Button>
+
+        <Flex justify='center' align='center' mt={8} direction='column' gap='1rem'>
+          <Heading size='md' textAlign='center' color='gray.600'>Inicia sesión con tu cuenta Google</Heading>
+          <GoogleButton onSignIn={ onGoogleSignIn }/>
+        </Flex>
 
         <Box mt='4'>
           <Text

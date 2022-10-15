@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "../../packages/ui/components/SearchModal.tsx", "../../packages/ui/context"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
