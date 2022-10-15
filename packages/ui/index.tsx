@@ -1,8 +1,10 @@
 import { ChakraProvider} from '@chakra-ui/react'
 import {
+  ConfirmLogout,
   CustomTabs,
   FloatingActionButton,
   FormInput,
+  GoogleButton,
   Navbar,
   NewPost,
   Post,
@@ -18,10 +20,12 @@ import {
 import { theme } from './theme'
 
 export {
+  ConfirmLogout,
   ChakraProvider,
   CustomTabs,
   FloatingActionButton,
   FormInput,
+  GoogleButton,
   Navbar,
   NewPost,
   Post,

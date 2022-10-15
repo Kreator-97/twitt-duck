@@ -2,24 +2,32 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export interface UIState {
   isSearchBarOpen: boolean;
+  isConfirmLogoutModalOpen: boolean,
 }
 
 const initialState: UIState = {
-  isSearchBarOpen: false
+  isSearchBarOpen: false,
+  isConfirmLogoutModalOpen: false,
 }
 
 export const uiSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    closeSearchBar() {
-      return { isSearchBarOpen: false }
+    closeSearchBar(state) {
+      return { ...state, isSearchBarOpen: false }
     },
-    openSearchBar() {
-      return { isSearchBarOpen: true }
-    }
+    openSearchBar(state) {
+      return { ...state, isSearchBarOpen: true }
+    },
+    closeConfirmLogoutModal(state) {
+      return { ...state, isConfirmLogoutModalOpen: false }
+    },
+    openConfirmLogoutModal(state) {
+      return { ...state, isConfirmLogoutModalOpen: true }
+    },
   }
 })
 
-export const { closeSearchBar, openSearchBar } = uiSlice.actions
+export const { closeSearchBar, openSearchBar, closeConfirmLogoutModal, openConfirmLogoutModal } = uiSlice.actions
 export default uiSlice.reducer

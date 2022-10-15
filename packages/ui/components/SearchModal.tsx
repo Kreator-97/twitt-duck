@@ -11,7 +11,7 @@ export const SearchModal = () => {
 
   return (
     <>
-      <Modal finalFocusRef={finalRef} isOpen={isSearchBarOpen} onClose={ () => { dispatch(closeSearchBar) }}>
+      <Modal finalFocusRef={finalRef} isOpen={isSearchBarOpen} onClose={ () => { dispatch(closeSearchBar()) }}>
         <ModalOverlay />
         <ModalContent>
           <Flex gap={4} p='1rem' alignItems='center'>
