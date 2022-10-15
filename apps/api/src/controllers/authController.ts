@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import prisma from '../lib/prisma'
 import { signToken } from '../util/jwt'
 import { ApiResponse } from '../interfaces'
+import { verify } from '../util/google-verify'
 
 interface UserResponse extends ApiResponse {
   user?: User;
@@ -108,4 +109,62 @@ export const renewToken = async (req: Request, res: Response) => {
     ok: true,
     token,
   })
+}
+
+export const signInGoogle = async (req: Request, res: Response<UserResponse>) => {
+  const { id_token } = req.body
+
+  try {
+    const userInfo = await verify(id_token)
+
+    if( !userInfo ) {
+      return res.status(400).json({
+        ok: false,
+        msg: 'Token cannot be verified'
+      })
+    }
+
+    const { email, name, picture } = userInfo
+
+    const isUserExists = await prisma.user.findUnique({ where: { email }})
+
+    if( isUserExists ) {
+      const token = signToken({ id: isUserExists.id })
+
+      return res.status(200).json({
+        msg: 'User Signed with Google Identity',
+        ok: true,
+        user: isUserExists,
+        token
+      })
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        email: email!,    // eslint-disable-line
+        fullname: name!,  // eslint-disable-line
+        username: name!,  // eslint-disable-line
+        password: '@',
+        profilePic: picture,
+        provider: 'GOOGLE'
+      }
+    })
+
+    const token = signToken({ id: user.id })
+
+    return res.status(200).json({
+      ok: true,
+      msg: 'User created using Google Identity',
+      token,
+      user,
+    })
+    
+  } catch (error) {
+    console.log(error)
+
+    return res.status(400).json({
+      ok: false,
+      msg: 'An error ocurred with google auth provider'
+    })
+  }
 }
