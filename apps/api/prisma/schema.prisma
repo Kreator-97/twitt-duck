@@ -16,7 +16,7 @@ model User {
   fullname    String
   password    String
   provider    Provider  @default(CREDENTIALS)
-  username    String    @unique
+  username    String?   @unique
   online      Boolean   @default(false)
   description String?
   profilePic  String?
@@ -24,6 +24,7 @@ model User {
   following   Int       @default(0)
   posts       Post[]
   role        Role      @default(USER)
+  active      Boolean   @default(false)
 }
 
 model Post {

@@ -7,49 +7,40 @@ import { signToken } from '../util/jwt'
 import { ApiResponse } from '../interfaces'
 import { verify } from '../util/google-verify'
 
+const imagesDomains = [
+  '/images/',
+  'https://cloudinary'
+]
+
 interface UserResponse extends ApiResponse {
   user?: User;
   token?: string;
 }
 
 export const register = async (req: Request, res: Response<UserResponse>) => {
-  const { fullname, email, username, password} = req.body
+  const { fullname, email, password} = req.body
 
   const isThisEmailExists = await prisma.user.findUnique({ where: { email }})
 
   if( isThisEmailExists ) {
     return res.status(400).json({
       ok: false,
-      msg: 'This email already taken'
-    })
-  }
-
-  const isThisUsernameExists = await prisma.user.findUnique({ where: { username }})
-
-  if( isThisUsernameExists ) {
-    return res.status(400).json({
-      ok: false,
-      msg: 'This username already taken'
+      msg: 'This email is already taken'
     })
   }
 
   const hash = bcrypt.hashSync(password, 10)
 
   try {
-    const user = await prisma.user.create({data: {
+    await prisma.user.create({data: {
       email,
-      username,
       fullname,
       password: hash,
     }})
-
-    const token = signToken({ id: user.id })
   
     return res.status(200).json({
       ok: true,
       msg: 'new user created',
-      token,
-      user: { ...user, password: '' },
     })
   }
   catch (error: any ) { // eslint-disable-line 
@@ -108,6 +99,55 @@ export const renewToken = async (req: Request, res: Response) => {
   res.json({
     ok: true,
     token,
+  })
+}
+
+export const activateUser = async (req: Request, res: Response<UserResponse>) => {
+  const { username, description, email } = req.body
+  const { profilePic } = req.body
+
+  const update: {[key:string]: string } = { username, description }
+
+  if( typeof profilePic === 'string' ) {
+    console.log(profilePic)
+
+    if( !imagesDomains.some((value) => profilePic.startsWith(value) ) ) {
+
+      return res.status(400).json({
+        ok: false,
+        msg: 'Prop profilePic on req.body must to be a valid cloudinary URL'
+      })
+    }
+
+    update.profilePic = profilePic
+  }
+  
+  const isThisUsernameExists = await prisma.user.findUnique({ where: { username }})
+
+  if( isThisUsernameExists ) {
+    return res.status(400).json({
+      ok: false,
+      msg: 'This username is already taken'
+    })
+  }
+
+  const user = await prisma.user.update({
+    where: { email },
+    data: {
+      username,
+      description,
+      profilePic,
+      active: true
+    }
+  })
+
+  const token = signToken({ id: user.id })
+
+  return res.status(200).json({
+    msg: 'Se ha finalizado el perfil del usuario',
+    ok: true,
+    token,
+    user: {...user, password: '' }
   })
 }
 
