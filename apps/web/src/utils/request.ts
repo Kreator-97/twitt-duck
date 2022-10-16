@@ -1,4 +1,3 @@
-
 interface Options {
   method?: string;
   body   : {[key:string]: any } // eslint-disable-line

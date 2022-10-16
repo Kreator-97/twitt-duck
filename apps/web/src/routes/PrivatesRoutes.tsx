@@ -40,6 +40,6 @@ export const PrivateRoutes: FC<Props> = ({ isAuthenticated }) => {
   }
 
   return (
-    <Navigate to='/auth/register' />
+    <Navigate to='/auth/login' />
   )
 }

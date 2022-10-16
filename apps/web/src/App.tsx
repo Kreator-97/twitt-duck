@@ -1,14 +1,16 @@
 import { useEffect } from 'react'
-import { AppRouter } from './routes/AppRouter'
-import './index.css'
 import { login, useAppDispatch } from '@twitt-duck/state'
+
+import { AppRouter } from './routes/AppRouter'
+import { DBLocal } from './utils'
+import './index.css'
 
 function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}' )
-    if( Object.keys(user).length !== 0 ) {
+    const user = DBLocal.loadUserFromLocal()
+    if( user ) {
       dispatch(login(user))
     }
   }, [])

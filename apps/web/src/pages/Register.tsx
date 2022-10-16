@@ -1,27 +1,33 @@
+// The register page is intended to be the page where an user is created
+// Howrever, when a new user is created, we need more personal data.
+// For that reason, we continue the proccess of customize a user profile in the page '/customize'
 import { FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
-import { Box, Button, FormControl, Text, FormLabel, Grid, Heading, Flex, useToast } from '@chakra-ui/react'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
 
 import { AuthLayout } from '../layouts'
-import { useForm } from '../hooks/useForm'
+import { DBLocal } from '../utils'
 import { googleRequest, registerRequest } from '../services/auth'
+import { notEmptyString } from '../utils/validations'
+import { useForm } from '../hooks/useForm'
+
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Grid,
+  Heading,
+  Text,
+  useToast,
+} from '@chakra-ui/react'
 
 const validations = {
-  fullname: {
-    validation: (value: string) => value.trim() !== '',
-    message: 'Este campo es requerido'
-  },
-  username: {
-    validation: (value: string) => value.trim() !== '',
-    message: 'Este campo es requerido'
-  },
-  email: {
-    validation: (value: string) => value.trim() !== '',
-    message: 'Este campo es requerido'
-  },
+  fullname: notEmptyString,
+  email: notEmptyString,
   password: {
     validation: (value: string) => value.length >= 8,
     message: 'La contraseña debe de tener 8 o más caracteres'
@@ -30,13 +36,13 @@ const validations = {
 
 export const RegisterPage = () => {
   const dispatch = useAppDispatch()
-  
-  const [ showErrors, setShowErrors ] = useState(false)
+  const navigate = useNavigate()
   const toast = useToast()
+  const [ showErrors, setShowErrors ] = useState(false)
 
-  const { email, fullname, password, username, onInputChange, errors, onResetForm } = useForm({
+
+  const { email, fullname, password, errors, onInputChange, onResetForm } = useForm({
     fullname: '',
-    username: '',
     email   : '',
     password: '',
   }, validations)
@@ -50,25 +56,17 @@ export const RegisterPage = () => {
     }
 
     try {
-      const {user, token} = await registerRequest(fullname, username, email, password)
-      
-      toast({
-        title: 'Cuenta creada.',
-        description: 'Bienvenido. Únete a la conversación',
-        status: 'success',
-        duration: 5000,
-        position: 'top',
-        isClosable: true,
-      })
-
-      localStorage.setItem('token', JSON.stringify(token))
-      localStorage.setItem('user', JSON.stringify(user))
-
-      // TODO: guardar token actualizar, auth state
-      console.log({user, token})
-      dispatch( login(user) )
+      await registerRequest(fullname, email, password)
       onResetForm()
+
+      // continue at the customize profile page
+      navigate(`/auth/customize?email=${email}`)
+
     } catch (error: any) { // eslint-disable-line
+      if( error === 'This email is already taken' ) {
+        navigate(`/auth/customize?email=${email}`)
+        return
+      }
       console.error(error)
       toast({
         title: 'No se pudo crear la cuenta',
@@ -81,12 +79,14 @@ export const RegisterPage = () => {
     }
   }
 
-  const navigate = useNavigate()
-
   const onGoogleSignIn = async (googleToken: string) => {
-
     try {
       const { user, token } = await googleRequest(googleToken)
+
+      if( !user.active ) {
+        navigate(`/auth/customize?email=${user.email}`)
+        return
+      }
 
       toast({
         title: 'Inicio de sesión.',
@@ -97,14 +97,11 @@ export const RegisterPage = () => {
         isClosable: true,
       })
   
-      // TODO: Enviar datos del usuario al login
       dispatch( login(user) )
 
-      localStorage.setItem('token', JSON.stringify(token))
-      localStorage.setItem('user', JSON.stringify(user))
+      DBLocal.saveUserAndTokenInLocal(user, token)
 
       navigate('/')
-      
     } catch (error: any) { //eslint-disable-line
       console.log(error)
       toast({
@@ -168,20 +165,6 @@ export const RegisterPage = () => {
           <Box>
             <FormLabel
               color='gray.600'
-            >Elige tu nombre de usuario
-            </FormLabel>
-            <FormInput
-              required
-              placehorder='Introduce tu nombre de usuario'
-              name='username'
-              value={username}
-              onChange={ onInputChange }
-            />
-          </Box>
-
-          <Box>
-            <FormLabel
-              color='gray.600'
             >Correo electrónico</FormLabel>
             <FormInput
               required
@@ -196,7 +179,9 @@ export const RegisterPage = () => {
           <Box>
             <FormLabel
               color='gray.600'
-            >Contraseña</FormLabel>
+            >
+              Contraseña
+            </FormLabel>
             <FormInput
               required
               placehorder='Introduce tu contraseña'
@@ -205,7 +190,16 @@ export const RegisterPage = () => {
               value={password}
               onChange={ onInputChange }
             />
-            { (errors.password && showErrors) && <Text color='red.400' fontSize='sm' mt='.5rem'>{errors.password}</Text> }
+            {
+              (errors.password && showErrors) &&
+              <Text
+                color='red.400'
+                fontSize='sm'
+                mt='.5rem'
+              >
+                { errors.password }
+              </Text>
+            }
           </Box>
         </Grid>
 
@@ -218,11 +212,27 @@ export const RegisterPage = () => {
             border: '1px solid hsla(210,90%,50%,.5)',
             transform: 'scale(1.02)',
           }}
-        >Crear cuenta</Button>
+        >
+          Continuar
+        </Button>
 
-        <Flex justify='center' align='center' mt={8} direction='column' gap='1rem'>
-          <Heading size='md' textAlign='center' color='gray.600'>Inicia sesión con tu cuenta Google</Heading>
-          <GoogleButton onSignIn={ onGoogleSignIn } />
+        <Flex
+          justify='center'
+          align='center'
+          direction='column'
+          gap='1rem'
+          mt={8}
+        >
+          <Heading
+            size='md'
+            textAlign='center'
+            color='gray.600'
+          >
+            Inicia sesión con tu cuenta Google
+          </Heading>
+          <GoogleButton
+            onSignIn={ onGoogleSignIn }
+          />
         </Flex>
 
         <Box mt='4'>

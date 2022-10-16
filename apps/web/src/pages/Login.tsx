@@ -1,31 +1,34 @@
 import { FormEvent, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Box, Button, FormControl, Text, FormLabel, Grid, Heading, Flex, useToast } from '@chakra-ui/react'
-import { MdArrowBack } from 'react-icons/md'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
+import { Link, useNavigate } from 'react-router-dom'
+import { MdArrowBack } from 'react-icons/md'
 import { useAppDispatch, login } from '@twitt-duck/state'
 
-import { useForm } from '../hooks/useForm'
 import { AuthLayout } from '../layouts'
+import { DBLocal } from '../utils'
 import { googleRequest, loginRequest } from '../services/auth'
+import { notEmptyString } from '../utils/validations'
+import { useForm } from '../hooks/useForm'
 
-const validations = {
-  email: {
-    validation: (value: string) => value.trim() !== '',
-    message: 'Este campo es requerido'
-  },
-  password: {
-    validation: (value: string) => value.trim() !== '',
-    message: 'Este campo es requerido'
-  },
-}
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Grid,
+  Heading,
+  Text,
+  useToast,
+} from '@chakra-ui/react'
+
+const validations = { email: notEmptyString, password: notEmptyString }
 
 export const LoginPage = () => {
-  const [ showErrors, setShowErrors] = useState(false)
+  const [ showErrors, setShowErrors ] = useState(false)
   const dispatch = useAppDispatch()
-
   const toast = useToast()
-  
+
   const navigate = useNavigate()
   const { email, password, errors, onResetForm, onInputChange } = useForm({
     email: '',
@@ -41,7 +44,12 @@ export const LoginPage = () => {
     }
 
     try {
-      const {user, token} = await loginRequest(email, password)
+      const { user, token } = await loginRequest(email, password)
+
+      if( !user.active ) {
+        navigate(`/auth/customize?email=${email}`)
+        return
+      }
       
       toast({
         title: 'Inicio de sesión.',
@@ -52,11 +60,8 @@ export const LoginPage = () => {
         isClosable: true,
       })
 
-      console.log({user, token})
-      localStorage.setItem('token', JSON.stringify(token))
-      localStorage.setItem('user', JSON.stringify(user))
+      DBLocal.saveUserAndTokenInLocal(user, token)
 
-      // TODO: guardar token, enviar datos del usuario al login
       dispatch( login(user) )
       onResetForm()
       navigate('/')
@@ -74,9 +79,13 @@ export const LoginPage = () => {
   }
 
   const onGoogleSignIn = async (googleToken: string) => {
-
     try {
       const { user, token } = await googleRequest(googleToken)
+
+      if( !user.active ) {
+        navigate(`/auth/customize?email=${user.email}`)
+        return
+      }
 
       toast({
         title: 'Inicio de sesión.',
@@ -87,12 +96,10 @@ export const LoginPage = () => {
         isClosable: true,
       })
   
-      // TODO: Enviar datos del usuario al login
       dispatch( login(user) )
       navigate('/')
-      localStorage.setItem('token', JSON.stringify(token))
-      localStorage.setItem('user', JSON.stringify(user))
-      
+      DBLocal.saveUserAndTokenInLocal(user, token)
+
     } catch (error: any) { //eslint-disable-line
       console.log(error)
       toast({
@@ -150,7 +157,15 @@ export const LoginPage = () => {
               onChange={ onInputChange }
               required
             />
-            { (errors.password && showErrors) && <Text color='red.400' fontSize='sm' mt='.5rem'>{errors.password}</Text> }
+            {
+              ( errors.password && showErrors ) &&
+              <Text
+                color='red.400'
+                fontSize='sm'
+                mt='.5rem'>
+                { errors.password }
+              </Text>
+            }
           </Box>
 
           <Box>
@@ -181,8 +196,20 @@ export const LoginPage = () => {
           Iniciar sesión
         </Button>
 
-        <Flex justify='center' align='center' mt={8} direction='column' gap='1rem'>
-          <Heading size='md' textAlign='center' color='gray.600'>Inicia sesión con tu cuenta Google</Heading>
+        <Flex
+          justify='center'
+          align='center'
+          direction='column'
+          gap='1rem'
+          mt={8}
+        >
+          <Heading
+            size='md'
+            textAlign='center'
+            color='gray.600'
+          >
+            Inicia sesión con tu cuenta Google
+          </Heading>
           <GoogleButton onSignIn={ onGoogleSignIn }/>
         </Flex>
 
@@ -190,7 +217,8 @@ export const LoginPage = () => {
           <Text
             textAlign='center'
             color='gray.600'
-          >¿No tienes cuenta?,
+          >
+            ¿No tienes cuenta?,
             <Link to='/auth/register'>
               <Text as='span' color='cyan.400'> Crea una cuenta</Text>
             </Link>
