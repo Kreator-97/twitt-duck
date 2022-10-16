@@ -15,6 +15,7 @@
     "typescript": "*"
   },
   "dependencies": {
-    "@twitt-duck/state": "*"
+    "@twitt-duck/state": "*",
+    "react": "*"
   }
 }

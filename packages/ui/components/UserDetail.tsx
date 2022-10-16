@@ -1,25 +1,34 @@
+import { HiUser } from 'react-icons/hi'
 import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
+import { useAppSelector } from '@twitt-duck/state'
 
 export const UserDetail = () => {
+  const { user } = useAppSelector(state => state.auth)
+
   return (
     <Grid
       templateColumns={{ base: '48px 1fr', md: '64px 1fr 48px 48px'}}
       maxW='1280'
-      m={{base: '-50px auto .5rem', md: '-50px auto 1rem' }}
-      p={{ base: '.5rem', md: '1rem'}}
+      m={{ base: '-50px auto .5rem', md: '-50px auto 1rem' }}
+      p={{ base: '.5rem', md: '1rem' }}
       bg='white'
       boxShadow='md'
       rounded='md'
       gap={'.5rem'}
     >
-      <Image
-        width={{
-          base: '32px',
-          mg: '48px',
-        }}
-        src="https://res.cloudinary.com/practicaldev/image/fetch/s--i96Gcbyf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/50592/f46e43c2-f4f0-4787-b34e-a310cecc221a.jpg"
-        rounded='md'
-      />
+      {
+        user?.profilePic
+          ? (
+            <Image
+              width='48px'
+              src={user.profilePic}
+              rounded='md'
+            />
+          )
+          : (
+            <HiUser width='32px' size='32px' color='#333' />
+          )
+      }
       <Box>
         <Grid
           gap='.25rem'
@@ -30,7 +39,17 @@ export const UserDetail = () => {
             as='h1'
             fontWeight={'bold'}
             fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
-          >Tom Holland - <Text as='span' fontWeight='light' color='gray.500'>@tomholland</Text></Text>
+          >
+            { user?.fullname || 'Usuario' }
+            <span> - </span>
+            <Text
+              as='span'
+              fontWeight='light'
+              color='gray.500'
+            >
+              @{ user?.username || '' }
+            </Text>
+          </Text>
           <Text
             as='p'
             fontWeight={'normal'}
@@ -39,12 +58,12 @@ export const UserDetail = () => {
             <Text
               as='span'
               style={{ fontWeight: 'bold' }}
-            > 5493 
+            > { user?.followers }
             </Text> Seguidores -
             <Text
               as='span'
               style={{ fontWeight: 'bold' }}
-            > 102
+            > { user?.following }
             </Text> Siguiendo
           </Text>
         </Grid>
@@ -53,7 +72,7 @@ export const UserDetail = () => {
           fontWeight='light'
           color='gray.600'
           fontSize={{ base: 'sm' }}
-        >Actor, filósofo, egocentrico, millonario</Text>
+        >{ user?.description || 'Sin descripción' }</Text>
       </Box>
 
       <Box
@@ -68,7 +87,9 @@ export const UserDetail = () => {
           width='100%'
           display='block'
           _hover={{ backgroundColor: 'cyan.600' }}
-        >Seguir</Button>
+        >
+          Seguir
+        </Button>
       </Box>
     </Grid>
   )

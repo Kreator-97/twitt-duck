@@ -1,6 +1,16 @@
 import React from 'react'
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text } from '@chakra-ui/react'
 import { useAppDispatch, useAppSelector, closeConfirmLogoutModal } from '@twitt-duck/state'
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Text
+} from '@chakra-ui/react'
 
 export const ConfirmLogout = () => {
   const { isConfirmLogoutModalOpen } = useAppSelector(state => state.ui)
@@ -26,10 +36,10 @@ export const ConfirmLogout = () => {
       <Modal finalFocusRef={ finalRef } isOpen={ isConfirmLogoutModalOpen } onClose={ onClose }>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Cerrar sesión</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>¿Esta seguro de cerrar la sesión?</Text>
+            <Text>¿Está seguro de cerrar la sesión?</Text>
           </ModalBody>
 
           <ModalFooter>

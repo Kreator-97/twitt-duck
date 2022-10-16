@@ -6,12 +6,13 @@ export interface User {
   provider    : Provider
   username    : string
   online      : boolean
-  description : string
-  profilePic  : string
+  description?: string
+  profilePic ?: string
   followers   : number
   following   : number
   posts       : Post
   role        : Role
+  active      : Boolean
 }
 
 export interface Post {
@@ -28,9 +29,6 @@ export interface Post {
 }
 
 type Role = 'USER' | 'ADMIN'
-
 type Provider = 'CREDENTIALS' | 'GOOGLE'
-
 type Visibility = 'HIDDEN' | 'VISIBLE'
-
 type Privacy = 'ONLY_ME' | 'ONLY_FOLLOWERS' | 'ALL' 

@@ -1,14 +1,31 @@
-import { Flex, Text, IconButton, Input, Grid } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
 import { HiOutlineSearch } from 'react-icons/hi'
-import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
-import { Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
 
-import { ConfirmLogout } from './ConfirmLogout'
-import { openConfirmLogoutModal } from '@twitt-duck/state/app/slices/uiSlice'
+import {
+  useAppDispatch,
+  openSearchBar,
+  useAppSelector,
+  openConfirmLogoutModal
+} from '@twitt-duck/state'
+
+import {
+  Flex,
+  Text,
+  IconButton,
+  Input,
+  Grid,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
+} from '@chakra-ui/react'
+
+
+import { ConfirmLogout } from './'
 
 export const Navbar = () => {
+  const { user } = useAppSelector( state => state.auth )
   const dispatch = useAppDispatch()
 
   return (
@@ -37,7 +54,6 @@ export const Navbar = () => {
             />
             <MenuList>
               <MenuItem><RouterLink to='/profile' >Ver perfil</RouterLink></MenuItem>
-              <MenuItem></MenuItem>
               <MenuItem color='red.300' onClick={ () => dispatch( openConfirmLogoutModal() ) }>Cerrar sesión</MenuItem>
             </MenuList>
           </Menu>
@@ -45,7 +61,9 @@ export const Navbar = () => {
             display={{base: 'none', lg: 'block'}}
             fontWeight={600}
             fontSize='lg'
-          >Tom Holland</Text>
+          >
+            { user?.fullname }
+          </Text>
         </Flex>
 
         <Text
