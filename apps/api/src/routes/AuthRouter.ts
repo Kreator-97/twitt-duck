@@ -29,8 +29,7 @@ AuthRouter.post('/renew', [
 ], renewToken)
 
 AuthRouter.post('/active-user', [
-  check('email', 'email must to be valid').isEmail(),
+  verifyUser,
   check('username', 'username is required').notEmpty(),
-  check('description', 'description is required').notEmpty(),
   validateFields
 ], activateUser)

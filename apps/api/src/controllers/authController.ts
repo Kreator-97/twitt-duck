@@ -7,11 +7,6 @@ import { signToken } from '../util/jwt'
 import { ApiResponse } from '../interfaces'
 import { verify } from '../util/google-verify'
 
-const imagesDomains = [
-  '/images/',
-  'https://cloudinary'
-]
-
 interface UserResponse extends ApiResponse {
   user?: User;
   token?: string;
@@ -25,29 +20,33 @@ export const register = async (req: Request, res: Response<UserResponse>) => {
   if( isThisEmailExists ) {
     return res.status(400).json({
       ok: false,
-      msg: 'This email is already taken'
+      msg: 'Este correo ya existe'
     })
   }
 
   const hash = bcrypt.hashSync(password, 10)
 
   try {
-    await prisma.user.create({data: {
+    const user = await prisma.user.create({data: {
       email,
       fullname,
       password: hash,
     }})
-  
+
+    const token = signToken({ id: user.id })
+
     return res.status(200).json({
       ok: true,
       msg: 'new user created',
+      user,
+      token,
     })
   }
   catch (error: any ) { // eslint-disable-line 
     console.error(error)
     return res.status(500).json({
       ok: false,
-      msg: 'An error ocurred when trying to create a new user',
+      msg: 'Ocurrió un error al intentar crear al usuario',
       error: error.message,
     })
   }
@@ -61,7 +60,7 @@ export const login = async (req: Request, res: Response<UserResponse>) => {
   if( !user ) {
     return res.status(404).json({
       ok: false,
-      msg: `User with email ‘${email}’ does not exist`
+      msg: `Usuario con email ‘${email}’ no existe`
     })
   }
 
@@ -70,7 +69,7 @@ export const login = async (req: Request, res: Response<UserResponse>) => {
   if( !isValidPassword ) {
     return res.status(404).json({
       ok: false,
-      msg: 'password invalid'
+      msg: 'Error de credentiales'
     })
   }
 
@@ -78,7 +77,7 @@ export const login = async (req: Request, res: Response<UserResponse>) => {
 
   return res.status(200).json({
     ok : true,
-    msg: 'user logged successfully',
+    msg: 'Inicio de sesión exitoso',
     token,
     user: {...user, password: '' }
   })
@@ -90,7 +89,7 @@ export const renewToken = async (req: Request, res: Response) => {
   if( !userId ) {
     return res.status(400).json({
       ok: true,
-      msg: 'userId not valid'
+      msg: 'Usuario id no válido'
     })
   }
 
@@ -103,40 +102,31 @@ export const renewToken = async (req: Request, res: Response) => {
 }
 
 export const activateUser = async (req: Request, res: Response<UserResponse>) => {
-  const { username, description, email } = req.body
-  const { profilePic } = req.body
+  const userId = req.userId
 
-  const update: {[key:string]: string } = { username, description }
-
-  if( typeof profilePic === 'string' ) {
-    console.log(profilePic)
-
-    if( !imagesDomains.some((value) => profilePic.startsWith(value) ) ) {
-
-      return res.status(400).json({
-        ok: false,
-        msg: 'Prop profilePic on req.body must to be a valid cloudinary URL'
-      })
-    }
-
-    update.profilePic = profilePic
+  if( !userId ) {
+    return res.status(400).json({
+      ok: false,
+      msg: 'Id dentro del token no es válido'
+    })
   }
+
+  const { username, description } = req.body
   
   const isThisUsernameExists = await prisma.user.findUnique({ where: { username }})
 
   if( isThisUsernameExists ) {
     return res.status(400).json({
       ok: false,
-      msg: 'This username is already taken'
+      msg: 'Este username no se encuentra disponible. Pruebe con otro'
     })
   }
 
   const user = await prisma.user.update({
-    where: { email },
+    where: { id: userId },
     data: {
       username,
       description,
-      profilePic,
       active: true
     }
   })
@@ -160,7 +150,7 @@ export const signInGoogle = async (req: Request, res: Response<UserResponse>) =>
     if( !userInfo ) {
       return res.status(400).json({
         ok: false,
-        msg: 'Token cannot be verified'
+        msg: 'Token no pudo ser verificado'
       })
     }
 
@@ -172,7 +162,7 @@ export const signInGoogle = async (req: Request, res: Response<UserResponse>) =>
       const token = signToken({ id: isUserExists.id })
 
       return res.status(200).json({
-        msg: 'User Signed with Google Identity',
+        msg: 'Inicio de sesión con Google exitoso',
         ok: true,
         user: isUserExists,
         token
@@ -194,7 +184,7 @@ export const signInGoogle = async (req: Request, res: Response<UserResponse>) =>
 
     return res.status(200).json({
       ok: true,
-      msg: 'User created using Google Identity',
+      msg: 'Usuario creado usando Google Identity',
       token,
       user,
     })
@@ -204,7 +194,7 @@ export const signInGoogle = async (req: Request, res: Response<UserResponse>) =>
 
     return res.status(400).json({
       ok: false,
-      msg: 'An error ocurred with google auth provider'
+      msg: 'Ocurrio un error con el proeevedor de autenticación'
     })
   }
 }
