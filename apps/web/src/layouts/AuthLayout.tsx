@@ -16,9 +16,9 @@ export const AuthLayout: FC<Props> = ({children}) => {
       <Box
         maxW='480px'
         width='100%'
-        minH='800px'
         p='1rem'
-        m={{base: '0 auto', md: 'auto auto'}}
+        minH={{ base: '700px', lg: '900px' }}
+        m={{ base: '0 auto', md: 'auto auto' }}
         boxShadow='md'
         bg='white'
       >

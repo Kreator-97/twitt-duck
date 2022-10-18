@@ -1,22 +1,37 @@
-interface Options {
+type Options = {
   method?: string;
-  body   : {[key:string]: any } // eslint-disable-line
-  token ?: string
+  body   : string | FormData;
+  token ?: string;
+  headers: Headers;
+  contentType?: undefined;
+} | {
+  method?: string;
+  body   : string | FormData;
+  token ?: string;
+  headers?: Headers;
+  contentType: 'application/json'
 }
 
 export const request = async <T>(endpoint: string, options: Options):Promise<T> => {
   try {
-    const headers = new Headers()
-    headers.append('Content-Type', 'application/json')
-    
-    if( options.token ) {
-      headers.append('Authorization', options.token)
+    let headers = new Headers()
+
+    if( options.headers ) {
+      headers = options.headers
     }
 
+    if( options.contentType === 'application/json' ) {
+      headers.append('Content-Type', options.contentType)
+    }
+
+    if( options.token ) {
+      headers.append('Authorization', `Bearer ${options.token}`)
+    }
+    
     const res = await fetch(`http://localhost:5000${endpoint}`, {
       method: options.method || 'GET',
       headers,
-      body: JSON.stringify(options.body)
+      body: options.body,
     })
 
     const data = await res.json()

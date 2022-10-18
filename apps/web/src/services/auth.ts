@@ -8,20 +8,16 @@ type Response = {
   user  : User;
 } | {
   ok      : false;
-  errors? : any[]; // eslint-disable-line
+  errors? : string[];
   msg?    : string;
 }
 
-type RegisterResponse = {
-  ok: boolean;
-  msg: string;
-  errors? : any[]; // eslint-disable-line
-}
-
 export const registerRequest = async (fullname: string, email: string, password: string ) => {
-  const data = await request<RegisterResponse>('/api/auth/register', {
+
+  const data = await request<Response>('/api/auth/register', {
     method: 'POST',
-    body: { fullname, password, email }
+    body: JSON.stringify({ fullname, password, email }),
+    contentType: 'application/json'
   })
 
   if( !data.ok ) {
@@ -34,9 +30,11 @@ export const registerRequest = async (fullname: string, email: string, password:
 }
 
 export const loginRequest = async(email: string, password: string) => {
+
   const data = await request<Response>('/api/auth/login', {
     method: 'POST',
-    body: { email, password }
+    body: JSON.stringify({ email, password }),
+    contentType: 'application/json'
   })
 
   if( !data.ok ) {
@@ -49,9 +47,11 @@ export const loginRequest = async(email: string, password: string) => {
 }
 
 export const googleRequest = async (token: string) => {
+
   const data = await request<Response>('/api/auth/google', {
     method: 'POST',
-    body: { id_token: token }
+    body: JSON.stringify({ id_token: token }),
+    contentType: 'application/json',
   })
 
   if( !data.ok ) {
@@ -60,12 +60,21 @@ export const googleRequest = async (token: string) => {
   }
   
   return data
+
 }
 
-export const saveProfile = async (username: string, description: string, profilePic: string, email: string) => {
+interface ProfileUpdate {
+  username: string;
+  description: string;
+}
+
+export const saveProfile = async ({ description, username }: ProfileUpdate, token: string) => {
+
   const data = await request<Response>('/api/auth/active-user', {
     method: 'POST',
-    body: { username, description, profilePic, email }
+    body: JSON.stringify({ username, description }),
+    contentType: 'application/json',
+    token
   })
 
   if( !data.ok ) {

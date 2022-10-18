@@ -56,17 +56,15 @@ export const RegisterPage = () => {
     }
 
     try {
-      await registerRequest(fullname, email, password)
+      const { token, user } = await registerRequest(fullname, email, password)
       onResetForm()
+
+      DBLocal.saveUserAndTokenInLocal(user, token)
 
       // continue at the customize profile page
       navigate(`/auth/customize?email=${email}`)
 
     } catch (error: any) { // eslint-disable-line
-      if( error === 'This email is already taken' ) {
-        navigate(`/auth/customize?email=${email}`)
-        return
-      }
       console.error(error)
       toast({
         title: 'No se pudo crear la cuenta',

@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
-import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
+import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
 
 import { AuthLayout } from '../layouts'
@@ -47,7 +47,7 @@ export const LoginPage = () => {
       const { user, token } = await loginRequest(email, password)
 
       if( !user.active ) {
-        navigate(`/auth/customize?email=${email}`)
+        navigate('/auth/customize')
         return
       }
       
@@ -68,7 +68,7 @@ export const LoginPage = () => {
     } catch (error: any) { // eslint-disable-line
       console.error(error)
       toast({
-        title: 'No se pudo crear la cuenta',
+        title: 'No se pudo iniciar la sesión',
         description: error,
         status: 'error',
         duration: 3000,
@@ -103,7 +103,7 @@ export const LoginPage = () => {
     } catch (error: any) { //eslint-disable-line
       console.log(error)
       toast({
-        title: 'No se pudo crear la cuenta',
+        title: 'No se pudo iniciar la sesión',
         description: error,
         status: 'error',
         duration: 3000,

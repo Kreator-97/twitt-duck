@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { HamburgerIcon } from '@chakra-ui/icons'
 
@@ -21,10 +21,10 @@ import {
   MenuItem
 } from '@chakra-ui/react'
 
-
 import { ConfirmLogout } from './'
 
 export const Navbar = () => {
+  const navigate = useNavigate()
   const { user } = useAppSelector( state => state.auth )
   const dispatch = useAppDispatch()
 
@@ -36,7 +36,7 @@ export const Navbar = () => {
     >
       <Grid
         gap='.5rem'
-        p={{base: '.5rem', lg: '.5rem'}}
+        p={{base: '.5rem', lg: '1rem'}}
         height="72px"
         justifyContent="space"
         alignItems="center"
@@ -53,7 +53,9 @@ export const Navbar = () => {
               variant='outline'
             />
             <MenuList>
-              <MenuItem><RouterLink to='/profile' >Ver perfil</RouterLink></MenuItem>
+              <MenuItem onClick={ () => navigate('/profile') }>
+                Ver perfil
+              </MenuItem>
               <MenuItem color='red.300' onClick={ () => dispatch( openConfirmLogoutModal() ) }>Cerrar sesión</MenuItem>
             </MenuList>
           </Menu>

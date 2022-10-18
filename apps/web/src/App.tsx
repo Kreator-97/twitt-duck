@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const user = DBLocal.loadUserFromLocal()
-    if( user ) {
+    if( user && user.active) {
       dispatch(login(user))
     }
   }, [])
