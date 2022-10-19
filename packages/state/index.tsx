@@ -2,7 +2,7 @@ import { Provider } from 'react-redux'
 
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import { store } from './app/store'
-import { AuthState, login } from './app/slices/authSlice'
+import { AuthState, finishChecking, login } from './app/slices/authSlice'
 import { UIState, closeSearchBar, openSearchBar, openConfirmLogoutModal, closeConfirmLogoutModal } from './app/slices/uiSlice'
 import { Post, User } from './interfaces'
 
@@ -12,6 +12,7 @@ export {
   useAppSelector,
   store,
   login,
+  finishChecking,
   closeSearchBar,
   openSearchBar,
   closeConfirmLogoutModal,

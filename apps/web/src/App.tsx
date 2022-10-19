@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { login, useAppDispatch } from '@twitt-duck/state'
+import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
 
 import { AppRouter } from './routes/AppRouter'
 import { DBLocal } from './utils'
@@ -12,6 +12,8 @@ function App() {
     const user = DBLocal.loadUserFromLocal()
     if( user && user.active) {
       dispatch(login(user))
+    } else {
+      dispatch(finishChecking())
     }
   }, [])
 

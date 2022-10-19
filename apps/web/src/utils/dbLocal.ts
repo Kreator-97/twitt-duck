@@ -14,6 +14,11 @@ export const loadUserFromLocal = (): User | null => {
   return user
 }
 
+export const getTokenFromLocal = ():string | null => {
+  const token = localStorage.getItem('token')
+  return token
+}
+
 export const clearLocal = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('user')

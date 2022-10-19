@@ -1,9 +1,11 @@
 import { HiUser } from 'react-icons/hi'
 import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
+import { useLocation } from 'react-router-dom'
 
 export const UserDetail = () => {
   const { user } = useAppSelector(state => state.auth)
+  const { pathname } = useLocation()
 
   return (
     <Grid
@@ -14,13 +16,13 @@ export const UserDetail = () => {
       bg='white'
       boxShadow='md'
       rounded='md'
-      gap={'.5rem'}
+      gap={{ base: '.5rem', md: '1rem' }}
     >
       {
         user?.profilePic
           ? (
             <Image
-              width='48px'
+              width={{ base: '48px' , md: '60px' }}
               src={user.profilePic}
               rounded='md'
             />
@@ -85,7 +87,7 @@ export const UserDetail = () => {
           color='white'
           size='sm'
           width='100%'
-          display='block'
+          display={ pathname === '/profile' ? 'none' : 'block' }
           _hover={{ backgroundColor: 'cyan.600' }}
         >
           Seguir

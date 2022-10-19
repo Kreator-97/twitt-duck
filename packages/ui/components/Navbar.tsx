@@ -5,7 +5,6 @@ import { HamburgerIcon } from '@chakra-ui/icons'
 import {
   useAppDispatch,
   openSearchBar,
-  useAppSelector,
   openConfirmLogoutModal
 } from '@twitt-duck/state'
 
@@ -25,7 +24,6 @@ import { ConfirmLogout } from './'
 
 export const Navbar = () => {
   const navigate = useNavigate()
-  const { user } = useAppSelector( state => state.auth )
   const dispatch = useAppDispatch()
 
   return (
@@ -42,7 +40,7 @@ export const Navbar = () => {
         alignItems="center"
         maxWidth="1440px"
         width='100%'
-        gridTemplateColumns={{base: 'auto 1fr auto', lg: 'auto 1fr auto'}}
+        gridTemplateColumns={{base: 'auto 1fr auto', lg: '240px 1fr 240px'}}
       >
         <Flex alignItems="center" gap="1rem">
           <Menu>
@@ -56,16 +54,14 @@ export const Navbar = () => {
               <MenuItem onClick={ () => navigate('/profile') }>
                 Ver perfil
               </MenuItem>
-              <MenuItem color='red.300' onClick={ () => dispatch( openConfirmLogoutModal() ) }>Cerrar sesión</MenuItem>
+              <MenuItem
+                color='red.300'
+                onClick={ () => dispatch( openConfirmLogoutModal() ) }
+              >
+                Cerrar sesión
+              </MenuItem>
             </MenuList>
           </Menu>
-          <Text
-            display={{base: 'none', lg: 'block'}}
-            fontWeight={600}
-            fontSize='lg'
-          >
-            { user?.fullname }
-          </Text>
         </Flex>
 
         <Text

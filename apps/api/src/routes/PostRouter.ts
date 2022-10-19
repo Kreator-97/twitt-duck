@@ -2,21 +2,20 @@ import { Router } from 'express'
 import { param, body } from 'express-validator'
 
 import { validateFields, verifyUser } from '../middlewares'
-import { createPost, getAllPosts, getPostsByUser, updatePostPrivacy } from '../controllers/postController'
+import { createPost, getAllPosts, getPostsByUsername, updatePostPrivacy } from '../controllers/postController'
 
 export const PostRouter = Router()
 
 PostRouter.get('/', getAllPosts)
 
-PostRouter.get('/user/:userId', [
-  param('userId', 'param userId must to be valid').notEmpty().isUUID(),
+PostRouter.get('/user/:username', [
+  param('username', 'param username must to be valid').notEmpty(),
   validateFields
-], getPostsByUser)
+], getPostsByUsername)
 
 PostRouter.post('/', [
   verifyUser,
-  body('title', 'title is required').notEmpty(),
-  body('title', 'content is required').notEmpty(),
+  body('content', 'content is required').notEmpty(),
   validateFields
 ], createPost)
 

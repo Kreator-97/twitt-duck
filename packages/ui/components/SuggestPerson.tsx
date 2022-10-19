@@ -20,6 +20,7 @@ export const SuggestPersons = () => {
         <Follow name='Henril Cavill' />
         <Follow name='John Doe' />
         <Follow name='Diego Gomez' />
+        <Follow name='Juan Jose de la Cruz Lopez' />
       </Box>
     </Box>
   )

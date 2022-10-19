@@ -45,6 +45,8 @@ export const LoginPage = () => {
 
     try {
       const { user, token } = await loginRequest(email, password)
+      
+      DBLocal.saveUserAndTokenInLocal(user, token)
 
       if( !user.active ) {
         navigate('/auth/customize')
@@ -59,8 +61,6 @@ export const LoginPage = () => {
         position: 'top',
         isClosable: true,
       })
-
-      DBLocal.saveUserAndTokenInLocal(user, token)
 
       dispatch( login(user) )
       onResetForm()

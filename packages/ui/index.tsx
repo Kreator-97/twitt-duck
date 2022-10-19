@@ -1,10 +1,12 @@
 import { ChakraProvider} from '@chakra-ui/react'
 import {
+  BottomBar,
   ConfirmLogout,
   CustomTabs,
   FloatingActionButton,
   FormInput,
   GoogleButton,
+  Loader,
   Navbar,
   NewPost,
   Post,
@@ -20,12 +22,14 @@ import {
 import { theme } from './theme'
 
 export {
+  BottomBar,
   ConfirmLogout,
   ChakraProvider,
   CustomTabs,
   FloatingActionButton,
   FormInput,
   GoogleButton,
+  Loader,
   Navbar,
   NewPost,
   Post,

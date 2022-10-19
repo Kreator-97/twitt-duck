@@ -11,9 +11,13 @@ interface PostResponse extends ApiResponse {
 
 const PRIVACY_VALUES = [ 'ONLY_ME', 'ONLY_FOLLOWERS', 'ALL' ]
 
-
 export const getAllPosts = async (req: Request, res: Response<PostResponse >) => {
-  const posts = await prisma.post.findMany()
+  const posts = await prisma.post.findMany({
+    include: { author: true },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
 
   res.status(200).json({
     ok : true,
@@ -22,10 +26,16 @@ export const getAllPosts = async (req: Request, res: Response<PostResponse >) =>
   })
 }
 
-export const getPostsByUser = async (req: Request, res: Response<PostResponse >) => {
-  const userId = req.params.userId.toString()
+export const getPostsByUsername = async (req: Request, res: Response<PostResponse >) => {
+  const username = req.params.username.toString()
 
-  const posts = await prisma.post.findMany({ where: { authorId: userId }})
+  const posts = await prisma.post.findMany({
+    where: { author: { username } },
+    include: { author: true },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
 
   res.status(200).json({
     ok : true,
@@ -44,7 +54,9 @@ export const createPost = async (req: Request, res: Response<PostResponse> ) => 
 
   const userId = req.userId
 
-  const user = await prisma.user.findUnique({ where: { id: userId }})
+  const user = await prisma.user.findUnique({
+    where: { id: userId }
+  })
 
   if( !user ) {
     return res.status(404).json({

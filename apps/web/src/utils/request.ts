@@ -1,12 +1,12 @@
 type Options = {
   method?: string;
-  body   : string | FormData;
+  body  ?: string | FormData;
   token ?: string;
   headers: Headers;
   contentType?: undefined;
 } | {
   method?: string;
-  body   : string | FormData;
+  body  ?: string | FormData;
   token ?: string;
   headers?: Headers;
   contentType: 'application/json'
@@ -27,12 +27,17 @@ export const request = async <T>(endpoint: string, options: Options):Promise<T> 
     if( options.token ) {
       headers.append('Authorization', `Bearer ${options.token}`)
     }
-    
-    const res = await fetch(`http://localhost:5000${endpoint}`, {
+
+    const requestOptions: RequestInit = {
       method: options.method || 'GET',
       headers,
-      body: options.body,
-    })
+    }
+
+    if( options.body ) {
+      requestOptions.body = options.body
+    }
+    
+    const res = await fetch(`http://localhost:5000${endpoint}`, requestOptions)
 
     const data = await res.json()
     return data
