@@ -1,11 +1,10 @@
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { HamburgerIcon } from '@chakra-ui/icons'
 
 import {
   useAppDispatch,
   openSearchBar,
-  useAppSelector,
   openConfirmLogoutModal
 } from '@twitt-duck/state'
 
@@ -21,11 +20,10 @@ import {
   MenuItem
 } from '@chakra-ui/react'
 
-
 import { ConfirmLogout } from './'
 
 export const Navbar = () => {
-  const { user } = useAppSelector( state => state.auth )
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   return (
@@ -36,13 +34,13 @@ export const Navbar = () => {
     >
       <Grid
         gap='.5rem'
-        p={{base: '.5rem', lg: '.5rem'}}
+        p={{base: '.5rem', lg: '1rem'}}
         height="72px"
         justifyContent="space"
         alignItems="center"
         maxWidth="1440px"
         width='100%'
-        gridTemplateColumns={{base: 'auto 1fr auto', lg: 'auto 1fr auto'}}
+        gridTemplateColumns={{base: 'auto 1fr auto', lg: '240px 1fr 240px'}}
       >
         <Flex alignItems="center" gap="1rem">
           <Menu>
@@ -53,17 +51,17 @@ export const Navbar = () => {
               variant='outline'
             />
             <MenuList>
-              <MenuItem><RouterLink to='/profile' >Ver perfil</RouterLink></MenuItem>
-              <MenuItem color='red.300' onClick={ () => dispatch( openConfirmLogoutModal() ) }>Cerrar sesión</MenuItem>
+              <MenuItem onClick={ () => navigate('/profile') }>
+                Ver perfil
+              </MenuItem>
+              <MenuItem
+                color='red.300'
+                onClick={ () => dispatch( openConfirmLogoutModal() ) }
+              >
+                Cerrar sesión
+              </MenuItem>
             </MenuList>
           </Menu>
-          <Text
-            display={{base: 'none', lg: 'block'}}
-            fontWeight={600}
-            fontSize='lg'
-          >
-            { user?.fullname }
-          </Text>
         </Flex>
 
         <Text

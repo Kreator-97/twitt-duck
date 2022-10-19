@@ -2,12 +2,22 @@ import { Avatar, Box, Flex, Text, Image } from '@chakra-ui/react'
 import { PostIcon } from './'
 
 // icons
+import { FC } from 'react'
 import { MdShare } from 'react-icons/md'
 import { HiOutlineHeart } from 'react-icons/hi'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
+import { Post as PostType} from '@twitt-duck/state'
+import { useNavigate } from 'react-router-dom'
 
-export const Post = () => {
+interface Props {
+  post: PostType;
+}
+
+export const Post: FC<Props> = ({post}) => {
+  const navigate = useNavigate()
+  
+  const { author, content, likes, comments, reposts, createdAt } = post
   return (
     <Box
       bg='white'
@@ -23,29 +33,41 @@ export const Post = () => {
         <Box width='48px'>
           <Avatar
             size='md'
-            name='Tom Holland'
-            src='https://res.cloudinary.com/practicaldev/image/fetch/s--i96Gcbyf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/50592/f46e43c2-f4f0-4787-b34e-a310cecc221a.jpg' />
+            name={ author.fullname }
+            src={ author.profilePic }
+          />
         </Box>
         <Box>
           <Text
+            cursor='pointer'
             fontWeight='bold'
-          >Tom Holland
-            - 
-            <Text
-              as={'i'}
+            onClick={ () => navigate(`/user/${author.username}`)}
+          > {author.fullname + ' -'}
+            <Text as={'span'}
               fontSize='base'
               fontWeight='light'
               color='gray.500'
-            > @tomholland </Text>
+            > @{author.username} </Text>
           </Text>
           <Text
             fontWeight='light'
             fontSize='sm'
           >
-            6 de oct 02:19
+            {
+              new Date(createdAt).toLocaleDateString()
+            }
           </Text>
         </Box>
       </Flex>
+      <Box paddingBottom='1rem'>
+        <Text
+          fontWeight='normal'
+          fontSize='md'
+          whiteSpace='pre-wrap'
+        >
+          { content }
+        </Text>
+      </Box>
       <Box
         mb={{ base: 2, lg: 4 }}
       >
@@ -61,17 +83,17 @@ export const Post = () => {
           <PostIcon
             icon={BiCommentDetail}
             title='Comentar'
-            count={10}
+            count={comments}
           />
           <PostIcon
             icon={AiOutlineRetweet}
             title='Debatir'
-            count={4}
+            count={reposts}
           />
           <PostIcon
             icon={HiOutlineHeart}
             title='Me gusta'
-            count={217}
+            count={likes}
           />
           <PostIcon
             icon={MdShare}

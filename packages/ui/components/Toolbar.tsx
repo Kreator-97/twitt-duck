@@ -1,9 +1,15 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Flex, Input, IconButton, FormControl } from '@chakra-ui/react'
-import { HiOutlineHome, HiOutlineBell, HiOutlineHashtag, HiOutlineSearch, HiOutlineUser } from 'react-icons/hi'
 import { RiMessage3Line } from 'react-icons/ri'
 import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
+import {
+  HiOutlineHome,
+  HiOutlineBell,
+  HiOutlineHashtag,
+  HiOutlineSearch,
+  HiOutlineUser
+} from 'react-icons/hi'
 
 import { ToolbarOption } from './ToolbarOption'
 
@@ -23,6 +29,7 @@ export const Toolbar = () => {
 
   return (
     <Flex
+      maxWidth='260px'
       direction='column'
       justify='space-between'
       bg='white'

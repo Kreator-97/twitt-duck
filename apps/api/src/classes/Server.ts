@@ -1,12 +1,14 @@
 import express, { Express } from 'express'
 import { createServer, Server as HTTPServer} from 'http'
 import { Server as SocketServer } from 'socket.io'
-import cors from 'cors'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
+import cors from 'cors'
 
 import { AuthRouter, PostRouter } from '../routes'
 import { Socket } from './Socket'
+import { ProfileRouter } from '../routes/ProfileRouter'
+
 dotenv.config()
 
 export class Server {
@@ -41,6 +43,7 @@ export class Server {
   routes() {
     this.app.use('/api/auth/', AuthRouter )
     this.app.use('/api/post/', PostRouter )
+    this.app.use('/api/profile/', ProfileRouter )
   }
 
   sockets () {

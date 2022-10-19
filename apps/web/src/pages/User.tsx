@@ -1,17 +1,23 @@
-import { CustomTabs, Loader, Post,} from '@twitt-duck/ui'
+import { useEffect } from 'react'
 import { Box, Heading } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
+import { CustomTabs, Post } from '@twitt-duck/ui'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { ProfileLayout } from '../layouts/ProfileLayout'
 import { useUserPosts } from '../hooks/useUserPost'
+import { ProfileLayout } from '../layouts'
 
-export const ProfilePage = () => {
-  const { user } = useAppSelector( state => state.auth )
-  const { posts, isLoading } = useUserPosts(user?.username || '')
+export const UserPage = () => {
+  const { user } = useAppSelector( state => state.auth)
+  const { pathname } = useLocation()
+  const username = pathname.split('/')[pathname.split('/').length-1]
+  const navigate = useNavigate()
 
-  if( isLoading ) {
-    return <Loader />
-  }
+  const { posts } = useUserPosts(username)
+
+  useEffect(() => {
+    if(username === user?.username ) return navigate('/profile')
+  }), []
 
   return (
     <ProfileLayout>

@@ -1,7 +1,7 @@
 import { User } from '@twitt-duck/state'
 
 export const saveUserAndTokenInLocal = (user: User, token: string) => {
-  localStorage.setItem('token', JSON.stringify(token))
+  localStorage.setItem('token', token)
   localStorage.setItem('user', JSON.stringify(user))
 }
 
@@ -12,6 +12,11 @@ export const loadUserFromLocal = (): User | null => {
     return null
   }
   return user
+}
+
+export const getTokenFromLocal = ():string | null => {
+  const token = localStorage.getItem('token')
+  return token
 }
 
 export const clearLocal = () => {

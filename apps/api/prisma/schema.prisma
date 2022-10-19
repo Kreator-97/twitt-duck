@@ -25,6 +25,8 @@ model User {
   posts       Post[]
   role        Role      @default(USER)
   active      Boolean   @default(false)
+
+  // TODO: add  backgroundPic prop to user modal
 }
 
 model Post {

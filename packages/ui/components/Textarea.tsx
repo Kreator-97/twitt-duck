@@ -1,10 +1,18 @@
+import { ChangeEvent, FC } from 'react'
 import './Textarea.css'
 
-export const Textarea = () => {
+interface Props {
+  value     : string;
+  onChange? : (e:ChangeEvent<HTMLTextAreaElement>) => void
+}
+
+export const Textarea: FC<Props> = ({ onChange, value }) => {
   return (
     <textarea
+      onChange={ (e) => onChange && onChange(e) }
       className='textarea'
-      placeholder='¿Qué esta pesando?'
+      placeholder='¿Qué está pasando?'
+      value={ value }
     ></textarea>
   )
 }
