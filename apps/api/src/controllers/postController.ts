@@ -13,7 +13,7 @@ const PRIVACY_VALUES = [ 'ONLY_ME', 'ONLY_FOLLOWERS', 'ALL' ]
 
 export const getAllPosts = async (req: Request, res: Response<PostResponse >) => {
   const posts = await prisma.post.findMany({
-    include: { author: true },
+    include: { author: true, images: true },
     orderBy: {
       createdAt: 'desc'
     }
@@ -31,7 +31,7 @@ export const getPostsByUsername = async (req: Request, res: Response<PostRespons
 
   const posts = await prisma.post.findMany({
     where: { author: { username } },
-    include: { author: true },
+    include: { author: true, images: true },
     orderBy: {
       createdAt: 'desc'
     }
@@ -45,11 +45,18 @@ export const getPostsByUsername = async (req: Request, res: Response<PostRespons
 }
 
 export const createPost = async (req: Request, res: Response<PostResponse> ) => {
-  const { content, privacy: privacyTemp } = req.body
+  const { content, privacy: privacyTemp, images } = req.body
 
   let privacy = privacyTemp
   if( !PRIVACY_VALUES.includes(privacyTemp) ) {
     privacy = 'ALL'
+  }
+
+  if( !(images instanceof Array) ) {
+    return res.status(400).json({
+      ok: false,
+      msg: 'images on req.body must to be a instance of Array'
+    })
   }
 
   const userId = req.userId
@@ -68,7 +75,12 @@ export const createPost = async (req: Request, res: Response<PostResponse> ) => 
   const post = await prisma.post.create({ data: {
     content,
     privacy,
-    authorId: user.id
+    authorId: user.id,
+    images: {
+      createMany: {
+        data: images.map(img => ({url: img}))
+      }
+    }
   }})
 
   return res.status(200).json({

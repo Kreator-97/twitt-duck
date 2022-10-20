@@ -1,19 +1,21 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Loader, NewPost, Post } from '@twitt-duck/ui'
 import { useToast } from '@chakra-ui/react'
 import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../layouts/AppLayout'
 import { createPost } from '../services/post'
-import { usePosts } from '../hooks/usePosts'
 import { DBLocal } from '../utils'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { uploadMultipleImagesRequest } from '../services/upload'
+import { usePosts } from '../hooks'
 
 export const HomePage = () => {
   const toast = useToast()
   const { mutate } = useSWRConfig()
   const navigate = useNavigate()
   const { posts, isLoading } = usePosts()
+  const [ postLoading, setPostLoading] = useState(false)
 
   useEffect(() => {
     const user = DBLocal.loadUserFromLocal()
@@ -26,11 +28,19 @@ export const HomePage = () => {
     return <Loader />
   }
 
-  const onCreatePost = async (content: string) => {
+  const onCreatePost = async (content: string, privacy: string, fileList: FileList) => {
+    setPostLoading(true)
     const token = DBLocal.getTokenFromLocal()
 
+    let images: string[] = []
+
+    if( fileList ) {
+      images = await uploadMultipleImagesRequest( fileList, token || '' )
+      console.log(images)
+    }
+
     try {
-      await createPost(content, token || '')
+      await createPost(content, images, token || '', privacy)
       toast({
         title: 'Publicación creada',
         status: 'success',
@@ -39,7 +49,10 @@ export const HomePage = () => {
         isClosable: true,
       })
       mutate('http://localhost:5000/api/post/')
+      setPostLoading(false)
     } catch (error) {
+      setPostLoading(false)
+      console.log(error)
       if( typeof error === 'string' ) {
         toast({
           title: 'No se pudo crear el post',
@@ -50,7 +63,6 @@ export const HomePage = () => {
           isClosable: true,
         })
       }
-      console.log(error)
     }
   }
 
@@ -66,6 +78,9 @@ export const HomePage = () => {
           })
         }
       </div>
+      {
+        postLoading && <Loader />
+      }
     </AppLayout>
   )
 }

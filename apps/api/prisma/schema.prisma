@@ -40,7 +40,14 @@ model Post {
   comments    Int         @default(0)
   likes       Int         @default(0)
   reposts     Int         @default(0)
-  // TODO: agregar imagenes del post 
+  images      Images[]
+}
+
+model Images {
+  id      String  @id @default(uuid())
+  url     String
+  post    Post    @relation(fields: [postId], references: [id])
+  postId  String
 }
 
 enum Role {

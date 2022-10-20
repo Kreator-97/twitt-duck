@@ -4,9 +4,15 @@ export const Loader = () => {
   return (
     <Grid
       maxWidth='100vw'
+      width='100%'
       height='100vh'
       justifyContent='center'
       alignItems='center'
+      position='fixed'
+      top='0'
+      left='0'
+      background={'whiteAlpha.500'}
+      backdropFilter='blur(2px)'
     >
       <Spinner
         thickness='4px'

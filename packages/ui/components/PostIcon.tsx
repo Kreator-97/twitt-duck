@@ -30,9 +30,7 @@ export const PostIcon: FC<Props> = ({ icon, title, count }) => {
         }}
       />
       {
-        count && (
-          <Text fontWeight='normal'>{count}</Text>
-        )
+        count && ( <Text fontWeight='normal'>{count}</Text> )
       }
     </Flex>
   )
