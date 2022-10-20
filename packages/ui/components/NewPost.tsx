@@ -10,7 +10,7 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
   const contentElementRef = useRef<HTMLDivElement>(null)
   const inputImagesRef = useRef<HTMLInputElement>(null)
   const [ privacy, setPrivacy] = useState<string>('ALL')
-  const [ filesSelected, setFilesSelected] = useState<number>(0)
+  const [ filesSelectedLength, setFilesSelectedLength ] = useState<number>(0)
   const placeholder = '¿Que está pasando?'
 
   const removePlaceholder = () => {
@@ -40,10 +40,15 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
     const content = contentElementRef.current?.innerText
 
     if( !content || content.trim() === '') return
+    if( content === placeholder ) return
 
     if( onCreatePost ) {
       onCreatePost(content, privacy, fileList || undefined)
       contentElementRef.current.innerText = placeholder
+      if( inputImagesRef.current) {
+        inputImagesRef.current.value = ''
+        setFilesSelectedLength(0)
+      }
     }
   }
 
@@ -53,7 +58,7 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
 
   const onInputFileChange = () => {
     const filesLength = inputImagesRef.current?.files?.length
-    setFilesSelected(filesLength|| 0)
+    setFilesSelectedLength(filesLength|| 0)
   }
 
   return (
@@ -116,7 +121,7 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
               onClick={ () => onSelectImages() }
             />
             {
-              ( filesSelected > 0) &&
+              ( filesSelectedLength > 0) &&
               <Box>
                 <Text
                   fontSize={{base: 'xs', md: 'sm'}}
@@ -126,7 +131,7 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
                   textOverflow='ellipsis'
                   wordBreak='break-word'
                 >
-                  {`${filesSelected} ${ filesSelected === 1 ? 'imagen seleccionada' : 'imagenes seleccionadas'}`}
+                  {`${filesSelectedLength} ${ filesSelectedLength === 1 ? 'imagen seleccionada' : 'imagenes seleccionadas'}`}
                 </Text>
               </Box>
             }

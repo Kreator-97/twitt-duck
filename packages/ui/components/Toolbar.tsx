@@ -29,7 +29,7 @@ export const Toolbar = () => {
 
   return (
     <Flex
-      maxWidth='260px'
+      maxWidth='280px'
       direction='column'
       justify='space-between'
       bg='white'

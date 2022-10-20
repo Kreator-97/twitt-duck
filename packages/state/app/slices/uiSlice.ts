@@ -1,13 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface UIState {
   isSearchBarOpen: boolean;
-  isConfirmLogoutModalOpen: boolean,
+  isConfirmLogoutModalOpen: boolean;
+  imageVisor: ImageVisor
 }
 
 const initialState: UIState = {
   isSearchBarOpen: false,
   isConfirmLogoutModalOpen: false,
+  imageVisor: {
+    imageURL: undefined,
+    isOpen: false
+  },
+}
+
+type ImageVisor = {
+  imageURL: string;
+  isOpen: true
+} | {
+  imageURL: undefined;
+  isOpen: false;
 }
 
 export const uiSlice = createSlice({
@@ -26,8 +39,14 @@ export const uiSlice = createSlice({
     openConfirmLogoutModal(state) {
       return { ...state, isConfirmLogoutModalOpen: true }
     },
+    openVisorImage(state, action: PayloadAction<string> ) {
+      return { ...state, imageVisor: { imageURL: action.payload, isOpen: true } }
+    },
+    closeVisorImage(state) {
+      return { ...state, imageVisor: { imageURL: undefined, isOpen: false } }
+    },
   }
 })
 
-export const { closeSearchBar, openSearchBar, closeConfirmLogoutModal, openConfirmLogoutModal } = uiSlice.actions
+export const { closeSearchBar, openSearchBar, closeConfirmLogoutModal, openConfirmLogoutModal, openVisorImage, closeVisorImage } = uiSlice.actions
 export default uiSlice.reducer

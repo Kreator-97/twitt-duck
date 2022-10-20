@@ -4,6 +4,7 @@ import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
 import { AppRouter } from './routes/AppRouter'
 import { DBLocal } from './utils'
 import './index.css'
+import { ImageVisor } from '@twitt-duck/ui'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -18,7 +19,10 @@ function App() {
   }, [])
 
   return (
-    <AppRouter />
+    <div>
+      <AppRouter />
+      <ImageVisor />
+    </div>
   )
 }
 

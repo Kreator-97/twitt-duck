@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Avatar, Box, Flex, Text, Grid } from '@chakra-ui/react'
 import { AspectRatio } from '@chakra-ui/react'
-import { Post as PostType} from '@twitt-duck/state'
+import { openVisorImage, Post as PostType, useAppDispatch} from '@twitt-duck/state'
 import { useNavigate } from 'react-router-dom'
 
 // icons
@@ -18,17 +18,23 @@ interface Props {
 
 export const Post: FC<Props> = ({post}) => {
   const navigate = useNavigate()
-  
+  const dispatch = useAppDispatch()
+
   const { author, content, likes, comments, reposts, createdAt, images } = post
+
+  const onOpenImage = (imageURL: string) => {
+    dispatch(openVisorImage(imageURL))
+  }
+  
   return (
     <Grid
       bg='white'
       mb={{ base: '4' }}
       boxShadow='base'
       gridTemplateColumns='48px 1fr'
-      p={{ base: '.25rem', lg: '.5rem' }}
-      rowGap={{ base: '.25rem', lg: '.5rem' }}
-      columnGap={{ base: '.25rem', lg: '.5rem' }}
+      p={{ base: '.5rem', lg: '.5rem' }}
+      rowGap={{ base: '.5rem', lg: '.5rem' }}
+      columnGap={{ base: '.5rem', lg: '.5rem' }}
     >
       <Box width='48px'>
         <Avatar
@@ -42,6 +48,7 @@ export const Post: FC<Props> = ({post}) => {
           cursor='pointer'
           fontWeight='bold'
           onClick={ () => navigate(`/user/${author.username}`)}
+          display='inline'
         > {author.fullname + ' -'}
           <Text as={'span'}
             fontSize='base'
@@ -52,6 +59,7 @@ export const Post: FC<Props> = ({post}) => {
         <Text
           fontWeight='light'
           fontSize='sm'
+          display='block'
         >
           {
             new Date(createdAt).toLocaleDateString()
@@ -90,6 +98,7 @@ export const Post: FC<Props> = ({post}) => {
                     ratio={images.length === 1 ? undefined : 1 }
                     key={image.id}
                     gridColumnStart={ (images.length === 3 && i === 2) ? 'span 2' : '' }
+                    onClick={ () => onOpenImage(image.url) }
                   >
                     <Box
                       cursor='pointer'
