@@ -1,12 +1,13 @@
 import { FC, FormEvent, useRef, useState } from 'react'
 import { MdOutlineImage } from 'react-icons/md'
-import { Box, Button, Flex, FormControl, Grid, Icon, Select, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, FormControl, Grid, Icon, Select, Text, useToast } from '@chakra-ui/react'
 
 interface Props {
   onCreatePost?(content:string, privacy: string, fileList?: FileList): void
 }
 
 export const NewPost: FC<Props> = ({onCreatePost}) => {
+  const toast = useToast()
   const contentElementRef = useRef<HTMLDivElement>(null)
   const inputImagesRef = useRef<HTMLInputElement>(null)
   const [ privacy, setPrivacy] = useState<string>('ALL')
@@ -41,6 +42,18 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
 
     if( !content || content.trim() === '') return
     if( content === placeholder ) return
+
+    if( Number(fileList?.length) >= 4 ) {
+      toast({
+        title: 'Advertencia',
+        description: 'Solamente se pueden subir un máximo de 4 imagenes por publicación',
+        status: 'warning',
+        duration: 3000,
+        position: 'top',
+        isClosable: true,
+      })
+      return
+    }
 
     if( onCreatePost ) {
       onCreatePost(content, privacy, fileList || undefined)
