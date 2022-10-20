@@ -1,10 +1,11 @@
 import { FC } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Navbar } from '@twitt-duck/ui'
 import { Box, Grid } from '@chakra-ui/react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { BottomBar, FloatingActionButton, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui/components'
+import { BottomBar, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui/components'
 import { useAppSelector } from '@twitt-duck/state'
-import { userUser } from '../hooks/useUser'
+
+import { userUser } from '../hooks'
 
 interface Props {
   children: React.ReactNode;
@@ -75,7 +76,6 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
           </Box>
         </Grid>
       </Box>
-      <FloatingActionButton />
       <BottomBar />
       <SearchModal />
     </Box>
