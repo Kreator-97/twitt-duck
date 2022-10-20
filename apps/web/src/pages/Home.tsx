@@ -15,7 +15,7 @@ export const HomePage = () => {
   const { mutate } = useSWRConfig()
   const navigate = useNavigate()
   const { posts, isLoading } = usePosts()
-  const [ postLoading, setPostLoading] = useState(false)
+  const [ createPostLoading, setCreatePostLoading] = useState(false)
 
   useEffect(() => {
     const user = DBLocal.loadUserFromLocal()
@@ -29,7 +29,7 @@ export const HomePage = () => {
   }
 
   const onCreatePost = async (content: string, privacy: string, fileList: FileList) => {
-    setPostLoading(true)
+    setCreatePostLoading(true)
     const token = DBLocal.getTokenFromLocal()
 
     let images: string[] = []
@@ -49,9 +49,9 @@ export const HomePage = () => {
         isClosable: true,
       })
       mutate('http://localhost:5000/api/post/')
-      setPostLoading(false)
+      setCreatePostLoading(false)
     } catch (error) {
-      setPostLoading(false)
+      setCreatePostLoading(false)
       console.log(error)
       if( typeof error === 'string' ) {
         toast({
@@ -79,7 +79,7 @@ export const HomePage = () => {
         }
       </div>
       {
-        postLoading && <Loader />
+        createPostLoading && <Loader />
       }
     </AppLayout>
   )
