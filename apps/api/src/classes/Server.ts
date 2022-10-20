@@ -5,9 +5,8 @@ import dotenv from 'dotenv'
 import morgan from 'morgan'
 import cors from 'cors'
 
-import { AuthRouter, PostRouter } from '../routes'
+import { AuthRouter, PostRouter, ProfileRouter, UploadRouter } from '../routes'
 import { Socket } from './Socket'
-import { ProfileRouter } from '../routes/ProfileRouter'
 
 dotenv.config()
 
@@ -44,6 +43,7 @@ export class Server {
     this.app.use('/api/auth/', AuthRouter )
     this.app.use('/api/post/', PostRouter )
     this.app.use('/api/profile/', ProfileRouter )
+    this.app.use('/api/upload/', UploadRouter )
   }
 
   sockets () {

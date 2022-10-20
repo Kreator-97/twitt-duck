@@ -31,6 +31,10 @@ export const Tendencies = () => {
           <Text fontWeight='bold' fontSize='lg'>#100DaysOfCode</Text>
           <Text fontWeight='light' fontSize='md'>2001 publicaciones</Text>
         </Box>
+        <Box mb='2'>
+          <Text fontWeight='bold' fontSize='lg'>#BlackAdam</Text>
+          <Text fontWeight='light' fontSize='md'>2001 publicaciones</Text>
+        </Box>
       </Box>
     </Box>
   )

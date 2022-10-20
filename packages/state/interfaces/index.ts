@@ -26,6 +26,13 @@ export interface Post {
   comments    : number;
   likes       : number;
   reposts     : number;
+  images      : Images[];
+}
+
+export interface Images {
+  id    : string;
+  url   : string;
+  postId: string
 }
 
 type Role = 'USER' | 'ADMIN'

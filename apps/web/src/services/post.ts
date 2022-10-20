@@ -11,10 +11,10 @@ type Response = {
   post: Post;
 }
 
-export const createPost = async (content: string, token: string) => {
+export const createPost = async (content: string, images: string[], token: string, privacy: string) => {
   const data = await request<Response>('/api/post', {
     method: 'POST',
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content, privacy, images }),
     contentType: 'application/json',
     token,
   })
