@@ -1,0 +1,32 @@
+import { Image, Modal, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react'
+import { closeVisorImage, useAppDispatch, useAppSelector } from '@twitt-duck/state'
+
+export const ImageVisor = () => {
+  const { imageVisor } = useAppSelector(state => state.ui)
+  const dispatch = useAppDispatch()
+
+  const onClose = () => {
+    dispatch(closeVisorImage())
+  }
+  
+  return (
+    <>
+      <Modal
+        isCentered
+        onClose={onClose}
+        isOpen={ imageVisor.isOpen }
+        motionPreset='slideInBottom'
+        size={{ base: 'lg', md: 'xl', lg: '3xl'}}
+      >
+        <ModalOverlay backgroundColor='blackAlpha.600' backdropBlur={'2px'}/>
+        <ModalContent boxShadow='none' rounded='md' p='.5rem' backgroundColor='transparent'>
+          <ModalCloseButton />
+          <Image
+            rounded='md'
+            src={ imageVisor.imageURL }
+          />
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}

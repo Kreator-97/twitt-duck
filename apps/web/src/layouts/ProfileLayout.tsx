@@ -1,13 +1,32 @@
 import { FC } from 'react'
 import { Navbar } from '@twitt-duck/ui'
 import { Box, Grid } from '@chakra-ui/react'
-import { BottomBar, FloatingActionButton, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui/components'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { BottomBar, FloatingActionButton, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui/components'
+import { useAppSelector } from '@twitt-duck/state'
+import { userUser } from '../hooks/useUser'
 
 interface Props {
   children: React.ReactNode;
 }
 
+// this layout work for users pages and profile page
+
 export const ProfileLayout: FC<Props> = ({ children }) => {
+  const {pathname} = useLocation()
+  const { user } = useAppSelector(state => state.auth)
+  const navigate = useNavigate()
+
+  if( !user ) {
+    navigate('/auth/login')
+    return <></>
+  }
+
+  const username = pathname === '/profile' ? user.username : pathname.split('/')[pathname.split('/').length-1]
+  const { user: userDetail, isLoading } = userUser(username)
+
+  if( isLoading ) return <Loader />
+
   return (
     <Box
       p={{ base: '0 .5rem', md: '0 1rem' }}
@@ -32,9 +51,9 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
             backgroundSize: 'cover',
           }}
         />
-        <UserDetail />
+        <UserDetail user={userDetail} />
         <Grid
-          gridTemplateColumns={{ base: '1fr', md: 'auto 1fr', lg: '240px 1fr' }}
+          gridTemplateColumns={{ base: '1fr', md: 'auto 1fr', lg: '280px 1fr' }}
           gap='1rem'
           alignItems='start'
           margin='0 auto'
@@ -49,7 +68,6 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
             boxShadow='md'
             rounded='md'
           >
-
             {
               children
             }

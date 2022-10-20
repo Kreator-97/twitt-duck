@@ -1,10 +1,14 @@
+import { FC } from 'react'
+import { User } from '@twitt-duck/state'
 import { HiUser } from 'react-icons/hi'
-import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
-import { useAppSelector } from '@twitt-duck/state'
 import { useLocation } from 'react-router-dom'
+import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
 
-export const UserDetail = () => {
-  const { user } = useAppSelector(state => state.auth)
+interface Props {
+  user?: User;
+}
+
+export const UserDetail: FC<Props> = ({ user }) => {
   const { pathname } = useLocation()
 
   return (
@@ -22,7 +26,9 @@ export const UserDetail = () => {
         user?.profilePic
           ? (
             <Image
+              objectFit='cover'
               width={{ base: '48px' , md: '60px' }}
+              height={{ base: '48px' , md: '60px' }}
               src={user.profilePic}
               rounded='md'
             />
