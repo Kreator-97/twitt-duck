@@ -18,7 +18,10 @@ export const ImageVisor = () => {
         motionPreset='slideInBottom'
         size={{ base: 'lg', md: 'xl', lg: '3xl'}}
       >
-        <ModalOverlay backgroundColor='blackAlpha.600' backdropBlur={'2px'}/>
+        <ModalOverlay
+          backgroundColor='blackAlpha.600'
+          backdropFilter='blur(1px)'
+        />
         <ModalContent boxShadow='none' rounded='md' p='.5rem' backgroundColor='transparent'>
           <ModalCloseButton />
           <Image

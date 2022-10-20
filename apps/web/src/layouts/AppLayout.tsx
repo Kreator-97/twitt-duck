@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Box, Grid } from '@chakra-ui/react'
-import { Navbar, SuggestPersons, Tendencies, Toolbar, BottomBar, FloatingActionButton, SearchModal } from '@twitt-duck/ui'
+import { BottomBar, Navbar, SuggestPersons, Tendencies, Toolbar, SearchModal } from '@twitt-duck/ui'
 
 interface Props {
   children: React.ReactNode;
@@ -40,18 +40,18 @@ export const AppLayout: FC<Props> = ({children }) => {
           height='100vh'
           display={{ base: 'none', xl: 'block' }}
           overflowY='scroll'
+          pb='2rem'
         >
           {
             <Box>
-              <Tendencies />
-              <div style={{ height: '1rem'}}></div>
               <SuggestPersons />
+              <div style={{ height: '1rem'}}></div>
+              <Tendencies />
             </Box>
           }
         </Box>
       </Grid>
       <BottomBar />
-      <FloatingActionButton />
       <SearchModal />
     </Box>
   )
