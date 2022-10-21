@@ -14,7 +14,7 @@ export const UserDetail: FC<Props> = ({ user }) => {
   return (
     <Grid
       templateColumns={{ base: '48px 1fr', md: '64px 1fr 48px 48px'}}
-      maxW='1280'
+      maxW='1080'
       m={{ base: '-50px auto .5rem', md: '-50px auto 1rem' }}
       p={{ base: '.5rem', md: '1rem' }}
       bg='white'
@@ -91,7 +91,7 @@ export const UserDetail: FC<Props> = ({ user }) => {
         <Button
           size='sm'
           width='100%'
-          display={ pathname === '/profile' ? 'none' : 'block' }
+          display={ pathname.startsWith('/profile') ? 'none' : 'block' }
           color='#fff'
           bgGradient='linear(to-b, cyan.400, teal.200)'
           _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
