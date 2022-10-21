@@ -54,6 +54,9 @@ export const Navbar = () => {
               <MenuItem onClick={ () => navigate('/profile') }>
                 Ver perfil
               </MenuItem>
+              <MenuItem onClick={ () => navigate('/profile/settings') }>
+                Configuración
+              </MenuItem>
               <MenuItem
                 color='red.300'
                 onClick={ () => dispatch( openConfirmLogoutModal() ) }

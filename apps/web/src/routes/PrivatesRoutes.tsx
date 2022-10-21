@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { ExplorePage, HomePage, MessagesPage, NotificationPage, ProfilePage, SearchPage } from '../pages'
+import { ExplorePage, HomePage, MessagesPage, NotificationPage, ProfilePage, SearchPage, SettingsPage } from '../pages'
 import { UserPage } from '../pages/User'
 
 interface Props {
@@ -29,8 +29,12 @@ export const PrivateRoutes: FC<Props> = ({ isAuthenticated }) => {
           element={<ExplorePage />}
         />
         <Route
-          path='/profile/*'
+          path='/profile'
           element={<ProfilePage />}
+        />
+        <Route
+          path='/profile/settings'
+          element={<SettingsPage />}
         />
         <Route
           path='/user/*'

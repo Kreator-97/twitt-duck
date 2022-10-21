@@ -23,7 +23,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
     return <></>
   }
 
-  const username = pathname === '/profile' ? user.username : pathname.split('/')[pathname.split('/').length-1]
+  const username = pathname.startsWith('/profile') ? user.username : pathname.split('/')[pathname.split('/').length-1]
   const { user: userDetail, isLoading } = userUser(username)
 
   if( isLoading ) return <Loader />
@@ -34,7 +34,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
       m={{ margin: '0 auto 0'}}
     >
       <Navbar />
-      <Box as='main'
+      <Box
         marginBottom='64px'
       >
         <Box
@@ -58,7 +58,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
           gap='1rem'
           alignItems='start'
           margin='0 auto'
-          maxWidth='1280px'
+          maxWidth='1080px'
           justifyContent='start'
         >
           <Toolbar />
