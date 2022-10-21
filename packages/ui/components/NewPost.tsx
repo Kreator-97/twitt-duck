@@ -160,9 +160,9 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
           <Button
             type='submit'
             size='sm'
-            bg='cyan.500'
-            color='gray.100'
-            _hover={{ bg: 'cyan.700'}}
+            color='#fff'
+            bgGradient='linear(to-b, cyan.400, teal.200)'
+            _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
           >
             Publicar
           </Button>

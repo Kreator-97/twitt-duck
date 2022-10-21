@@ -89,12 +89,12 @@ export const UserDetail: FC<Props> = ({ user }) => {
         gridColumnStart='span 2'
       >
         <Button
-          bg='cyan.500'
-          color='white'
           size='sm'
           width='100%'
           display={ pathname === '/profile' ? 'none' : 'block' }
-          _hover={{ backgroundColor: 'cyan.600' }}
+          color='#fff'
+          bgGradient='linear(to-b, cyan.400, teal.200)'
+          _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
         >
           Seguir
         </Button>

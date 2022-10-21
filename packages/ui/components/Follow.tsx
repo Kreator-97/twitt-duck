@@ -25,10 +25,10 @@ export const Follow: FC<Props> = ({name}) => {
       </Text>
       <Button
         boxShadow='md'
-        bg='cyan.500'
         size='sm'
-        color='gray.100'
-        _hover={{ bg: 'cyan.700'}}
+        color='#fff'
+        bgGradient='linear(to-b, cyan.400, teal.200)'
+        _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
       >
         Seguir
       </Button>
