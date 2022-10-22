@@ -4,10 +4,10 @@ import { Loader, NewPost, Post } from '@twitt-duck/ui'
 import { useToast } from '@chakra-ui/react'
 import { useSWRConfig } from 'swr'
 
+import { createPost, uploadMultipleImagesRequest } from '@twitt-duck/services'
+
 import { AppLayout } from '../layouts/AppLayout'
-import { createPost } from '../services/post'
 import { DBLocal } from '../utils'
-import { uploadMultipleImagesRequest } from '../services/upload'
 import { usePosts } from '../hooks'
 
 export const HomePage = () => {

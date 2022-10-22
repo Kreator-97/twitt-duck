@@ -1,12 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login, useAppDispatch } from '@twitt-duck/state'
+import { saveProfile, updateProfileImageRequest } from '@twitt-duck/services'
 
 import { AuthLayout } from '../layouts'
 import { DBLocal } from '../utils'
-import { saveProfile } from '../services/auth'
 import userDefault from '../assets/images/default-user.png'
-import { updateProfileImageRequest } from '../services/upload'
 
 import {
   Box,
