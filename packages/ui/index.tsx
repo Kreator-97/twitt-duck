@@ -1,8 +1,11 @@
 import { ChakraProvider} from '@chakra-ui/react'
 import {
   BottomBar,
+  ChangeBackgroundPicture,
   ConfirmLogout,
   CustomTabs,
+  FormChangePassword,
+  FormChangeProfileInfo,
   FormInput,
   GoogleButton,
   ImageVisor,
@@ -23,9 +26,12 @@ import { theme } from './theme'
 
 export {
   BottomBar,
+  ChangeBackgroundPicture,
   ConfirmLogout,
   ChakraProvider,
   CustomTabs,
+  FormChangePassword,
+  FormChangeProfileInfo,
   FormInput,
   GoogleButton,
   ImageVisor,

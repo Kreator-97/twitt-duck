@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "packages",
     "web",
-    "api"
+    "api",
+    "services"
   ]
 }
