@@ -1,18 +1,19 @@
 export interface User {
-  id          : string
-  email       : string
-  fullname    : string
-  password    : string
-  provider    : Provider
-  username    : string
-  online      : boolean
-  description?: string
-  profilePic ?: string
-  followers   : number
-  following   : number
-  posts       : Post
-  role        : Role
-  active      : Boolean
+  id            : string
+  email         : string
+  fullname      : string
+  password      : string
+  provider      : Provider
+  username      : string
+  online        : boolean
+  description?  : string
+  profilePic ?  : string
+  backgroundPic?: string
+  followers     : number
+  following     : number
+  posts         : Post
+  role          : Role
+  active        : Boolean
 }
 
 export interface Post {

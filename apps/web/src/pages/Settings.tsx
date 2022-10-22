@@ -11,6 +11,7 @@ import {
   FormControl,
   FormLabel,
   Grid,
+  Heading,
   Image,
   Input,
   InputGroup,
@@ -23,11 +24,11 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { changePasswordRequest, updateUserRequest } from '../services/user'
+import { changePasswordRequest, updateUserBackgroundRequest, updateUserRequest } from '../services/user'
 import { DBLocal } from '../utils'
 import { notEmptyString } from '../utils/validations'
 import { ProfileLayout } from '../layouts'
-import { updateProfileImageRequest } from '../services/upload'
+import { updateProfileImageRequest, uploadMultipleImagesRequest } from '../services/upload'
 import { useForm } from '../hooks'
 
 const validations = {
@@ -42,6 +43,7 @@ export const SettingsPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const profilePicInputRef = useRef<HTMLInputElement>(null)
+  const backgroundPicInputRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
   const { user } = useAppSelector( state => state.auth )
   const [ showPassword, setShowPassword ] = useState(false)
@@ -195,6 +197,40 @@ export const SettingsPage = () => {
     }
   }
 
+  const onChangeBackgroundPicture = async () => {
+    const files = backgroundPicInputRef.current?.files
+
+    if( !files ) return
+
+    const token = DBLocal.getTokenFromLocal()
+
+    try {
+      const images = await uploadMultipleImagesRequest(files, token || '')
+      const imgURL = await updateUserBackgroundRequest(images[0], token || '')
+
+      dispatch(login({...user, backgroundPic: imgURL }))
+
+      toast({
+        title: 'imagen de fondo actualizada',
+        status: 'success',
+        position: 'top',
+        isClosable: true,
+        duration: 3000,
+      })
+    } catch (error) {
+      console.log(error)
+      if( typeof error === 'string' ) {
+        toast({
+          title: 'Ocurrió un error al intentar cambiar la imagen',
+          status: 'error',
+          position: 'top',
+          isClosable: true,
+          duration: 3000,
+        })
+      }
+    }
+  }
+
   return (
     <ProfileLayout>
       <Tabs
@@ -202,13 +238,9 @@ export const SettingsPage = () => {
         mb='4'
       >
         <TabList>
-          <Tab>
-            Actualiza tu perfil
-          </Tab>
-          <Tab
-          >
-            Contraseña
-          </Tab>
+          <Tab>Actualiza tu perfil</Tab>
+          <Tab>Contraseña</Tab>
+          <Tab>Imagen de fondo</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -360,6 +392,28 @@ export const SettingsPage = () => {
                 </Button>
               </Grid>
             </FormControl>
+          </TabPanel>
+          <TabPanel>
+            <Image
+              src={ user.backgroundPic ? user.backgroundPic : '/images/default-bg.jpg' }
+              cursor='pointer'
+              onClick={ () => backgroundPicInputRef.current?.click() }
+            />
+            <Heading
+              fontSize='sm'
+              color='gray.500'
+              as='h3'
+              textAlign='center'
+              py='2'
+            >Haz click en la imagen para cambiarla</Heading>
+            <input
+              multiple={false}
+              type='file'
+              accept='.jpg, .jpeg, .png, .webp'
+              ref={backgroundPicInputRef}
+              style={{ display: 'none' }}
+              onChange={ () => onChangeBackgroundPicture() }
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
