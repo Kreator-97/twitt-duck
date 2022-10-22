@@ -6,10 +6,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
+import { googleRequest, registerRequest } from '@twitt-duck/services'
 
 import { AuthLayout } from '../layouts'
 import { DBLocal } from '../utils'
-import { googleRequest, registerRequest } from '../services/auth'
 import { notEmptyString } from '../utils/validations'
 import { useForm } from '../hooks/useForm'
 
