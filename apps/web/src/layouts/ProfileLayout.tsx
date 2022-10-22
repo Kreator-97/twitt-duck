@@ -1,9 +1,8 @@
 import { FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Navbar } from '@twitt-duck/ui'
 import { Box, Grid } from '@chakra-ui/react'
-import { BottomBar, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui/components'
 import { useAppSelector } from '@twitt-duck/state'
+import { Navbar, BottomBar, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui'
 
 import { userUser } from '../hooks'
 
@@ -47,7 +46,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
           objectFit='cover'
           style={{
             objectFit: 'cover',
-            backgroundImage: 'url(https://getwallpapers.com/wallpaper/full/1/7/f/1334809-most-popular-best-4k-wallpapers-1920x1080-download-free.jpg)',
+            backgroundImage: user.backgroundPic ? `url(${user.backgroundPic})` : 'url(/images/default-bg.jpg)',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
           }}

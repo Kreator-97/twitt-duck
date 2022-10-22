@@ -11,22 +11,21 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  email       String    @unique
-  fullname    String
-  password    String
-  provider    Provider  @default(CREDENTIALS)
-  username    String?   @unique
-  online      Boolean   @default(false)
-  description String?
-  profilePic  String?
-  followers   Int       @default(0)
-  following   Int       @default(0)
-  posts       Post[]
-  role        Role      @default(USER)
-  active      Boolean   @default(false)
-
-  // TODO: add  backgroundPic prop to user modal
+  id            String    @id @default(uuid())
+  email         String    @unique
+  fullname      String
+  password      String
+  provider      Provider  @default(CREDENTIALS)
+  username      String?   @unique
+  online        Boolean   @default(false)
+  description   String?
+  profilePic    String?
+  followers     Int       @default(0)
+  following     Int       @default(0)
+  posts         Post[]
+  role          Role      @default(USER)
+  active        Boolean   @default(false)
+  backgroundPic String?
 }
 
 model Post {

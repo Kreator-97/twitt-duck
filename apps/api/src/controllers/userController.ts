@@ -110,7 +110,7 @@ export const changePassword = async (req: Request, res: Response<UserResponse>) 
 
   if( !isValidPassword ) {
     return res.status(400).json({
-      ok: false, 
+      ok: false,
       msg: 'Error de credenciales. Verifique su correo o contraseña'
     })
   }
@@ -132,7 +132,55 @@ export const changePassword = async (req: Request, res: Response<UserResponse>) 
     console.log(error)
     return res.status(500).json({
       ok: false,
-      msg: 'Ocurrio un error al intentar cambiar la contraseña'
+      msg: 'Ocurrio un error al intentar cambiar la contraseña',
+      error: 'Ocurrio un error al intentar cambiar la contraseña',
+    })
+  }
+}
+
+export const changeBackgroundPicture = async (req: Request, res: Response) => {
+  const { backgroundPic } = req.body
+
+  const userId = req.userId
+
+  if( !userId ) {
+    return res.status(400).json({
+      ok: false,
+      msg: 'userId en el token es inválido'
+    })
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId }
+  })
+
+  if( !user ) {
+    return res.status(404).json({
+      ok: false,
+      msg: 'Usuario no encontrado'
+    })
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        backgroundPic,
+      }
+    })
+
+    return res.status(202).json({
+      ok: true,
+      msg: 'Imagen de fondo actualizada',
+      imgURL: backgroundPic,
+    })
+  } catch (error) {
+    console.log(error)
+
+    return res.status(500).json({
+      ok: false,
+      msg: 'No se pudo actualizar la imagen de fondo',
+      error,
     })
   }
 }
