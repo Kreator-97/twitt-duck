@@ -36,7 +36,6 @@ export const HomePage = () => {
 
     if( fileList ) {
       images = await uploadMultipleImagesRequest( fileList, token || '' )
-      console.log(images)
     }
 
     try {

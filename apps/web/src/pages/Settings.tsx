@@ -1,12 +1,17 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useRef, useState } from 'react'
 import { login, useAppDispatch, useAppSelector } from '@twitt-duck/state'
 import { useNavigate } from 'react-router-dom'
+import { Loader } from '@twitt-duck/ui'
+import { mutate } from 'swr'
+
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Grid,
+  Image,
   Input,
   InputGroup,
   Tab,
@@ -14,6 +19,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   useToast,
 } from '@chakra-ui/react'
 
@@ -21,6 +27,7 @@ import { changePasswordRequest, updateUserRequest } from '../services/user'
 import { DBLocal } from '../utils'
 import { notEmptyString } from '../utils/validations'
 import { ProfileLayout } from '../layouts'
+import { updateProfileImageRequest } from '../services/upload'
 import { useForm } from '../hooks'
 
 const validations = {
@@ -34,10 +41,12 @@ const validations = {
 export const SettingsPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const profilePicInputRef = useRef<HTMLInputElement>(null)
   const toast = useToast()
   const { user } = useAppSelector( state => state.auth )
-  const [showPassword, setShowPassword] = useState(false)
-  
+  const [ showPassword, setShowPassword ] = useState(false)
+  const [ isLoading, setIsLoading] = useState(false)
+
   if( !user ) {
     navigate('/')
     return <></>
@@ -50,7 +59,7 @@ export const SettingsPage = () => {
     fullname: user.fullname,
     description: user.description || '',
     newPassword: '',
-    currentPassword: ''
+    currentPassword: '',
   }, validations)
 
   const onSaveProfile = async (e: FormEvent ) => {
@@ -143,6 +152,49 @@ export const SettingsPage = () => {
     onInputChange(newEvent)
   }
 
+  const onChangeProfilePicture = async () => {
+    setIsLoading(true)
+    const files = profilePicInputRef.current?.files
+    if( !files ) return
+    
+    const token = DBLocal.getTokenFromLocal()
+    if( !token ) return console.error('token no existe')
+
+    try {
+      const imgURL = await updateProfileImageRequest(files, token || '')
+
+      if( !imgURL ) {
+        return Promise.reject('hubo un error al subir la imagen')
+      }
+
+      setIsLoading(false)
+
+      DBLocal.saveUserAndTokenInLocal({...user, profilePic: imgURL}, token)
+      dispatch(login({...user, profilePic: imgURL }))
+      mutate(`http://localhost:5000/api/user/${username}`)
+
+      toast({
+        title: 'Imagen de perfil actualizada con éxito',
+        isClosable: true,
+        position: 'top',
+        duration: 3000,
+        status: 'success',
+      })
+    } catch (error) {
+      setIsLoading(false)
+      console.error(error)
+      if( typeof error === 'string' ) {
+        toast({
+          title: error,
+          isClosable: true,
+          position: 'top',
+          duration: 3000,
+          status: 'error',
+        })
+      }
+    }
+  }
+
   return (
     <ProfileLayout>
       <Tabs
@@ -166,6 +218,33 @@ export const SettingsPage = () => {
               m='0 auto'
               onSubmit={ onSaveProfile }
             >
+              <Flex
+                gridTemplateColumns='1fr'
+                justifyContent='center'
+                alignItems='center'
+                my='2rem'
+                gap='1rem'
+                flexDirection='column'
+              >
+                <Image
+                  src={user.profilePic}
+                  width='80px'
+                  height='80px'
+                  objectFit='cover'
+                  rounded='full'
+                  cursor='pointer'
+                  onClick={ () => profilePicInputRef.current?.click() }
+                />
+                <Text color='gray.400' fontSize='sm'>Haz click en la imagen para cambiarla</Text>
+                <input
+                  ref={profilePicInputRef}
+                  type='file'
+                  accept='.jpg, .jpeg, .png, .webp'
+                  style={{display: 'none'}}
+                  onChange={ onChangeProfilePicture }
+                  multiple={false}
+                />
+              </Flex>
               <Grid
                 gridTemplateColumns='1fr'
                 gap='1rem'
@@ -255,7 +334,6 @@ export const SettingsPage = () => {
                   <InputGroup>
                     <Input
                       type={showPassword ? 'text' : 'password'}
-
                       name='newPassword'
                       onChange={ onInputChange}
                       value={newPassword}
@@ -285,7 +363,9 @@ export const SettingsPage = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-
+      {
+        isLoading && <Loader />
+      }
     </ProfileLayout>
   )
 }
