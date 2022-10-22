@@ -26,7 +26,7 @@ export const updateProfileImageRequest = async (fileList: FileList, token: strin
 }
 
 export const uploadMultipleImagesRequest = async (fileList: FileList, token: string):Promise<string[]> => {
-  if( fileList.length === 0 ) return Promise.reject(null)
+  if( fileList.length === 0 ) return []
 
   try {
     const images: string[] = []
