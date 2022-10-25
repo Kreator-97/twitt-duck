@@ -2,6 +2,7 @@ import { ChakraProvider} from '@chakra-ui/react'
 import {
   BottomBar,
   ChangeBackgroundPicture,
+  CommentsList,
   ConfirmLogout,
   CustomTabs,
   FormChangePassword,
@@ -28,6 +29,7 @@ import { theme } from './theme'
 export {
   BottomBar,
   ChangeBackgroundPicture,
+  CommentsList,
   ConfirmLogout,
   ChakraProvider,
   CustomTabs,

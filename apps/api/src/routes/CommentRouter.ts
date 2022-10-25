@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
-import { AddComment } from '../controllers/commentController'
+import { AddComment, toggleLikeComment } from '../controllers/commentController'
 import { validateFields, verifyUser } from '../middlewares'
 
 export const CommentRouter = Router()
@@ -11,3 +11,8 @@ CommentRouter.post('/:postId', [
   param('postId', 'postId es requerido y debe ser válido').isUUID(),
   validateFields
 ], AddComment)
+
+CommentRouter.put('/:commentId/toggle-like', [
+  verifyUser,
+  validateFields
+], toggleLikeComment)

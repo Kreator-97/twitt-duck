@@ -4,7 +4,6 @@ import { validateToken } from '../util/jwt'
 export const verifyUser = async (req: Request, res:Response, next: NextFunction) => {
 
   const token = req.header('authorization')?.split(' ')[1]
-  console.log(token)
   if( !token ) {
     return res.status(400).json({
       ok: false,

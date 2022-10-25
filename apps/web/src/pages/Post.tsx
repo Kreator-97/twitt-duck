@@ -1,11 +1,10 @@
 import { useRef } from 'react'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
-import { Box, Button, Flex, Grid, Text, useToast } from '@chakra-ui/react'
-import { Loader, Post, UserAvatar } from '@twitt-duck/ui'
-import { useAppSelector } from '@twitt-duck/state'
-import { createComment } from '@twitt-duck/services'
-import { PostActions } from '@twitt-duck/ui/components/PostActions'
 import { mutate } from 'swr'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAppSelector } from '@twitt-duck/state'
+import { CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
+import { Box, Button, Flex, Grid, useToast } from '@chakra-ui/react'
+import { createComment, toggleLikeComment, toggleLikePost } from '@twitt-duck/services'
 
 import { usePost } from '../hooks/usePost'
 import { AppLayout } from '../layouts'
@@ -59,6 +58,7 @@ export const PostPage = () => {
     const content = contentElementRef.current?.innerText
 
     if( !content || content?.trim() === '' ) return
+    if( content === placeholder ) return
     if( !token ) return
 
     try {
@@ -89,14 +89,39 @@ export const PostPage = () => {
     }
   }
 
-  const onLikeCompleted = () => {
+  const onPostLiked = async (actionId: string) => {
+    const token = localStorage.getItem('token')
+
+    try {
+      await toggleLikePost(actionId, token || '')
+    } catch (error) {
+      console.log(error)
+    }
+    
     console.log('mutando')
     mutate(`http://localhost:5000/api/post/${post.id}`)
+  }
+  
+  const onCommentLiked = async (actionId: string) => {
+    console.log('mutando')
+    const token = localStorage.getItem('token')
+
+    if( !token ) {
+      console.error('token no existe')
+      return
+    }
+
+    try {
+      await toggleLikeComment(actionId, token || '')
+      mutate(`http://localhost:5000/api/post/${post.id}`)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
     <AppLayout>
-      <Post post={post} onLikeCompleted={onLikeCompleted} />
+      <Post post={post} onLikeEvent={onPostLiked} />
 
       <Grid
         gridTemplateColumns='48px 1fr'
@@ -136,70 +161,11 @@ export const PostPage = () => {
         </Flex>
       </Grid>
 
-      <Box
-        bgColor='white'
-        boxShadow='md'
-      >
-        {
-          post.comments.map( comment => {
-            const { author } = comment
-            return (
-              <Grid
-                p='1rem .5rem'
-                border='1px solid #EEE'
-                key={comment.id}
-                gridTemplateColumns='48px 1fr'
-                gap='.5rem'
-                alignItems='center'
-              >
-                <Box>
-                  <UserAvatar
-                    imgURL={author.profilePic}
-                    name={author.fullname}
-                  />
-                </Box>
-                <Box>
-                  <Text>
-                    { author.fullname + ' - ' }
-                    <Text color='gray.500' as='span'>@{author.username}
-                    </Text>
-                  </Text>
-                  <Text
-                    color='gray.500'
-                  >
-                    { 'En respuesta a ' }
-                    <Text
-                      as='span'
-                      color='cyan.500'
-                    >
-                      <Link
-                        to={`/user/${post.author.username}`}
-                      >
-                        @{ post.author.username }
-                      </Link>
-                    </Text>
-                  </Text>
-                </Box>
-                <Box />
-                <Box
-                  minHeight='3rem'
-                >
-                  <Text>{ comment.content }</Text>
-                </Box>
-                <Box />
-                {/* FIXME: fix this on schema */}
-                <PostActions
-                  onLikeCompleted={ onLikeCompleted }
-                  postId={post.id}
-                  comments={ [] }
-                  likes={[]}
-                  reposts={0}
-                />
-              </Grid>
-            )
-          })
-        }
-      </Box>
+      <CommentsList
+        comments={post.comments}
+        onCommentLiked={ onCommentLiked }
+        post={post}
+      />
     </AppLayout>
   )
 }

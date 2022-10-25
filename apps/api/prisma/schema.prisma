@@ -22,64 +22,69 @@ model User {
   profilePic    String   @default("/images/default-user.png")
   followers     Int      @default(0)
   following     Int      @default(0)
-  posts         Post[]
-  comments      Comment[]
   role          Role     @default(USER)
   active        Boolean  @default(false)
   backgroundPic String?
+  posts         Post[]
+  comments      Comment[]
   likes         Likes[]
   reposts       Repost[]
 }
 
 model Post {
-  id         String     @id @default(uuid())
-  content    String
-  visibility Visibility @default(VISIBLE)
-  createdAt  DateTime   @default(now())
-  author     User       @relation(fields: [authorId], references: [id])
-  authorId   String
-  privacy    Privacy    @default(ALL)
-  comments   Comment[]
-  likes      Likes[]
-  reposts    Repost[]
-  images     Images[]
-}
-
-model Repost {
-  id              String  @id  @default(uuid())
-  originalPost    Post    @relation(fields: [originalPostId], references: [id]) 
-  originalPostId  String
-  user            User    @relation(fields: [userId], references: [id])
-  userId          String
-}
-
-model Likes {
-  id      String  @id @default(uuid())
-  user    User    @relation(fields: [userId], references: [id])
-  userId  String
-  post    Post    @relation(fields: [postId], references: [id])
-  postId  String
+  id              String      @id @default(uuid())
+  content         String
+  visibility      Visibility  @default(VISIBLE)
+  createdAt       DateTime    @default(now())
+  likes           Likes[]
+  reposts         Repost[]
+  images          Images[]
+  privacy         Privacy     @default(ALL)
+  author          User?       @relation(fields: [authorId], references: [id])
+  authorId        String?
+  comments        Comment[]
 }
 
 model Comment {
-  id         String     @id @default(uuid())
-  content    String
-  visibility Visibility @default(VISIBLE)
-  createdAt  DateTime   @default(now())
-  author     User       @relation(fields: [authorId], references: [id])
-  authorId   String
-  privacy    Privacy    @default(ALL)
-  likes      Int        @default(0)
-  reposts    Int        @default(0)
-  post       Post       @relation(fields:[postId], references: [id])
-  postId     String
+  id              String      @id @default(uuid())
+  content         String
+  visibility      Visibility  @default(VISIBLE)
+  createdAt       DateTime    @default(now())
+  privacy         Privacy     @default(ALL)
+  author          User        @relation(fields: [authorId], references: [id])
+  post            Post        @relation(fields: [postId], references: [id])
+  authorId        String
+  postId          String
+  likes           Likes[]
+  reposts         Repost[]
+  // images          Images[]
+}
+
+model Repost {
+  id                String    @id  @default(uuid())
+  author            User      @relation(fields: [authorId], references: [id])
+  authorId          String
+  originalPost      Post?     @relation(fields: [originalPostId], references: [id]) 
+  originalPostId    String?
+  originalComment   Comment?  @relation(fields: [originalCommentId], references: [id]) 
+  originalCommentId String?
+}
+
+model Likes {
+  id        String    @id @default(uuid())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post?     @relation(fields: [postId], references: [id])
+  postId    String?
+  comment   Comment?  @relation(fields: [commentId], references: [id])
+  commentId String?
 }
 
 model Images {
-  id     String @id @default(uuid())
-  url    String
-  post   Post   @relation(fields: [postId], references: [id])
-  postId String
+  id        String    @id @default(uuid())
+  url       String
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    String
 }
 
 enum Role {

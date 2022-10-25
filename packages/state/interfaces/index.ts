@@ -38,7 +38,7 @@ export interface Comment {
   author      : User;
   authorId    : string;
   privacy     : Privacy;
-  comments    : number;
+  comments    : Number;
   likes       : Like[];
   reposts     : number;
 }

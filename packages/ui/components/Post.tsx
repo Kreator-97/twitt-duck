@@ -8,10 +8,10 @@ import { PostActions } from './PostActions'
 
 interface Props {
   post: PostType;
-  onLikeCompleted?: () => void;
+  onLikeEvent?: (postId: string) => void;
 }
 
-export const Post: FC<Props> = ({post, onLikeCompleted}) => {
+export const Post: FC<Props> = ({post, onLikeEvent}) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -119,13 +119,14 @@ export const Post: FC<Props> = ({post, onLikeCompleted}) => {
           </Grid>
         )
       }
-      <Box gridColumnStart='span 2'>
+      <Box />
+      <Box>
         <PostActions
-          postId={post.id}
+          actionId={post.id}
           comments={comments}
           likes={likes}
           reposts={reposts.length}
-          onLikeCompleted={ onLikeCompleted }
+          onLikeEvent={ onLikeEvent }
         />
       </Box>
     </Grid>

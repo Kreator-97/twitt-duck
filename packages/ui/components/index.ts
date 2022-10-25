@@ -1,6 +1,7 @@
 export * from './BottomBar'
 export * from './BottomBarIcon'
 export * from './ChangeBackgroundPicture'
+export * from './CommentsList'
 export * from './ConfirmLogout'
 export * from './CustomTabs'
 export * from './Follow'

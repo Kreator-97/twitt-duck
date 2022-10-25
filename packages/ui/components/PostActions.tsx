@@ -2,7 +2,6 @@ import { FC, MouseEvent } from 'react'
 import { MdShare } from 'react-icons/md'
 import { Box, Flex } from '@chakra-ui/react'
 import { Comment, Like, useAppSelector } from '@twitt-duck/state'
-import { toogleLikePost } from '@twitt-duck/services'
 
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
@@ -11,27 +10,23 @@ import { HiOutlineHeart } from 'react-icons/hi'
 import { PostIcon } from './PostIcon'
 
 interface Props {
-  postId  : string;
+  actionId  : string;
   comments: Comment[];
   reposts : number;
   likes   : Like[];
-  onLikeCompleted?: () => void
+  onLikeEvent?: (actionId: string) => void
 }
 
-export const PostActions: FC<Props> = ({ comments, likes, reposts, postId, onLikeCompleted }) => {
+// this component perform all actions over the Post or comment passed as actionId:
+// actiones likes, reposts, comment
+
+export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, onLikeEvent }) => {
   const { user } = useAppSelector(state => state.auth)
 
   const onLikePost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
 
-    const token = localStorage.getItem('token')
-
-    try {
-      await toogleLikePost(postId, token || '')
-      onLikeCompleted && onLikeCompleted()
-    } catch (error) {
-      console.log(error)
-    }
+    onLikeEvent && onLikeEvent(actionId)
   }
 
   return (

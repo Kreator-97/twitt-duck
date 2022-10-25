@@ -20,11 +20,18 @@ export const createComment = async (postId: string, content: string, token: stri
   })
 
   if( !data.ok ) {
-    // console.log({error, errors})
     console.log(data.errors)
     return Promise.reject(data.msg)
   }
 
   return data
+}
+
+export const toggleLikeComment = async (commentId: string, token: string) => {
+  await request(`/api/comment/${commentId}/toggle-like`, {
+    method: 'PUT',
+    token,
+    contentType: 'application/json'
+  })
 }
 

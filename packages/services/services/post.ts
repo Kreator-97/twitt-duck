@@ -27,7 +27,7 @@ export const createPost = async (content: string, images: string[], token: strin
   return data
 }
 
-export const toogleLikePost = async (postId: string, token: string) => {
+export const toggleLikePost = async (postId: string, token: string) => {
   const data = await request<Response>(`/api/post/${postId}/toggle-like`, {
     method: 'PUT',
     contentType: 'application/json',
@@ -41,4 +41,3 @@ export const toogleLikePost = async (postId: string, token: string) => {
 
   return data
 }
-

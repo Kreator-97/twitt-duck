@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { Loader, NewPost, Post } from '@twitt-duck/ui'
-import { createPost, uploadMultipleImagesRequest } from '@twitt-duck/services'
+import { createPost, toggleLikePost, uploadMultipleImagesRequest } from '@twitt-duck/services'
 
 import { useSWRConfig } from 'swr'
 
@@ -28,9 +28,16 @@ export const HomePage = () => {
     return <Loader />
   }
 
-  const onLikeCompleted = () => {
-    console.log('mutando')
-    mutate('http://localhost:5000/api/post/')
+  const onLikeEvent = async (actionId: string) => {
+    const token = DBLocal.getTokenFromLocal()
+
+    try {
+      await toggleLikePost(actionId, token || '')
+      mutate('http://localhost:5000/api/post/')
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const onCreatePost = async (content: string, privacy: string, fileList: FileList) => {
@@ -77,7 +84,7 @@ export const HomePage = () => {
         {
           posts.map((post) => {
             return (
-              <Post key={post.id} post={post} onLikeCompleted={ onLikeCompleted } />
+              <Post key={post.id} post={post} onLikeEvent={ onLikeEvent } />
             )
           })
         }
