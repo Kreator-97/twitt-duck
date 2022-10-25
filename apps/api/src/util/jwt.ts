@@ -7,7 +7,7 @@ export const signToken = (payload: {[key: string]: string}) => {
     throw new Error('SECRET is not defined')
   }
 
-  const token = jwt.sign(payload, secret, { expiresIn: '7d' })
+  const token = jwt.sign(payload, secret, { expiresIn: '30d' })
   return token
 }
 
@@ -28,5 +28,3 @@ export const validateToken = (token: string):Promise<{id: string}> => {
     }
   })
 }
-
-

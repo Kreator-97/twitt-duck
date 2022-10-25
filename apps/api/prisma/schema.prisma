@@ -11,42 +11,75 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
+  id            String   @id @default(uuid())
+  email         String   @unique
   fullname      String
   password      String
-  provider      Provider  @default(CREDENTIALS)
-  username      String?   @unique
-  online        Boolean   @default(false)
+  provider      Provider @default(CREDENTIALS)
+  username      String?  @unique
+  online        Boolean  @default(false)
   description   String?
-  profilePic    String?
-  followers     Int       @default(0)
-  following     Int       @default(0)
+  profilePic    String   @default("/images/default-user.png")
+  followers     Int      @default(0)
+  following     Int      @default(0)
   posts         Post[]
-  role          Role      @default(USER)
-  active        Boolean   @default(false)
+  comments      Comment[]
+  role          Role     @default(USER)
+  active        Boolean  @default(false)
   backgroundPic String?
+  likes         Likes[]
+  reposts       Repost[]
 }
 
 model Post {
-  id          String      @id @default(uuid())
-  content     String
-  visibility  Visibility  @default(VISIBLE)
-  createdAt   DateTime    @default(now())
-  author      User        @relation(fields: [authorId], references: [id])
-  authorId    String
-  privacy     Privacy     @default(ALL)
-  comments    Int         @default(0)
-  likes       Int         @default(0)
-  reposts     Int         @default(0)
-  images      Images[]
+  id         String     @id @default(uuid())
+  content    String
+  visibility Visibility @default(VISIBLE)
+  createdAt  DateTime   @default(now())
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   String
+  privacy    Privacy    @default(ALL)
+  comments   Comment[]
+  likes      Likes[]
+  reposts    Repost[]
+  images     Images[]
+}
+
+model Repost {
+  id              String  @id  @default(uuid())
+  originalPost    Post    @relation(fields: [originalPostId], references: [id]) 
+  originalPostId  String
+  user            User    @relation(fields: [userId], references: [id])
+  userId          String
+}
+
+model Likes {
+  id      String  @id @default(uuid())
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String
+  post    Post    @relation(fields: [postId], references: [id])
+  postId  String
+}
+
+model Comment {
+  id         String     @id @default(uuid())
+  content    String
+  visibility Visibility @default(VISIBLE)
+  createdAt  DateTime   @default(now())
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   String
+  privacy    Privacy    @default(ALL)
+  likes      Int        @default(0)
+  reposts    Int        @default(0)
+  post       Post       @relation(fields:[postId], references: [id])
+  postId     String
 }
 
 model Images {
-  id      String  @id @default(uuid())
-  url     String
-  post    Post    @relation(fields: [postId], references: [id])
-  postId  String
+  id     String @id @default(uuid())
+  url    String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
 }
 
 enum Role {

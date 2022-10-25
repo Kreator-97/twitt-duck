@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Post } from '../../interfaces';
 
 export interface UIState {
   isSearchBarOpen: boolean;
   isConfirmLogoutModalOpen: boolean;
-  imageVisor: ImageVisor
+  imageVisor: ImageVisor;
+  postVisor: PostVisor;
 }
 
 const initialState: UIState = {
@@ -13,6 +15,10 @@ const initialState: UIState = {
     imageURL: undefined,
     isOpen: false
   },
+  postVisor: {
+    isOpen: false,
+    post: null
+  }
 }
 
 type ImageVisor = {
@@ -20,6 +26,14 @@ type ImageVisor = {
   isOpen: true
 } | {
   imageURL: undefined;
+  isOpen: false;
+}
+
+type PostVisor = {
+  post: Post;
+  isOpen: true;
+} | {
+  post: null | undefined;
   isOpen: false;
 }
 

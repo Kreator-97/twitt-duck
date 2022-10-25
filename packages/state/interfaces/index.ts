@@ -7,7 +7,7 @@ export interface User {
   username      : string
   online        : boolean
   description?  : string
-  profilePic ?  : string
+  profilePic    : string
   backgroundPic?: string
   followers     : number
   following     : number
@@ -24,16 +24,37 @@ export interface Post {
   author      : User;
   authorId    : string;
   privacy     : Privacy;
-  comments    : number;
-  likes       : number;
-  reposts     : number;
+  comments    : Comment[]
+  likes       : any[];
+  reposts     : any[];
   images      : Images[];
+}
+
+export interface Comment {
+  id          : string;
+  content     : string;
+  visibility  : Visibility;
+  createdAt   : Date;
+  author      : User;
+  authorId    : string;
+  privacy     : Privacy;
+  comments    : number;
+  likes       : Like[];
+  reposts     : number;
 }
 
 export interface Images {
   id    : string;
   url   : string;
   postId: string
+}
+
+export interface Like {
+  id: string;
+  user: User;
+  post: {
+    id: string
+  };
 }
 
 type Role = 'USER' | 'ADMIN'

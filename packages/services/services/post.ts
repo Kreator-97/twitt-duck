@@ -1,5 +1,5 @@
 import { Post } from '@twitt-duck/state'
-import { request } from './utils/request'
+import { request } from '../utils/request'
 
 type Response = {
   ok: false;
@@ -26,3 +26,19 @@ export const createPost = async (content: string, images: string[], token: strin
 
   return data
 }
+
+export const toogleLikePost = async (postId: string, token: string) => {
+  const data = await request<Response>(`/api/post/${postId}/toggle-like`, {
+    method: 'PUT',
+    contentType: 'application/json',
+    token
+  })
+
+  if( !data.ok ) {
+    console.log(data.errors)
+    return Promise.reject(data.msg)
+  }
+
+  return data
+}
+

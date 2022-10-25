@@ -1,4 +1,4 @@
-import { request } from './utils/request'
+import { request } from '../utils/request'
 
 export const updateProfileImageRequest = async (fileList: FileList, token: string): Promise<string | null> => {
   const img = fileList[0]

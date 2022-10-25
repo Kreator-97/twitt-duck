@@ -1,22 +1,17 @@
 import { FC } from 'react'
-import { Avatar, Box, Flex, Text, Grid } from '@chakra-ui/react'
+import { Avatar, Box, Text, Grid } from '@chakra-ui/react'
 import { AspectRatio } from '@chakra-ui/react'
 import { openVisorImage, Post as PostType, useAppDispatch} from '@twitt-duck/state'
 import { useNavigate } from 'react-router-dom'
 
-// icons
-import { MdShare } from 'react-icons/md'
-import { HiOutlineHeart } from 'react-icons/hi'
-import { AiOutlineRetweet } from 'react-icons/ai'
-import { BiCommentDetail } from 'react-icons/bi'
-
-import { PostIcon } from './'
+import { PostActions } from './PostActions'
 
 interface Props {
   post: PostType;
+  onLikeCompleted?: () => void;
 }
 
-export const Post: FC<Props> = ({post}) => {
+export const Post: FC<Props> = ({post, onLikeCompleted}) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -35,6 +30,8 @@ export const Post: FC<Props> = ({post}) => {
       p={{ base: '.5rem', lg: '.5rem' }}
       rowGap={{ base: '.5rem', lg: '.5rem' }}
       columnGap={{ base: '.5rem', lg: '.5rem' }}
+      onClick={ () => navigate(`/post/${post.id}`) }
+      cursor='pointer'
     >
       <Box width='48px'>
         <Avatar
@@ -47,8 +44,14 @@ export const Post: FC<Props> = ({post}) => {
         <Text
           cursor='pointer'
           fontWeight='bold'
-          onClick={ () => navigate(`/user/${author.username}`)}
+          onClick={ (e) => {
+            e.stopPropagation()
+            navigate(`/user/${author.username}`)
+          }}
           display='inline'
+          _hover={{
+            textDecoration: 'underline'
+          }}
         > {author.fullname + ' -'}
           <Text as={'span'}
             fontSize='base'
@@ -72,6 +75,7 @@ export const Post: FC<Props> = ({post}) => {
           fontWeight='normal'
           fontSize='md'
           whiteSpace='pre-wrap'
+          minH='3rem'
         >
           { content }
         </Text>
@@ -98,7 +102,8 @@ export const Post: FC<Props> = ({post}) => {
                     ratio={images.length === 1 ? undefined : 1 }
                     key={image.id}
                     gridColumnStart={ (images.length === 3 && i === 2) ? 'span 2' : '' }
-                    onClick={ () => onOpenImage(image.url) }
+                    onClick={ (e) => { e.stopPropagation(); onOpenImage(image.url) } }
+                    
                   >
                     <Box
                       cursor='pointer'
@@ -115,39 +120,13 @@ export const Post: FC<Props> = ({post}) => {
         )
       }
       <Box gridColumnStart='span 2'>
-        <Flex
-          gap='1rem'
-          justify='space-evenly'
-          alignItems='center'
-        >
-          <Box>
-            <PostIcon
-              icon={BiCommentDetail}
-              title='Comentar'
-              count={comments}
-            />
-          </Box>
-          <Box>
-            <PostIcon
-              icon={AiOutlineRetweet}
-              title='Debatir'
-              count={reposts}
-            />
-          </Box>
-          <Box>
-            <PostIcon
-              icon={HiOutlineHeart}
-              title='Me gusta'
-              count={likes}
-            />
-          </Box>
-          <Box>
-            <PostIcon
-              icon={MdShare}
-              title='Compatir'
-            />
-          </Box>
-        </Flex>
+        <PostActions
+          postId={post.id}
+          comments={comments}
+          likes={likes}
+          reposts={reposts.length}
+          onLikeCompleted={ onLikeCompleted }
+        />
       </Box>
     </Grid>
   )

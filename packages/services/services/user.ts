@@ -1,5 +1,5 @@
 import { User } from '@twitt-duck/state'
-import { request } from './utils/request'
+import { request } from '../utils/request'
 
 type Response = {
   ok: false;

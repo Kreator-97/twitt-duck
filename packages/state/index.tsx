@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from './app/hooks'
 import { store } from './app/store'
 import { AuthState, finishChecking, login } from './app/slices/authSlice'
 import { UIState, closeSearchBar, openSearchBar, openConfirmLogoutModal, closeConfirmLogoutModal, closeVisorImage, openVisorImage } from './app/slices/uiSlice'
-import { Post, User } from './interfaces'
+import { Post, User, Comment, Images, Like } from './interfaces'
 
 export {
   Provider,
@@ -25,5 +25,8 @@ export type {
   AuthState,
   UIState,
   Post,
-  User
+  User,
+  Comment,
+  Images,
+  Like
 }

@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
+import { useLocation, useNavigate,  } from 'react-router-dom'
 import { Box, Heading } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
 import { CustomTabs, Post } from '@twitt-duck/ui'
-import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useUserPosts } from '../hooks/useUserPost'
 import { ProfileLayout } from '../layouts'
@@ -16,7 +16,9 @@ export const UserPage = () => {
   const { posts } = useUserPosts(username)
 
   useEffect(() => {
-    if(username === user?.username ) return navigate('/profile')
+    if(username === user?.username ) return navigate('/profile', {
+      replace: true
+    })
   }), []
 
   return (

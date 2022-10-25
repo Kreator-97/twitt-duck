@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader, NewPost, Post } from '@twitt-duck/ui'
 import { useToast } from '@chakra-ui/react'
-import { useSWRConfig } from 'swr'
-
+import { Loader, NewPost, Post } from '@twitt-duck/ui'
 import { createPost, uploadMultipleImagesRequest } from '@twitt-duck/services'
+
+import { useSWRConfig } from 'swr'
 
 import { AppLayout } from '../layouts/AppLayout'
 import { DBLocal } from '../utils'
@@ -26,6 +26,11 @@ export const HomePage = () => {
 
   if ( isLoading ) {
     return <Loader />
+  }
+
+  const onLikeCompleted = () => {
+    console.log('mutando')
+    mutate('http://localhost:5000/api/post/')
   }
 
   const onCreatePost = async (content: string, privacy: string, fileList: FileList) => {
@@ -72,7 +77,7 @@ export const HomePage = () => {
         {
           posts.map((post) => {
             return (
-              <Post key={post.id} post={post}/>
+              <Post key={post.id} post={post} onLikeCompleted={ onLikeCompleted } />
             )
           })
         }
