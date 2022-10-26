@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
-import { ConfirmRemoveRepost, ImageVisor } from '@twitt-duck/ui'
+import { ImageVisor } from '@twitt-duck/ui'
 
 import { AppRouter } from './routes/AppRouter'
 import { DBLocal } from './utils'
@@ -22,7 +22,6 @@ function App() {
     <div>
       <AppRouter />
       <ImageVisor />
-      <ConfirmRemoveRepost />
     </div>
   )
 }

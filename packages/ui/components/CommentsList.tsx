@@ -14,8 +14,8 @@ interface Props {
 export const CommentsList: FC<Props> = ({comments, post, onCommentLiked, onCommentReposted}) => {
   const dispatch = useAppDispatch()
 
-  const onRepostCancelEvent = async () => {
-    dispatch(openRemoveRepostModal())
+  const onRepostCancelEvent = async (actionId: string) => {
+    dispatch(openRemoveRepostModal(actionId))
   }
 
   return (

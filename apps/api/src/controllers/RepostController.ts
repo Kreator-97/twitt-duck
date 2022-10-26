@@ -92,3 +92,51 @@ export const createRepost = async (req: Request, res: Response<RepostResponse>) 
     })
   }
 }
+
+export const deleteRepost = async (req: Request, res: Response) => {
+  const repostId = req.params.repostId
+  const userId = req.userId
+
+  if( !userId ) {
+    return res.status(400).json({
+      msg: 'userId dentro de token no fue encontrado',
+      ok: false,
+    })
+  }
+
+  try {
+    const repost = await prisma.repost.findFirst({ where: {
+      OR: [
+        {
+          originalCommentId: repostId,
+          authorId: userId,
+        },
+        {
+          originalPostId: repostId,
+          authorId: userId,
+
+        }
+      ]
+    }})
+
+    if( !repost ) {
+      return res.status(404).json({
+        ok: false,
+        msg: `No existe el repost con el id ${repostId}`
+      })
+    }
+
+    await prisma.repost.delete({ where: { id: repost.id }})
+
+    return res.status(200).json({
+      ok: true, 
+      msg: 'Repost ha sido eliminado'
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      ok: false,
+      msg: 'Ocurrio un error. Repost no pudo ser eliminado'
+    })
+  }
+}
