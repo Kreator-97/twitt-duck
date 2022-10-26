@@ -81,6 +81,7 @@ export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
           fontSize='md'
           whiteSpace='pre-wrap'
           minH='3rem'
+          onClick={ (e) => e.stopPropagation() }
         >
           { content }
         </Text>
