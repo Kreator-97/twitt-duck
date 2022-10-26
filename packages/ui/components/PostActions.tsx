@@ -1,8 +1,6 @@
-import { FC, MouseEvent } from 'react'
-import { MdShare } from 'react-icons/md'
+import { FC, MouseEvent, useMemo } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
-import { Comment, Like, useAppSelector } from '@twitt-duck/state'
-
+import { Comment, Like, Repost, useAppSelector } from '@twitt-duck/state'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import { HiOutlineHeart } from 'react-icons/hi'
@@ -10,23 +8,38 @@ import { HiOutlineHeart } from 'react-icons/hi'
 import { PostIcon } from './PostIcon'
 
 interface Props {
+  comments  : Comment[];
+  likes     : Like[];
+  reposts   : Repost[];
   actionId  : string;
-  comments: Comment[];
-  reposts : number;
-  likes   : Like[];
-  onLikeEvent?: (actionId: string) => void
+  type      : 'comment' | 'post';
+  onLikeEvent?: (actionId: string) => void;
+  onRepostEvent?: (actionId: string, type: 'comment' | 'post') => void;
+  onRepostCancelEvent?: (actionId: string, type: 'comment' | 'post') => void;
 }
 
 // this component perform all actions over the Post or comment passed as actionId:
 // actiones likes, reposts, comment
 
-export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, onLikeEvent }) => {
+export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, type, onLikeEvent, onRepostEvent, onRepostCancelEvent }) => {
   const { user } = useAppSelector(state => state.auth)
+  
+  const repostActive = useMemo(() => reposts.some( repost => repost.author.id === user?.id), [reposts])
 
   const onLikePost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
-
     onLikeEvent && onLikeEvent(actionId)
+  }
+
+  const onRepost = async (e: MouseEvent<HTMLDivElement> ) => {
+    e.stopPropagation()
+
+    if( repostActive ) {
+      onRepostCancelEvent && onRepostCancelEvent(actionId, type)
+      return
+    }
+    
+    onRepostEvent && onRepostEvent(actionId, type)
   }
 
   return (
@@ -47,9 +60,11 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, onL
       </Box>
       <Box>
         <PostIcon
+          active={ repostActive }
           icon={AiOutlineRetweet}
-          title='Debatir'
-          count={reposts}
+          title='Difundir'
+          count={ reposts.length }
+          onClick={ onRepost }
         />
       </Box>
       <Box>
@@ -59,12 +74,6 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, onL
           title='Me gusta'
           count={likes.length}
           onClick={ onLikePost }
-        />
-      </Box>
-      <Box>
-        <PostIcon
-          icon={MdShare}
-          title='Compatir'
         />
       </Box>
     </Flex>

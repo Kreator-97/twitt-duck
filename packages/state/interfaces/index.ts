@@ -40,7 +40,14 @@ export interface Comment {
   privacy     : Privacy;
   comments    : Number;
   likes       : Like[];
-  reposts     : number;
+  reposts     : Repost[];
+}
+
+export interface Repost {
+  id               : string;
+  author           : User;
+  originalPost    ?: Post;
+  originalComment ?: Comment
 }
 
 export interface Images {

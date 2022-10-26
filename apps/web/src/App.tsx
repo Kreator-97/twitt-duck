@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
+import { ConfirmRemoveRepost, ImageVisor } from '@twitt-duck/ui'
 
 import { AppRouter } from './routes/AppRouter'
 import { DBLocal } from './utils'
 import './index.css'
-import { ImageVisor } from '@twitt-duck/ui'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -22,6 +22,7 @@ function App() {
     <div>
       <AppRouter />
       <ImageVisor />
+      <ConfirmRemoveRepost />
     </div>
   )
 }

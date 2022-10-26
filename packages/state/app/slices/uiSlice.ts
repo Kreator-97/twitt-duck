@@ -6,11 +6,13 @@ export interface UIState {
   isConfirmLogoutModalOpen: boolean;
   imageVisor: ImageVisor;
   postVisor: PostVisor;
+  isRemoveRepostModalIpen: boolean;
 }
 
 const initialState: UIState = {
   isSearchBarOpen: false,
   isConfirmLogoutModalOpen: false,
+  isRemoveRepostModalIpen: false,
   imageVisor: {
     imageURL: undefined,
     isOpen: false
@@ -59,8 +61,23 @@ export const uiSlice = createSlice({
     closeVisorImage(state) {
       return { ...state, imageVisor: { imageURL: undefined, isOpen: false } }
     },
+    openRemoveRepostModal(state) {
+      return { ...state, isRemoveRepostModalIpen: true }
+    },
+    closeRemoveRepostModal(state) {
+      return { ...state, isRemoveRepostModalIpen: false }
+    },
   }
 })
 
-export const { closeSearchBar, openSearchBar, closeConfirmLogoutModal, openConfirmLogoutModal, openVisorImage, closeVisorImage } = uiSlice.actions
+export const {
+  closeSearchBar,
+  openSearchBar,
+  closeConfirmLogoutModal,
+  openConfirmLogoutModal,
+  openVisorImage,
+  closeVisorImage,
+  openRemoveRepostModal,
+  closeRemoveRepostModal
+} = uiSlice.actions
 export default uiSlice.reducer

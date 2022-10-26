@@ -3,8 +3,8 @@ import { Provider } from 'react-redux'
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import { store } from './app/store'
 import { AuthState, finishChecking, login } from './app/slices/authSlice'
-import { UIState, closeSearchBar, openSearchBar, openConfirmLogoutModal, closeConfirmLogoutModal, closeVisorImage, openVisorImage } from './app/slices/uiSlice'
-import { Post, User, Comment, Images, Like } from './interfaces'
+import { UIState, closeSearchBar, openSearchBar, openConfirmLogoutModal, closeConfirmLogoutModal, closeVisorImage, openVisorImage, closeRemoveRepostModal, openRemoveRepostModal } from './app/slices/uiSlice'
+import { Post, User, Comment, Images, Like, Repost } from './interfaces'
 
 export {
   Provider,
@@ -19,6 +19,8 @@ export {
   openConfirmLogoutModal,
   closeVisorImage,
   openVisorImage,
+  closeRemoveRepostModal,
+  openRemoveRepostModal
 }
 
 export type {
@@ -28,5 +30,6 @@ export type {
   User,
   Comment,
   Images,
-  Like
+  Like,
+  Repost,
 }

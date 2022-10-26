@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppSelector } from '@twitt-duck/state'
 import { CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
 import { Box, Button, Flex, Grid, useToast } from '@chakra-ui/react'
-import { createComment, toggleLikeComment, toggleLikePost } from '@twitt-duck/services'
+import { createComment, toggleLikeComment, toggleLikePost, createRepost } from '@twitt-duck/services'
 
 import { usePost } from '../hooks/usePost'
 import { AppLayout } from '../layouts'
@@ -25,7 +25,6 @@ export const PostPage = () => {
   }
   
   const { post, isLoading } = usePost(postId)
-
   if( isLoading ) return <Loader />
 
   const removePlaceholder = () => {
@@ -119,9 +118,30 @@ export const PostPage = () => {
     }
   }
 
+  const onCommentReposted = async (actionId: string, type: 'comment' | 'post') => {
+    console.log('mutando')
+    const token = localStorage.getItem('token')
+
+    if( !token ) {
+      console.error('token no existe')
+      return
+    }
+
+    try {
+      await createRepost(type, actionId, token)
+      mutate(`http://localhost:5000/api/post/${post.id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <AppLayout>
-      <Post post={post} onLikeEvent={onPostLiked} />
+      <Post
+        post={post}
+        onLikeEvent={onPostLiked}
+        onRepostEvent={ onCommentReposted }
+      />
 
       <Grid
         gridTemplateColumns='48px 1fr'
@@ -164,6 +184,7 @@ export const PostPage = () => {
       <CommentsList
         comments={post.comments}
         onCommentLiked={ onCommentLiked }
+        onCommentReposted={ onCommentReposted }
         post={post}
       />
     </AppLayout>

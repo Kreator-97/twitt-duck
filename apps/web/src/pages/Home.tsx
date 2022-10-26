@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useSWRConfig } from 'swr'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { Loader, NewPost, Post } from '@twitt-duck/ui'
-import { createPost, toggleLikePost, uploadMultipleImagesRequest } from '@twitt-duck/services'
-
-import { useSWRConfig } from 'swr'
+import { createPost, createRepost, toggleLikePost, uploadMultipleImagesRequest } from '@twitt-duck/services'
 
 import { AppLayout } from '../layouts/AppLayout'
 import { DBLocal } from '../utils'
@@ -35,6 +34,24 @@ export const HomePage = () => {
       await toggleLikePost(actionId, token || '')
       mutate('http://localhost:5000/api/post/')
 
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const onRepostEvent = async (actionId: string, type: string) => {
+    const token = DBLocal.getTokenFromLocal()
+
+    try {
+      await createRepost(type, actionId, token || '')
+      mutate('http://localhost:5000/api/post/')
+      toast({
+        title: 'Has difundido esta publicación',
+        position: 'top',
+        isClosable: true,
+        status: 'success',
+        duration: 3000,
+      })
     } catch (error) {
       console.log(error)
     }
@@ -84,7 +101,12 @@ export const HomePage = () => {
         {
           posts.map((post) => {
             return (
-              <Post key={post.id} post={post} onLikeEvent={ onLikeEvent } />
+              <Post
+                key={post.id}
+                post={post}
+                onLikeEvent={ onLikeEvent }
+                onRepostEvent={onRepostEvent}
+              />
             )
           })
         }

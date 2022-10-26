@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Avatar, Box, Text, Grid } from '@chakra-ui/react'
 import { AspectRatio } from '@chakra-ui/react'
-import { openVisorImage, Post as PostType, useAppDispatch} from '@twitt-duck/state'
+import { openVisorImage, Post as PostType, useAppDispatch, openRemoveRepostModal} from '@twitt-duck/state'
 import { useNavigate } from 'react-router-dom'
 
 import { PostActions } from './PostActions'
@@ -9,9 +9,10 @@ import { PostActions } from './PostActions'
 interface Props {
   post: PostType;
   onLikeEvent?: (postId: string) => void;
+  onRepostEvent?: (postId: string, type: 'comment' | 'post') => void;
 }
 
-export const Post: FC<Props> = ({post, onLikeEvent}) => {
+export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -19,6 +20,10 @@ export const Post: FC<Props> = ({post, onLikeEvent}) => {
 
   const onOpenImage = (imageURL: string) => {
     dispatch(openVisorImage(imageURL))
+  }
+
+  const onRepostCancelEvent = async () => {
+    dispatch(openRemoveRepostModal())
   }
   
   return (
@@ -122,11 +127,14 @@ export const Post: FC<Props> = ({post, onLikeEvent}) => {
       <Box />
       <Box>
         <PostActions
+          onRepostCancelEvent={ onRepostCancelEvent }
+          type='post'
           actionId={post.id}
           comments={comments}
           likes={likes}
-          reposts={reposts.length}
+          reposts={reposts}
           onLikeEvent={ onLikeEvent }
+          onRepostEvent={ onRepostEvent }
         />
       </Box>
     </Grid>

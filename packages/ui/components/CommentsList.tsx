@@ -1,16 +1,23 @@
+import { FC } from 'react'
 import { Box, Grid, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { Comment, Post } from '@twitt-duck/state'
-import { FC } from 'react'
+import { Comment, openRemoveRepostModal, Post, useAppDispatch } from '@twitt-duck/state'
 import { PostActions, UserAvatar } from '.'
 
 interface Props {
-  comments: Comment[]
-  onCommentLiked: (actionId:string) => void
-  post: Post
+  comments: Comment[];
+  post    : Post;
+  onCommentReposted : (actionId:string, type: 'comment' | 'post') => void
+  onCommentLiked    : (actionId:string ) => void
 }
 
-export const CommentsList: FC<Props> = ({comments, post, onCommentLiked}) => {
+export const CommentsList: FC<Props> = ({comments, post, onCommentLiked, onCommentReposted}) => {
+  const dispatch = useAppDispatch()
+
+  const onRepostCancelEvent = async () => {
+    dispatch(openRemoveRepostModal())
+  }
+
   return (
     <Box
       bgColor='white'
@@ -63,11 +70,14 @@ export const CommentsList: FC<Props> = ({comments, post, onCommentLiked}) => {
               <Box />
               {/* FIXME: fix this on schema */}
               <PostActions
+                type='comment'
                 onLikeEvent={ onCommentLiked }
+                onRepostEvent={ onCommentReposted }
+                onRepostCancelEvent={ onRepostCancelEvent }
                 actionId={comment.id}
                 comments={ [] }
                 likes={ comment.likes }
-                reposts={0}
+                reposts={ comment.reposts }
               />
             </Grid>
           )
