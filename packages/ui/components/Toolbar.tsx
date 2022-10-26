@@ -1,7 +1,6 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Flex, Input, IconButton, FormControl } from '@chakra-ui/react'
-import { RiMessage3Line } from 'react-icons/ri'
 import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
 import {
   HiOutlineHome,
@@ -57,12 +56,6 @@ export const Toolbar = () => {
           Icon={HiOutlineHashtag}
           title='Explorar'
           url={'/explore'}
-        />
-          
-        <ToolbarOption
-          Icon={RiMessage3Line}
-          title='Mensajes'
-          url={'/messages'}
         />
           
         <ToolbarOption

@@ -6,13 +6,16 @@ export interface UIState {
   isConfirmLogoutModalOpen: boolean;
   imageVisor: ImageVisor;
   postVisor: PostVisor;
-  isRemoveRepostModalIpen: boolean;
+  isRemoveRepostModalOpen: RepostModal;
 }
 
 const initialState: UIState = {
   isSearchBarOpen: false,
   isConfirmLogoutModalOpen: false,
-  isRemoveRepostModalIpen: false,
+  isRemoveRepostModalOpen: {
+    isOpen: false,
+    repostId: undefined,
+  },
   imageVisor: {
     imageURL: undefined,
     isOpen: false
@@ -39,6 +42,11 @@ type PostVisor = {
   isOpen: false;
 }
 
+type RepostModal = {
+  repostId: string | undefined;
+  isOpen: boolean;
+}
+
 export const uiSlice = createSlice({
   name: 'auth',
   initialState,
@@ -61,11 +69,11 @@ export const uiSlice = createSlice({
     closeVisorImage(state) {
       return { ...state, imageVisor: { imageURL: undefined, isOpen: false } }
     },
-    openRemoveRepostModal(state) {
-      return { ...state, isRemoveRepostModalIpen: true }
+    openRemoveRepostModal(state, action: PayloadAction<string>) {
+      return { ...state, isRemoveRepostModalOpen: { isOpen: true, repostId: action.payload } }
     },
     closeRemoveRepostModal(state) {
-      return { ...state, isRemoveRepostModalIpen: false }
+      return { ...state, isRemoveRepostModalOpen: { isOpen: false, repostId: undefined } }
     },
   }
 })
@@ -80,4 +88,5 @@ export const {
   openRemoveRepostModal,
   closeRemoveRepostModal
 } = uiSlice.actions
+
 export default uiSlice.reducer

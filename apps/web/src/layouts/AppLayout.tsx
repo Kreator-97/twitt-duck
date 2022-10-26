@@ -1,12 +1,31 @@
 import { FC } from 'react'
+import { mutate } from 'swr'
 import { Box, Grid } from '@chakra-ui/react'
-import { BottomBar, Navbar, SuggestPersons, Tendencies, Toolbar, SearchModal } from '@twitt-duck/ui'
+import { useLocation } from 'react-router-dom'
+import {
+  BottomBar,
+  ConfirmRemoveRepost,
+  Navbar,
+  SearchModal,
+  SuggestPersons,
+  Tendencies,
+  Toolbar,
+} from '@twitt-duck/ui'
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const AppLayout: FC<Props> = ({children }) => {
+  const { pathname } = useLocation()
+
+  const onSuccess = () => {
+    mutate('http://localhost:5000/api/post/')
+    if( pathname.startsWith('/post/') ) {
+      const URLToReload = `http://localhost:5000/api${pathname}`
+      mutate(URLToReload)
+    }
+  }
 
   return (
     <Box
@@ -53,6 +72,7 @@ export const AppLayout: FC<Props> = ({children }) => {
       </Grid>
       <BottomBar />
       <SearchModal />
+      <ConfirmRemoveRepost onSuccess={ onSuccess } />
     </Box>
   )
 }

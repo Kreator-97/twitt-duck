@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { Avatar, Box, Text, Grid } from '@chakra-ui/react'
 import { AspectRatio } from '@chakra-ui/react'
-import { openVisorImage, Post as PostType, useAppDispatch, openRemoveRepostModal} from '@twitt-duck/state'
 import { useNavigate } from 'react-router-dom'
+import { openVisorImage, Post as PostType, useAppDispatch, openRemoveRepostModal} from '@twitt-duck/state'
 
 import { PostActions } from './PostActions'
 
@@ -22,8 +22,8 @@ export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
     dispatch(openVisorImage(imageURL))
   }
 
-  const onRepostCancelEvent = async () => {
-    dispatch(openRemoveRepostModal())
+  const onRepostCancelEvent = async (postId: string) => {
+    dispatch(openRemoveRepostModal(postId))
   }
   
   return (
@@ -81,6 +81,7 @@ export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
           fontSize='md'
           whiteSpace='pre-wrap'
           minH='3rem'
+          onClick={ (e) => e.stopPropagation() }
         >
           { content }
         </Text>

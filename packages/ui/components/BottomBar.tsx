@@ -1,7 +1,6 @@
 import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
 import { Box, Flex } from '@chakra-ui/react'
 import { HiOutlineBell, HiOutlineHashtag, HiOutlineHome, HiOutlineSearch, HiOutlineUser } from 'react-icons/hi'
-import { RiMessage3Line } from 'react-icons/ri'
 import { BottomBarIcon } from './'
 
 export const BottomBar = () => {
@@ -20,7 +19,7 @@ export const BottomBar = () => {
         boxShadow='inner'
         padding='.5rem'
         borderTop='1px solid #ddd'
-        justifyContent='space-evenly'
+        justifyContent='space-around'
       >
         <BottomBarIcon
           Icon={ HiOutlineHome }
@@ -38,12 +37,6 @@ export const BottomBar = () => {
           Icon={ HiOutlineHashtag }
           label='Explorar'
           to='/explore'
-        />
-
-        <BottomBarIcon
-          Icon={ RiMessage3Line }
-          label='Mensajes'
-          to='/messages'
         />
 
         <BottomBarIcon
