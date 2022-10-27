@@ -1,4 +1,5 @@
 export * from './usePosts'
+export * from './useFollow'
 export * from './useForm'
 export * from './usePosts'
 export * from './useSuggestedPeople'

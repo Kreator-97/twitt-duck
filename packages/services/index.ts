@@ -1,4 +1,5 @@
 export * from './services/auth'
+export * from './services/follow'
 export * from './services/post'
 export * from './services/upload'
 export * from './services/user'

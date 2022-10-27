@@ -1,14 +1,14 @@
 import { FC } from 'react'
 import { Box, Text } from '@chakra-ui/react'
-import { User } from '@twitt-duck/state'
+import { useAppSelector } from '@twitt-duck/state'
 
-import { Follow } from './Follow'
+import { Follow } from '.'
+import { useSuggestedPeople } from '@twitt-duck/hooks'
 
-interface Props {
-  suggestedUsers : User[] 
-}
+export const SuggestPeople: FC = () => {
+  const { users: suggestedUsers } = useSuggestedPeople()
 
-export const SuggestPeople: FC<Props> = ({suggestedUsers}) => {
+  const { user } = useAppSelector(state => state.auth)
 
   return (
     <Box
@@ -25,14 +25,16 @@ export const SuggestPeople: FC<Props> = ({suggestedUsers}) => {
       >A quien seguir</Text>
       <Box>
         {
-          suggestedUsers.map(({id, fullname, profilePic, username}) => (
-            <Follow
-              key={ id }
-              name={ fullname }
-              imgURL={ profilePic }
-              username={ username }
-            />
-          ))
+          // filter all user by case if some suggested users is the user authenticated
+          suggestedUsers.filter((u) => u.username !== user?.username)
+            .map(({id, fullname, profilePic, username}) => (
+              <Follow
+                key={ id }
+                name={ fullname }
+                imgURL={ profilePic }
+                username={ username }
+              />
+            ))
         }
       </Box>
     </Box>

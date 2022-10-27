@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { mutate } from 'swr'
 import { Box, Grid } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
+
 import {
   BottomBar,
   ConfirmRemoveRepost,
@@ -11,7 +12,8 @@ import {
   Tendencies,
   Toolbar,
 } from '@twitt-duck/ui'
-import { useSuggestedPeople } from '../hooks'
+
+import { useAppSelector } from '@twitt-duck/state'
 
 interface Props {
   children: React.ReactNode;
@@ -19,8 +21,12 @@ interface Props {
 
 export const AppLayout: FC<Props> = ({children }) => {
   const { pathname } = useLocation()
+  const { user } = useAppSelector( state => state.auth)
 
-  const { users: suggestedUsers } = useSuggestedPeople()
+  if( !user ) {
+    console.error('no existe el usuario')
+    return <></>
+  }
 
   const onSuccess = () => {
     mutate('http://localhost:5000/api/post/')
@@ -66,7 +72,7 @@ export const AppLayout: FC<Props> = ({children }) => {
         >
           {
             <Box>
-              <SuggestPeople suggestedUsers={suggestedUsers}/>
+              <SuggestPeople />
               <div style={{ height: '1rem'}}></div>
               <Tendencies />
             </Box>

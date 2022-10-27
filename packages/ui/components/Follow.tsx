@@ -1,5 +1,11 @@
 import { FC } from 'react'
 import { Avatar, Button, Grid, Text } from '@chakra-ui/react'
+import { createFollow } from '@twitt-duck/services'
+import { useAppSelector } from '@twitt-duck/state'
+import { mutate } from 'swr'
+import { useFollow } from '@twitt-duck/hooks'
+
+// TODO: crear package de customs hooks
 
 interface Props {
   name: string;
@@ -8,14 +14,33 @@ interface Props {
 }
 
 export const Follow: FC<Props> = ({name, imgURL, username}) => {
+  const { user } = useAppSelector(state => state.auth)
 
+  if( !user ) {
+    console.error('usuario invalido')
+    return <></>
+  }
 
-  const onFollow = () => {
-    console.log(`Hay que seguir al usuario @${username}`)
+  const { following } = useFollow(user.username)
+
+  const onFollow = async () => {
+
+    const token = localStorage.getItem('token')
+    try {
+      await createFollow(username, token || '')
+      mutate(`http://localhost:5000/api/follow/${user?.username}`)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
-    <Grid mb='4' alignItems='center' gap='.5rem' gridTemplateColumns='32px 1fr 60px'>
+    <Grid
+      mb='4'
+      alignItems='center'
+      gap='.5rem'
+      gridTemplateColumns='32px 1fr auto'
+    >
       <Avatar
         size='sm'
         src={imgURL}
@@ -38,7 +63,11 @@ export const Follow: FC<Props> = ({name, imgURL, username}) => {
         _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
         onClick={ () => onFollow() }
       >
-        Seguir
+        {
+          following.some(follow => follow.followingTo.username === username )
+            ? 'Siguiendo'
+            : 'Seguir'
+        }
       </Button>
     </Grid>
   )

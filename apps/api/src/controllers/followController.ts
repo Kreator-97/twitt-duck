@@ -1,8 +1,34 @@
 import { Request, Response } from 'express'
 import prisma from '../lib/prisma'
 
+export const getFollowsByUsername = async (req: Request, res: Response) => {
+  const username = req.params.username
+
+  const user = await prisma.user.findUnique({
+    where:{ username },
+    include: {
+      followers: { include: { user: true, followingTo: true } },
+      following: { include: { user: true, followingTo: true } },
+    }
+  })
+  
+  if( !user ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `no existe el usuario con el username ${username}`
+    })
+  }
+
+  return res.status(200).json({
+    ok: true,
+    msg: 'exitoso',
+    followers: user.followers,
+    following: user.following,
+  })
+}
+
 export const addFollower = async (req: Request, res: Response) => {
-  const userIdToFollow = req.params.userIdToFollow
+  const usernameToFollow = req.params.username
   const userId = req.userId
 
   if( !userId ) {
@@ -12,12 +38,12 @@ export const addFollower = async (req: Request, res: Response) => {
     })
   }
 
-  const userToFollow = await prisma.user.findUnique({ where: { id: userIdToFollow }})
+  const userToFollow = await prisma.user.findUnique({ where: { username: usernameToFollow }})
 
   if( !userToFollow ) {
     return res.status(200).json({
       ok: false,
-      msg: `no existe el usuario con el id ${userIdToFollow}`
+      msg: `no existe el usuario con el nombre ${usernameToFollow}`
     })
   }
 
@@ -30,7 +56,7 @@ export const addFollower = async (req: Request, res: Response) => {
     })
   }
 
-  if( userIdToFollow === userId ) {
+  if( userToFollow.id === userId ) {
     return res.status(400).json({
       ok: false,
       msg: 'El follower y el following no pueden ser el mismo',
@@ -40,13 +66,13 @@ export const addFollower = async (req: Request, res: Response) => {
   const isThisFollowExist = await prisma.follow.findFirst({
     where: {
       userId: userId,
-      followingId: userIdToFollow,
+      followingId: userToFollow.id,
     }
   })
 
   if( isThisFollowExist ) {
     return res.status(400).json({
-      msg: 'El usuario ya es seguidor de este usuario a seguir',
+      msg: 'El usuario del token ya es seguidor de este usuario',
       ok: false
     })
   }
@@ -55,7 +81,7 @@ export const addFollower = async (req: Request, res: Response) => {
     await prisma.follow.create({
       data: {
         userId: userId,
-        followingId: userIdToFollow,
+        followingId: userToFollow.id,
       }
     })
 
