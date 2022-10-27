@@ -66,12 +66,12 @@ export const UserDetail: FC<Props> = ({ user }) => {
             <Text
               as='span'
               style={{ fontWeight: 'bold' }}
-            > { user?.followers }
+            > { user?.followers.length }
             </Text> Seguidores -
             <Text
               as='span'
               style={{ fontWeight: 'bold' }}
-            > { user?.following }
+            > { user?.following.length }
             </Text> Siguiendo
           </Text>
         </Grid>

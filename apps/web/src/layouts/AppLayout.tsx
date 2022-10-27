@@ -7,10 +7,11 @@ import {
   ConfirmRemoveRepost,
   Navbar,
   SearchModal,
-  SuggestPersons,
+  SuggestPeople,
   Tendencies,
   Toolbar,
 } from '@twitt-duck/ui'
+import { useSuggestedPeople } from '../hooks'
 
 interface Props {
   children: React.ReactNode;
@@ -18,6 +19,8 @@ interface Props {
 
 export const AppLayout: FC<Props> = ({children }) => {
   const { pathname } = useLocation()
+
+  const { users: suggestedUsers } = useSuggestedPeople()
 
   const onSuccess = () => {
     mutate('http://localhost:5000/api/post/')
@@ -63,7 +66,7 @@ export const AppLayout: FC<Props> = ({children }) => {
         >
           {
             <Box>
-              <SuggestPersons />
+              <SuggestPeople suggestedUsers={suggestedUsers}/>
               <div style={{ height: '1rem'}}></div>
               <Tendencies />
             </Box>

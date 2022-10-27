@@ -9,8 +9,8 @@ export interface User {
   description?  : string
   profilePic    : string
   backgroundPic?: string
-  followers     : number
-  following     : number
+  followers     : Followers[]
+  following     : Following[]
   posts         : Post
   role          : Role
   active        : Boolean
@@ -48,6 +48,15 @@ export interface Repost {
   author           : User;
   originalPost    ?: Post;
   originalComment ?: Comment
+}
+
+export interface Followers {
+  id: string;
+  user: User
+}
+export interface Following {
+  id: string;
+  user: User
 }
 
 export interface Images {

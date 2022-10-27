@@ -11,7 +11,13 @@ interface UserResponse extends ApiResponse {
 
 export const getUserByUsername = async (req:Request, res: Response<UserResponse>) => {
   const { username } = req.params
-  const user = await prisma.user.findUnique({where: { username }})
+  const user = await prisma.user.findUnique({
+    where: { username },
+    include: {
+      followers: true, following: true
+    }
+    // include: { followers: true, following: true }
+  })
 
   if( !user ) {
     return res.status(404).json({

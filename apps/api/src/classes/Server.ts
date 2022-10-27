@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import morgan from 'morgan'
 import cors from 'cors'
 
-import { AuthRouter, CommentRouter, PostRouter, ProfileRouter, RepostRouter, UploadRouter, UserRouter } from '../routes'
+import { AuthRouter, CommentRouter, FollowRouter, PostRouter, ProfileRouter, RepostRouter, SuggestedPeopleRouter, UploadRouter, UserRouter } from '../routes'
 import { Socket } from './Socket'
 
 dotenv.config()
@@ -47,6 +47,8 @@ export class Server {
     this.app.use('/api/user/',    UserRouter )
     this.app.use('/api/comment/', CommentRouter )
     this.app.use('/api/repost/',  RepostRouter )
+    this.app.use('/api/follow/',  FollowRouter )
+    this.app.use('/api/suggested-people/', SuggestedPeopleRouter )
   }
 
   sockets () {

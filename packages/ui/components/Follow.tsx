@@ -3,15 +3,22 @@ import { Avatar, Button, Grid, Text } from '@chakra-ui/react'
 
 interface Props {
   name: string;
-  url?: string;
+  imgURL: string;
+  username: string;
 }
 
-export const Follow: FC<Props> = ({name}) => {
+export const Follow: FC<Props> = ({name, imgURL, username}) => {
+
+
+  const onFollow = () => {
+    console.log(`Hay que seguir al usuario @${username}`)
+  }
+
   return (
     <Grid mb='4' alignItems='center' gap='.5rem' gridTemplateColumns='32px 1fr 60px'>
       <Avatar
         size='sm'
-        src='https://res.cloudinary.com/practicaldev/image/fetch/s--i96Gcbyf--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://thepracticaldev.s3.amazonaws.com/uploads/user/profile_image/50592/f46e43c2-f4f0-4787-b34e-a310cecc221a.jpg'
+        src={imgURL}
       />
       <Text
         title={name}
@@ -29,6 +36,7 @@ export const Follow: FC<Props> = ({name}) => {
         color='#fff'
         bgGradient='linear(to-b, cyan.400, teal.200)'
         _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
+        onClick={ () => onFollow() }
       >
         Seguir
       </Button>

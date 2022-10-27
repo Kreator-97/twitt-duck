@@ -22,7 +22,10 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
     return <></>
   }
 
-  const username = pathname.startsWith('/profile') ? user.username : pathname.split('/')[pathname.split('/').length-1]
+  const username = pathname.startsWith('/profile')
+    ? user.username 
+    : pathname.split('/')[pathname.split('/').length-1]
+
   const { user: userDetail, isLoading } = userUser(username)
 
   if( isLoading ) return <Loader />
