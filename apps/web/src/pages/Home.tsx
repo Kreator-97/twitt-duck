@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { Loader, NewPost, Post } from '@twitt-duck/ui'
 import { createPost, createRepost, toggleLikePost, uploadMultipleImagesRequest } from '@twitt-duck/services'
+import { usePosts } from '@twitt-duck/hooks'
 
 import { AppLayout } from '../layouts/AppLayout'
 import { DBLocal } from '../utils'
-import { usePosts } from '../hooks'
 
 export const HomePage = () => {
   const toast = useToast()

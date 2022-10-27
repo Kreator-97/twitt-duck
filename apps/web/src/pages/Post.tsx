@@ -1,12 +1,12 @@
 import { useRef } from 'react'
 import { mutate } from 'swr'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAppSelector } from '@twitt-duck/state'
-import { CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
 import { Box, Button, Flex, Grid, useToast } from '@chakra-ui/react'
+import { CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
 import { createComment, toggleLikeComment, toggleLikePost, createRepost } from '@twitt-duck/services'
+import { useAppSelector } from '@twitt-duck/state'
+import { usePost } from '@twitt-duck/hooks'
 
-import { usePost } from '../hooks/usePost'
 import { AppLayout } from '../layouts'
 
 export const PostPage = () => {
@@ -97,12 +97,10 @@ export const PostPage = () => {
       console.log(error)
     }
     
-    console.log('mutando')
     mutate(`http://localhost:5000/api/post/${post.id}`)
   }
   
   const onCommentLiked = async (actionId: string) => {
-    console.log('mutando')
     const token = localStorage.getItem('token')
 
     if( !token ) {
@@ -119,7 +117,6 @@ export const PostPage = () => {
   }
 
   const onCommentReposted = async (actionId: string, type: 'comment' | 'post') => {
-    console.log('mutando')
     const token = localStorage.getItem('token')
 
     if( !token ) {
@@ -139,7 +136,7 @@ export const PostPage = () => {
     <AppLayout>
       <Post
         post={post}
-        onLikeEvent={onPostLiked}
+        onLikeEvent={ onPostLiked }
         onRepostEvent={ onCommentReposted }
       />
 

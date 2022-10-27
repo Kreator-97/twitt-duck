@@ -7,7 +7,7 @@ interface Response {
   ok: boolean;
 }
 
-export const userUser = (username: string) => {
+export const useUser = (username: string) => {
   const { data, error } = useSWR<Response>(`http://localhost:5000/api/user/${username}`)
 
   return {

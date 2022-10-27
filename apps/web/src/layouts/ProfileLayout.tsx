@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Grid } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
 import { Navbar, BottomBar, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui'
-
-import { userUser } from '../hooks'
+import { useUser } from '@twitt-duck/hooks'
 
 interface Props {
   children: React.ReactNode;
@@ -26,7 +25,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
     ? user.username 
     : pathname.split('/')[pathname.split('/').length-1]
 
-  const { user: userDetail, isLoading } = userUser(username)
+  const { user: userDetail, isLoading } = useUser(username)
 
   if( isLoading ) return <Loader />
 

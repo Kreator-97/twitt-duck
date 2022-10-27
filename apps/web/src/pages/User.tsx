@@ -4,7 +4,8 @@ import { Box, Heading } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
 import { CustomTabs, Post } from '@twitt-duck/ui'
 
-import { useUserPosts } from '../hooks/useUserPost'
+import { useUserPosts } from '@twitt-duck/hooks'
+
 import { ProfileLayout } from '../layouts'
 
 export const UserPage = () => {

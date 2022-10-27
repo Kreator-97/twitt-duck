@@ -1,9 +1,9 @@
 import { CustomTabs, Loader, Post,} from '@twitt-duck/ui'
 import { Box, Heading } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
+import { useUserPosts } from '@twitt-duck/hooks'
 
 import { ProfileLayout } from '../layouts/ProfileLayout'
-import { useUserPosts } from '../hooks/useUserPost'
 
 export const ProfilePage = () => {
   const { user } = useAppSelector( state => state.auth )

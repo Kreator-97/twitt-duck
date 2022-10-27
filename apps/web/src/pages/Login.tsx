@@ -4,11 +4,11 @@ import { MdArrowBack } from 'react-icons/md'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
 import { googleRequest, loginRequest } from '@twitt-duck/services'
+import { useForm } from '@twitt-duck/hooks'
 
 import { AuthLayout } from '../layouts'
 import { DBLocal } from '../utils'
 import { notEmptyString } from '../utils/validations'
-import { useForm } from '../hooks/useForm'
 
 import {
   Box,
