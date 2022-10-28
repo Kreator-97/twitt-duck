@@ -81,9 +81,10 @@ export const LoginPage = () => {
   const onGoogleSignIn = async (googleToken: string) => {
     try {
       const { user, token } = await googleRequest(googleToken)
+      DBLocal.saveUserAndTokenInLocal(user, token)
 
       if( !user.active ) {
-        navigate(`/auth/customize?email=${user.email}`)
+        navigate('/auth/customize')
         return
       }
 
@@ -98,8 +99,6 @@ export const LoginPage = () => {
   
       dispatch( login(user) )
       navigate('/')
-      DBLocal.saveUserAndTokenInLocal(user, token)
-
     } catch (error: any) { //eslint-disable-line
       console.log(error)
       toast({
