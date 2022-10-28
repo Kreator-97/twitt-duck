@@ -2,6 +2,7 @@ import { ChakraProvider} from '@chakra-ui/react'
 import {
   BottomBar,
   ChangeBackgroundPicture,
+  Comment,
   CommentsList,
   ConfirmLogout,
   ConfirmRemoveRepost,
@@ -16,6 +17,7 @@ import {
   NewPost,
   Post,
   PostActions,
+  PostsList,
   ProfileOption,
   ScrollToTop,
   SearchModal,
@@ -24,12 +26,14 @@ import {
   Toolbar,
   UserAvatar,
   UserDetail,
+  UserFeed,
 } from './components'
 import { theme } from './theme'
 
 export {
   BottomBar,
   ChangeBackgroundPicture,
+  Comment,
   CommentsList,
   ConfirmLogout,
   ConfirmRemoveRepost,
@@ -45,6 +49,7 @@ export {
   NewPost,
   Post,
   PostActions,
+  PostsList,
   ProfileOption,
   ScrollToTop,
   SearchModal,
@@ -54,4 +59,5 @@ export {
   Toolbar,
   UserAvatar,
   UserDetail,
+  UserFeed,
 }

@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSWRConfig } from 'swr'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
-import { Loader, NewPost, Post } from '@twitt-duck/ui'
-import { createPost, createRepost, toggleLikePost, uploadMultipleImagesRequest } from '@twitt-duck/services'
-import { usePosts } from '@twitt-duck/hooks'
+import { Loader, NewPost, PostsList, UserFeed } from '@twitt-duck/ui'
+import { useFeed } from '@twitt-duck/hooks'
 
-import { AppLayout } from '../layouts/AppLayout'
+import {
+  createPost,
+  uploadMultipleImagesRequest
+} from '@twitt-duck/services'
+
+import { AppLayout } from '../layouts'
 import { DBLocal } from '../utils'
 
 export const HomePage = () => {
   const toast = useToast()
   const { mutate } = useSWRConfig()
   const navigate = useNavigate()
-  const { posts, isLoading } = usePosts()
   const [ createPostLoading, setCreatePostLoading] = useState(false)
 
   useEffect(() => {
@@ -23,38 +26,14 @@ export const HomePage = () => {
     }
   }, [])
 
-  if ( isLoading ) {
+  const { feed, isLoading }= useFeed()
+  
+  const feedLength = useMemo(() => {
+    return Object.keys(feed).length
+  }, [feed])
+
+  if( isLoading ) {
     return <Loader />
-  }
-
-  const onLikeEvent = async (actionId: string) => {
-    const token = DBLocal.getTokenFromLocal()
-
-    try {
-      await toggleLikePost(actionId, token || '')
-      mutate('http://localhost:5000/api/post/')
-
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const onRepostEvent = async (actionId: string, type: string) => {
-    const token = DBLocal.getTokenFromLocal()
-
-    try {
-      await createRepost(type, actionId, token || '')
-      mutate('http://localhost:5000/api/post/')
-      toast({
-        title: 'Has difundido esta publicación',
-        position: 'top',
-        isClosable: true,
-        status: 'success',
-        duration: 3000,
-      })
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   const onCreatePost = async (content: string, privacy: string, fileList: FileList) => {
@@ -99,16 +78,10 @@ export const HomePage = () => {
       <div>
         <NewPost onCreatePost={ onCreatePost } />
         {
-          posts.map((post) => {
-            return (
-              <Post
-                key={post.id}
-                post={post}
-                onLikeEvent={ onLikeEvent }
-                onRepostEvent={onRepostEvent}
-              />
-            )
-          })
+
+          ( feedLength !== 0 )
+            ? <UserFeed feed={feed} />
+            : (<PostsList />)
         }
       </div>
       {

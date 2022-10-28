@@ -46,8 +46,8 @@ export interface Comment {
 export interface Repost {
   id               : string;
   author           : User;
-  originalPost    ?: Post;
-  originalComment ?: Comment
+  originalPost     : Post;
+  originalComment  : Comment
 }
 
 export interface Follow {
@@ -74,3 +74,19 @@ type Role = 'USER' | 'ADMIN'
 type Provider = 'CREDENTIALS' | 'GOOGLE'
 type Visibility = 'HIDDEN' | 'VISIBLE'
 type Privacy = 'ONLY_ME' | 'ONLY_FOLLOWERS' | 'ALL' 
+
+
+export interface Feed {
+  [key: string]: FeedItem
+}
+
+type FeedItem = {
+  type: 'post';
+  posts: Post;
+} | {
+  type: 'repost';
+  reposts: Repost;
+} | {
+  type: 'repost-comment';
+  comments: Repost;
+}

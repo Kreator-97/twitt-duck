@@ -3,7 +3,7 @@ import { mutate } from 'swr'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Flex, Grid, useToast } from '@chakra-ui/react'
 import { CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
-import { createComment, toggleLikeComment, toggleLikePost, createRepost } from '@twitt-duck/services'
+import { createComment, toggleLikePost, createRepost } from '@twitt-duck/services'
 import { useAppSelector } from '@twitt-duck/state'
 import { usePost } from '@twitt-duck/hooks'
 
@@ -100,22 +100,6 @@ export const PostPage = () => {
     mutate(`http://localhost:5000/api/post/${post.id}`)
   }
   
-  const onCommentLiked = async (actionId: string) => {
-    const token = localStorage.getItem('token')
-
-    if( !token ) {
-      console.error('token no existe')
-      return
-    }
-
-    try {
-      await toggleLikeComment(actionId, token || '')
-      mutate(`http://localhost:5000/api/post/${post.id}`)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const onCommentReposted = async (actionId: string, type: 'comment' | 'post') => {
     const token = localStorage.getItem('token')
 
@@ -180,8 +164,6 @@ export const PostPage = () => {
 
       <CommentsList
         comments={post.comments}
-        onCommentLiked={ onCommentLiked }
-        onCommentReposted={ onCommentReposted }
         post={post}
       />
     </AppLayout>

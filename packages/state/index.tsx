@@ -17,6 +17,7 @@ import {
 
 import {
   Comment,
+  Feed,
   Follow,
   Images,
   Like,
@@ -52,4 +53,5 @@ export type {
   Repost,
   UIState,
   User,
+  Feed,
 }

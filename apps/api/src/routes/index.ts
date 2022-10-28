@@ -1,5 +1,6 @@
 export * from './AuthRouter'
 export * from './CommentRouter'
+export * from './FeedRouter'
 export * from './FollowRouter'
 export * from './PostRouter'
 export * from './ProfileRouter'
