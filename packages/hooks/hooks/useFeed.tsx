@@ -1,17 +1,16 @@
 import useSWR from 'swr'
 
-const url = 'http://localhost:5000/api/feed/'
 const token = localStorage.getItem('token')
-
 const headers = new Headers()
 headers.append('Authorization', `Bearer ${token}`)
 
-const options: RequestInit = {
-  headers,
-}
-
 export const useFeed = () => {
-  const { data, error } = useSWR([url, options])
+  const token = localStorage.getItem('token')
+  const { data, error } = useSWR(['http://localhost:5000/api/feed/', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }])
 
   return {
     feed: data?.feed || {},

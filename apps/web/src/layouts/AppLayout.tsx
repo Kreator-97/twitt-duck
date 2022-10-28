@@ -30,6 +30,12 @@ export const AppLayout: FC<Props> = ({children }) => {
 
   const onSuccess = () => {
     mutate('http://localhost:5000/api/post/')
+    const token = localStorage.getItem('token')
+    mutate(['http://localhost:5000/api/feed/', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }])
     if( pathname.startsWith('/post/') ) {
       const URLToReload = `http://localhost:5000/api${pathname}`
       mutate(URLToReload)

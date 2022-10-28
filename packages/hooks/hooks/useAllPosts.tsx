@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Post } from '@twitt-duck/state'
 import useSWR from 'swr'
 
-export const usePosts = () => {
+export const useAllPosts = () => {
   const { data, error } = useSWR('http://localhost:5000/api/post/')
 
   const [ posts, setPosts] = useState<Post[]>([])

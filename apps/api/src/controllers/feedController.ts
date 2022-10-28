@@ -47,12 +47,19 @@ export const getUserFeed = async (req: Request, res: Response) => {
 
   const postsPromise = prisma.post.findMany({
     where: {
-      authorId: {
-        in: followingIds
-      }
+      OR: [
+        {
+          authorId: {
+            in: followingIds
+          }
+        },
+        {
+          authorId: userId
+        }
+      ]
     },
     orderBy: {
-      createdAt: 'asc'
+      createdAt: 'desc'
     },
     include: {
       author: true,
@@ -75,13 +82,14 @@ export const getUserFeed = async (req: Request, res: Response) => {
 
   const repostsPromise = prisma.repost.findMany({
     where: {
-      originalPost: {
-        authorId: { in: followingIds }
-      }
+      authorId: { in: followingIds }
+      // originalPost: {
+      //   authorId: 
+      // }
     },
     orderBy: {
       originalPost: {
-        createdAt: 'asc'
+        createdAt: 'desc'
       }
     },
     include: {
@@ -110,13 +118,14 @@ export const getUserFeed = async (req: Request, res: Response) => {
 
   const repostsCommentsPromise = await prisma.repost.findMany({
     where: {
-      originalComment: {
-        authorId: { in: followingIds }
-      }
+      authorId: { in: followingIds }
+      // originalComment: {
+      //   authorId: { in: followingIds }
+      // }
     },
     orderBy: {
       originalComment: {
-        createdAt: 'asc'
+        createdAt: 'desc'
       }
     },
     include: {
@@ -139,7 +148,6 @@ export const getUserFeed = async (req: Request, res: Response) => {
           }
         }
       },
-
     }
   })
 
@@ -168,6 +176,7 @@ export const getUserFeed = async (req: Request, res: Response) => {
   }, {})
 
   const feed: Feed = {...posts, ...reposts, ...comments}
+  // console.log({posts, reposts, comments})
 
   return res.status(200).json({
     ok: true,

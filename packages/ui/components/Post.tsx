@@ -2,17 +2,15 @@ import { FC } from 'react'
 import { Avatar, Box, Text, Grid } from '@chakra-ui/react'
 import { AspectRatio } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import { openVisorImage, Post as PostType, useAppDispatch, openRemoveRepostModal} from '@twitt-duck/state'
+import { openVisorImage, Post as PostType, useAppDispatch } from '@twitt-duck/state'
 
 import { PostActions } from './PostActions'
 
 interface Props {
   post: PostType;
-  onLikeEvent?: (postId: string) => void;
-  onRepostEvent?: (postId: string, type: 'comment' | 'post') => void;
 }
 
-export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
+export const Post: FC<Props> = ({ post }) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -22,21 +20,20 @@ export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
     dispatch(openVisorImage(imageURL))
   }
 
-  const onRepostCancelEvent = async (postId: string) => {
-    dispatch(openRemoveRepostModal(postId))
-  }
-  
   return (
     <Grid
       bg='white'
-      mb={{ base: '4' }}
-      boxShadow='base'
+      boxShadow='md'
       gridTemplateColumns='48px 1fr'
       p={{ base: '.5rem', lg: '.5rem' }}
       rowGap={{ base: '.5rem', lg: '.5rem' }}
       columnGap={{ base: '.5rem', lg: '.5rem' }}
       onClick={ () => navigate(`/post/${post.id}`) }
       cursor='pointer'
+      transition='background .3s ease-out'
+      _hover={{
+        backgroundColor: '#EEE'
+      }}
     >
       <Box width='48px'>
         <Avatar
@@ -128,14 +125,11 @@ export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
       <Box />
       <Box>
         <PostActions
-          onRepostCancelEvent={ onRepostCancelEvent }
           type='post'
           actionId={post.id}
           comments={comments}
           likes={likes}
           reposts={reposts}
-          onLikeEvent={ onLikeEvent }
-          onRepostEvent={ onRepostEvent }
         />
       </Box>
     </Grid>

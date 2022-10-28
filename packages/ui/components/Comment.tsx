@@ -1,9 +1,7 @@
 import { FC } from 'react'
-import { mutate } from 'swr'
 import { Link } from 'react-router-dom'
 import { Box, Grid, Text } from '@chakra-ui/react'
-import { Comment as CommentType, openRemoveRepostModal, Post, useAppDispatch } from '@twitt-duck/state'
-import { createRepost, toggleLikeComment } from '@twitt-duck/services'
+import { Comment as CommentType, Post } from '@twitt-duck/state'
 
 import { UserAvatar } from './UserAvatar'
 import { PostActions } from './PostActions'
@@ -13,48 +11,7 @@ interface Props {
   post?: Post
 }
 
-export const Comment: FC<Props> = ({comment, post}) => {
-  const dispatch = useAppDispatch()
-
-  const onRepostCancelEvent = async (actionId: string) => {
-    dispatch(openRemoveRepostModal(actionId))
-  }
-
-  const onCommentLiked = async (actionId: string) => {
-    const token = localStorage.getItem('token')
-
-    if( !token ) {
-      console.error('token no existe')
-      return
-    }
-
-    try {
-      await toggleLikeComment(actionId, token || '')
-      if( post ) {
-        mutate(`http://localhost:5000/api/post/${post.id}`)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const onCommentReposted = async (actionId: string, type: 'comment' | 'post') => {
-    const token = localStorage.getItem('token')
-
-    if( !token ) {
-      console.error('token no existe')
-      return
-    }
-
-    try {
-      await createRepost(type, actionId, token)
-      if( post ) {
-        mutate(`http://localhost:5000/api/post/${post.id}`)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+export const Comment: FC<Props> = ({comment}) => {
 
   const { author } = comment
   return (
@@ -65,6 +22,11 @@ export const Comment: FC<Props> = ({comment, post}) => {
       gridTemplateColumns='48px 1fr'
       gap='.5rem'
       alignItems='center'
+      transition='background .3s ease-out'
+      cursor='pointer'
+      _hover={{
+        backgroundColor: '#EEE'
+      }}
     >
       <Box>
         <UserAvatar
@@ -102,9 +64,6 @@ export const Comment: FC<Props> = ({comment, post}) => {
       {/* FIXME: fix this on schema */}
       <PostActions
         type='comment'
-        onLikeEvent={ onCommentLiked }
-        onRepostEvent={ onCommentReposted }
-        onRepostCancelEvent={ onRepostCancelEvent }
         actionId={comment.id}
         comments={ [] }
         likes={ comment.likes }

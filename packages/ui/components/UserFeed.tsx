@@ -27,7 +27,8 @@ export const UserFeed: FC<Props> = ({feed}) => {
               <Box
                 key={item.comments.originalComment.id}
                 bgColor='#fff'
-                p='2'
+                p='4'
+                boxShadow='md'
               >
                 <Heading
                   as='h3'
@@ -51,7 +52,8 @@ export const UserFeed: FC<Props> = ({feed}) => {
               <Box
                 key={item.reposts.id}
                 bgColor='#fff'
-                p='2'
+                p='4'
+                boxShadow='md'
               >
                 <Heading
                   as='h3'

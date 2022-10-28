@@ -1,4 +1,4 @@
-import { CustomTabs, Loader, Post,} from '@twitt-duck/ui'
+import { CustomTabs, Loader, PostsList,} from '@twitt-duck/ui'
 import { Box, Heading } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
 import { useUserPosts } from '@twitt-duck/hooks'
@@ -27,15 +27,14 @@ export const ProfilePage = () => {
 
       {
         (posts.length === 0) &&
-          ( <Heading as='h3' fontSize='md'>No existen publicaciones hechas</Heading> )
+          ( <Heading
+            as='h3'
+            fontSize='md'
+            textAlign='center'
+          >No existen publicaciones hechas
+          </Heading> )
       }
-      {
-        posts.map((post) => {
-          return (
-            <Post key={post.id} post={post}/>
-          )
-        })
-      }
+      <PostsList posts={posts} />
     </ProfileLayout>
   )
 }

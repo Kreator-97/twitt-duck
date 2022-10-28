@@ -1,17 +1,28 @@
 import { FC, FormEvent, useRef, useState } from 'react'
+import { mutate } from 'swr'
 import { MdOutlineImage } from 'react-icons/md'
-import { Box, Button, Flex, FormControl, Grid, Icon, Select, Text, useToast } from '@chakra-ui/react'
+import { createPost, uploadMultipleImagesRequest } from '@twitt-duck/services'
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  Grid,
+  Icon,
+  Select,
+  Text,
+  useToast
+} from '@chakra-ui/react'
 
-interface Props {
-  onCreatePost?(content:string, privacy: string, fileList?: FileList): void
-}
+import { Loader } from '.'
 
-export const NewPost: FC<Props> = ({onCreatePost}) => {
+export const NewPost: FC = () => {
   const toast = useToast()
   const contentElementRef = useRef<HTMLDivElement>(null)
   const inputImagesRef = useRef<HTMLInputElement>(null)
   const [ privacy, setPrivacy] = useState<string>('ALL')
   const [ filesSelectedLength, setFilesSelectedLength ] = useState<number>(0)
+  const [ createPostLoading, setCreatePostLoading] = useState(false)
   const placeholder = '¿Que está pasando?'
 
   const removePlaceholder = () => {
@@ -65,6 +76,48 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
     }
   }
 
+  const onCreatePost = async (content: string, privacy: string, fileList?: FileList) => {
+    setCreatePostLoading(true)
+    const token = localStorage.getItem('token') 
+
+    let images: string[] = []
+
+    if( fileList ) {
+      images = await uploadMultipleImagesRequest( fileList, token || '' )
+    }
+
+    try {
+      await createPost(content, images, token || '', privacy)
+      toast({
+        title: 'Publicación creada',
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        isClosable: true,
+      })
+      mutate('http://localhost:5000/api/post/')
+      mutate(['http://localhost:5000/api/feed/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }])
+      setCreatePostLoading(false)
+    } catch (error) {
+      setCreatePostLoading(false)
+      console.log(error)
+      if( typeof error === 'string' ) {
+        toast({
+          title: 'No se pudo crear el post',
+          description: error,
+          status: 'error',
+          duration: 3000,
+          position: 'top',
+          isClosable: true,
+        })
+      }
+    }
+  }
+
   const onSelectImages = () => {
     inputImagesRef.current?.click()
   }
@@ -82,10 +135,10 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
       margin='0 auto'
       bg="white"
       p={{base: '2', lg: '4'}}
-      mb={{base: '2', lg: '4'}}
       borderRadius={2}
       boxShadow="md"
       minW='280px'
+      width='100%'
     >
       <Box
         contentEditable
@@ -168,6 +221,9 @@ export const NewPost: FC<Props> = ({onCreatePost}) => {
           </Button>
         </Grid>
       </FormControl>
+      {
+        createPostLoading && <Loader />
+      }
     </Grid>
   )
 }

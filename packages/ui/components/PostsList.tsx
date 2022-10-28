@@ -1,51 +1,40 @@
-import { useToast } from '@chakra-ui/react'
-import { usePosts } from '@twitt-duck/hooks'
-import { createRepost, toggleLikePost } from '@twitt-duck/services'
-import { mutate } from 'swr'
+import { Box, Grid, Heading } from '@chakra-ui/react'
+import { Post as PostType } from '@twitt-duck/state'
+import { FC } from 'react'
 
 import { Post } from '.'
-import { Loader } from './Loader'
 
-export const PostsList = () => {
-  const toast = useToast()
-  const { posts, isLoading } = usePosts()
+interface Props {
+  posts: PostType[];
+  showFeedMessage?: boolean;
+}
 
-  if ( isLoading ) {
-    return <Loader />
-  }
+export const PostsList: FC<Props> = ({posts, showFeedMessage = false}) => {
 
-  const onLikeEvent = async (actionId: string) => {
-    const token = localStorage.getItem('token')
-
-    try {
-      await toggleLikePost(actionId, token || '')
-      mutate('http://localhost:5000/api/post/')
-
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const onRepostEvent = async (actionId: string, type: string) => {
-    const token = localStorage.getItem('token')
-
-    try {
-      await createRepost(type, actionId, token || '')
-      mutate('http://localhost:5000/api/post/')
-      toast({
-        title: 'Has difundido esta publicación',
-        position: 'top',
-        isClosable: true,
-        status: 'success',
-        duration: 3000,
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   return (
-    <div>
+    <Grid
+      gridTemplateColumns='1fr'
+      gap='1rem'
+    >
+      {
+        showFeedMessage && (
+          <Box
+            boxShadow='md'
+            bgColor='#fff'
+          >
+            <Heading
+              textAlign='center'
+              padding='1rem'
+              as='h3'
+              fontWeight='400'
+              fontSize='md'
+            >
+              Personaliza tu feed siguiendo a las personas que más te interesan
+            </Heading>
+          </Box>
+        )
+      }
       {
         (posts.length === 0)
           ? 'Personaliza tu feed siguiendo a personas'
@@ -55,13 +44,11 @@ export const PostsList = () => {
                 <Post
                   key={post.id}
                   post={post}
-                  onLikeEvent={ onLikeEvent }
-                  onRepostEvent={onRepostEvent}
                 />
               )
             })
           )
       }
-    </div>
+    </Grid>
   )
 }
