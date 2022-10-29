@@ -13,44 +13,50 @@ export const BottomBar = () => {
       position='fixed'
       bottom={0}
       left={0}
+      zIndex='banner'
+      boxShadow='sm'
+      bg={'white'}
+      padding='.5rem'
+      borderTop='1px solid #eee'
     >
-      <Flex
-        bg={'white'}
-        boxShadow='inner'
-        padding='.5rem'
-        borderTop='1px solid #ddd'
-        justifyContent='space-around'
+      <Box
+        maxW='400px'
+        margin='0 auto'
       >
-        <BottomBarIcon
-          Icon={ HiOutlineHome }
-          label='Home'
-          to='/'
-        />
+        <Flex
+          justifyContent='space-around'
+        >
+          <BottomBarIcon
+            Icon={ HiOutlineHome }
+            label='Home'
+            to='/'
+          />
 
-        <BottomBarIcon
-          Icon={ HiOutlineBell }
-          label='Notificaciones'
-          to='/notification'
-        />
+          <BottomBarIcon
+            Icon={ HiOutlineBell }
+            label='Notificaciones'
+            to='/notification'
+          />
 
-        <BottomBarIcon
-          Icon={ HiOutlineHashtag }
-          label='Explorar'
-          to='/explore'
-        />
+          <BottomBarIcon
+            Icon={ HiOutlineHashtag }
+            label='Explorar'
+            to='/explore'
+          />
 
-        <BottomBarIcon
-          Icon={ HiOutlineUser }
-          label='Perfil'
-          to='/profile'
-        />
+          <BottomBarIcon
+            Icon={ HiOutlineUser }
+            label='Perfil'
+            to='/profile'
+          />
 
-        <BottomBarIcon
-          Icon={ HiOutlineSearch }
-          label='Buscar'
-          onClick={ () => dispatch(openSearchBar()) }
-        />
-      </Flex>
+          <BottomBarIcon
+            Icon={ HiOutlineSearch }
+            label='Buscar'
+            onClick={ () => dispatch(openSearchBar()) }
+          />
+        </Flex>
+      </Box>
     </Box>
   )
 }

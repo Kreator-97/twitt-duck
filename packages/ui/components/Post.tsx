@@ -26,7 +26,7 @@ export const Post: FC<Props> = ({ post }) => {
       cursor='pointer'
       transition='background .3s ease-out'
       _hover={{
-        backgroundColor: '#EEE'
+        backgroundColor: 'rgb(238, 245, 255)'
       }}
     >
       <Box width='48px'>

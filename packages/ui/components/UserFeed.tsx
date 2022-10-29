@@ -33,7 +33,7 @@ export const UserFeed: FC<Props> = ({feed}) => {
                 <Heading
                   as='h3'
                   fontSize={'md'}
-                  color='cyan.600'
+                  color='blue.500'
                   mb='.5rem'
                   fontWeight={400}
                 >
@@ -58,7 +58,7 @@ export const UserFeed: FC<Props> = ({feed}) => {
                 <Heading
                   as='h3'
                   fontSize={'md'}
-                  color='cyan.600'
+                  color='blue.500'
                   mb='.5rem'
                   fontWeight={400}
                 >

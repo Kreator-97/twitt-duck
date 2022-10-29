@@ -28,7 +28,7 @@ export const UserInfo: FC<Props> = ({username}) => {
 
   return (
     <Tabs
-      colorScheme='cyan'
+      colorScheme='blue'
       mb='4'
     >
       <TabList>

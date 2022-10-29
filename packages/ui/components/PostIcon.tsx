@@ -20,14 +20,14 @@ export const PostIcon: FC<Props> = ({ icon, title, count, onClick, active = fals
       cursor='pointer'
       padding= '.5rem'
       borderRadius='1rem'
-      color={ active ? 'red.500' : '#333' }
+      color={ active ? 'red.400' : '#333' }
       _hover={{
-        color: 'red.500',
+        color: 'red.400',
         bg: 'gray.200',
       }}
     >
       <Icon
-        color={ active ? 'red.500' : 'inherit' }
+        color={ active ? 'red.400' : 'inherit' }
         as={icon}
         boxSize={{
           sm: '1rem',
