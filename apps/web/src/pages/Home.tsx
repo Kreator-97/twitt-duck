@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Loader, NewPost, PostsList, UserFeed } from '@twitt-duck/ui'
-import { useAllPosts, useFeed } from '@twitt-duck/hooks'
+import { useFeed, usePublicFeed } from '@twitt-duck/hooks'
 import { Grid } from '@chakra-ui/react'
 
 import { AppLayout } from '../layouts'
@@ -18,7 +18,7 @@ export const HomePage = () => {
   }, [])
 
   const { feed, isLoading }= useFeed()
-  const { posts }= useAllPosts()
+  const { posts } = usePublicFeed()
 
   if( isLoading ) return <Loader />
 
@@ -34,7 +34,11 @@ export const HomePage = () => {
             <UserFeed feed={feed} />
           )
         }
-        <PostsList posts={posts} showFeedMessage={true} />
+        {
+          ( posts.length !== 0 ) && (
+            <PostsList posts={posts} showFeedMessage={true} />
+          )
+        }
       </Grid>
     </AppLayout>
   )

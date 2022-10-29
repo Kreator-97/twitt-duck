@@ -29,7 +29,7 @@ export const AppLayout: FC<Props> = ({children }) => {
   }
 
   const onSuccess = () => {
-    mutate('http://localhost:5000/api/post/')
+    mutate('http://localhost:5000/api/feed/public-posts')
     const token = localStorage.getItem('token')
     mutate(['http://localhost:5000/api/feed/', {
       headers: {

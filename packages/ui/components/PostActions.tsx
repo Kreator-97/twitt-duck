@@ -81,7 +81,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
     try {
       await createRepost(type, actionId, token || '')
 
-      mutate('http://localhost:5000/api/post/')
+      mutate('http://localhost:5000/api/feed/public-posts')
       mutate(['http://localhost:5000/api/feed/', {
         headers: {
           'Authorization': `Bearer ${token}`

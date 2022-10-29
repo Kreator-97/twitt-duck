@@ -95,7 +95,7 @@ export const NewPost: FC = () => {
         position: 'top',
         isClosable: true,
       })
-      mutate('http://localhost:5000/api/post/')
+      mutate('http://localhost:5000/api/feed/public-posts')
       mutate(['http://localhost:5000/api/feed/', {
         headers: {
           'Authorization': `Bearer ${token}`
