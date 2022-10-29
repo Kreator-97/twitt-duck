@@ -5,8 +5,6 @@ import { useAppSelector } from '@twitt-duck/state'
 import { mutate } from 'swr'
 import { useFollow } from '@twitt-duck/hooks'
 
-// TODO: crear package de customs hooks
-
 interface Props {
   name: string;
   imgURL: string;
@@ -59,8 +57,8 @@ export const Follow: FC<Props> = ({name, imgURL, username}) => {
         boxShadow='md'
         size='sm'
         color='#fff'
-        bgGradient='linear(to-b, cyan.400, teal.200)'
-        _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
+        bgGradient='linear(to-r, blue.400, cyan.400)'
+        _hover={{ bgGradient: 'linear(to-r, blue.500, cyan.500)'}}
         onClick={ () => onFollow() }
       >
         {

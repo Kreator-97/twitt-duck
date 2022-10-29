@@ -6,11 +6,11 @@ import {
   CommentsList,
   ConfirmLogout,
   ConfirmRemoveRepost,
-  CustomTabs,
   FormChangePassword,
   FormChangeProfileInfo,
   FormInput,
   GoogleButton,
+  Gallery,
   ImageVisor,
   Loader,
   Navbar,
@@ -27,6 +27,7 @@ import {
   UserAvatar,
   UserDetail,
   UserFeed,
+  UserInfo,
 } from './components'
 import { theme } from './theme'
 
@@ -38,10 +39,10 @@ export {
   ConfirmLogout,
   ConfirmRemoveRepost,
   ChakraProvider,
-  CustomTabs,
   FormChangePassword,
   FormChangeProfileInfo,
   FormInput,
+  Gallery,
   GoogleButton,
   ImageVisor,
   Loader,
@@ -60,4 +61,5 @@ export {
   UserAvatar,
   UserDetail,
   UserFeed,
+  UserInfo,
 }

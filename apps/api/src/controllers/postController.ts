@@ -16,7 +16,7 @@ export const getAllPosts = async (req: Request, res: Response<PostResponse >) =>
     include: {
       author: true,
       images: true,
-      comments: { include: { likes: { include: { user: true }}, reposts: { include: { author: true }} }},
+      comments: { include: { likes: { include: { user: true }}, reposts: { include: { author: true } }, post: { include: { author: true } } }},
       likes: {
         include: { post: { select: { id: true } }, user: true }
       },
@@ -42,7 +42,7 @@ export const getPostsByUsername = async (req: Request, res: Response<PostRespons
     include: {
       author: true,
       images: true,
-      comments: { include: { likes: { include: { user: true }}, reposts: { include: { author: true }} }},
+      comments: { include: { likes: { include: { user: true }}, reposts: { include: { author: true } }, post: { include: { author: true } } }},
       likes: {
         include: { post: { select: { id: true } }, user: true }
       },
@@ -74,7 +74,7 @@ export const getPostById = async (req: Request, res: Response<PostResponse>) => 
         },
         reposts: { include: { author: true }},
         comments: {
-          include: { author: true, likes: { include: { user: true }}, reposts: { include: { author: true }} },
+          include: { author: true, likes: { include: { user: true }}, reposts: { include: { author: true } }, post: { include: { author: true } } },
           orderBy: {
             createdAt: 'desc'
           }

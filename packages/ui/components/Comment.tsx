@@ -1,21 +1,24 @@
 import { FC } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Box, Grid, Text } from '@chakra-ui/react'
-import { Comment as CommentType, Post } from '@twitt-duck/state'
+import { Comment as CommentType } from '@twitt-duck/state'
 
 import { UserAvatar } from './UserAvatar'
 import { PostActions } from './PostActions'
 
 interface Props {
   comment: CommentType;
-  post?: Post
 }
 
 export const Comment: FC<Props> = ({comment}) => {
+  const navigate = useNavigate()
 
   const { author } = comment
+
+  // console.log(comment)
   return (
     <Grid
+      bgColor='#fff'
       p='1rem .5rem'
       border='1px solid #EEE'
       key={comment.id}
@@ -24,6 +27,8 @@ export const Comment: FC<Props> = ({comment}) => {
       alignItems='center'
       transition='background .3s ease-out'
       cursor='pointer'
+      onClick={ () => navigate(`/comment/${comment.id}`) }
+
       _hover={{
         backgroundColor: '#EEE'
       }}
@@ -48,8 +53,8 @@ export const Comment: FC<Props> = ({comment}) => {
             as='span'
             color='cyan.500'
           >
-            <Link to={`/user/${comment.author.username}`}
-            > @{ comment.author.username }
+            <Link to={`/user/${comment.post.author.username}`}
+            > @{ comment.post.author.username }
             </Link>
           </Text>
         </Text>

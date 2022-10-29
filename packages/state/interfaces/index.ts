@@ -39,6 +39,7 @@ export interface Comment {
   authorId    : string;
   privacy     : Privacy;
   comments    : Number;
+  post        : Post;
   likes       : Like[];
   reposts     : Repost[];
 }
@@ -65,9 +66,8 @@ export interface Images {
 export interface Like {
   id: string;
   user: User;
-  post: {
-    id: string
-  };
+  post: Post;
+
 }
 
 type Role = 'USER' | 'ADMIN'

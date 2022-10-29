@@ -9,6 +9,84 @@ interface UserResponse extends ApiResponse {
   user?: User
 }
 
+export const getUserInfo = async (req: Request, res: Response) => {
+  const username = req.params.username
+  const user = await prisma.user.findUnique({ where: { username }})
+
+  if( !user ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `El usuario con el username ${username} no existe en la base de datos`
+    })
+  }
+
+  const posts = await prisma.post.findMany({
+    where: {
+      authorId: user.id
+    },
+    include: {
+      author: true,
+      comments: true,
+      likes: {
+        include: {
+          user: true
+        }
+      },
+      images: true,
+      reposts: {
+        include: { author: true }
+      }
+    }
+  })
+
+  // we show only the post who user liked
+  const likes = await prisma.likes.findMany({
+    where: {
+      userId: user.id,
+      postId: {
+        not: null
+      }
+    },
+    include: {
+      comment: true,
+      post: {
+        include: {
+          author: true,
+          likes: {
+            include: {
+              user: true,
+            }
+          },
+          images: true,
+          comments: true,
+          reposts: {
+            include: {
+              author: true,
+            }
+          },
+        }
+      },
+      user: true
+    }
+  })
+
+  const images = await prisma.images.findMany({
+    where: {
+      post: {
+        authorId: user.id
+      }
+    },
+  })
+
+  return res.status(200).json({
+    ok: true,
+    msg: 'user found',
+    posts,
+    images,
+    likes,
+  })
+}
+
 export const getUserByUsername = async (req:Request, res: Response<UserResponse>) => {
   const { username } = req.params
   const user = await prisma.user.findUnique({
@@ -16,7 +94,6 @@ export const getUserByUsername = async (req:Request, res: Response<UserResponse>
     include: {
       followers: true, following: true
     }
-    // include: { followers: true, following: true }
   })
 
   if( !user ) {

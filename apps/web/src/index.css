@@ -1,5 +1,6 @@
 /* globals styles */
 
 input:focus {
-  outline: none
+  outline: none;
+  color: #3da5b8;
 }

@@ -13,6 +13,7 @@ export const Loader = () => {
       left='0'
       background={'whiteAlpha.500'}
       backdropFilter='blur(2px)'
+      zIndex='modal'
     >
       <Spinner
         thickness='4px'

@@ -132,7 +132,11 @@ export const getUserFeed = async (req: Request, res: Response) => {
               user: true,
             }
           },
-          post: true,
+          post: {
+            include: {
+              author: true
+            }
+          },
           reposts: {
             include: {
               author: true,

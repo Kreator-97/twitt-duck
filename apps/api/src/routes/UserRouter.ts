@@ -1,10 +1,22 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
 
-import { changeBackgroundPicture, changePassword, getUserByUsername, updateUserByUsername } from '../controllers/userController'
+import {
+  changeBackgroundPicture,
+  changePassword,
+  getUserByUsername,
+  getUserInfo,
+  updateUserByUsername
+} from '../controllers/userController'
+
 import { validateFields, verifyUser } from '../middlewares'
 
 export const UserRouter = Router()
+
+UserRouter.get('/info/:username', [
+  param('username', 'username parametro es requerido').notEmpty(),
+  validateFields,
+], getUserInfo)
 
 UserRouter.get('/:username', [
   param('username', 'username parametro es requerido').notEmpty(),

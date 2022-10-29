@@ -1,10 +1,9 @@
 import { FC } from 'react'
 import { Avatar, Box, Text, Grid } from '@chakra-ui/react'
-import { AspectRatio } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import { openVisorImage, Post as PostType, useAppDispatch } from '@twitt-duck/state'
+import { Post as PostType } from '@twitt-duck/state'
 
-import { PostActions } from './PostActions'
+import { Gallery, PostActions } from '.'
 
 interface Props {
   post: PostType;
@@ -12,13 +11,8 @@ interface Props {
 
 export const Post: FC<Props> = ({ post }) => {
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
 
   const { author, content, likes, comments, reposts, createdAt, images } = post
-
-  const onOpenImage = (imageURL: string) => {
-    dispatch(openVisorImage(imageURL))
-  }
 
   return (
     <Grid
@@ -85,41 +79,7 @@ export const Post: FC<Props> = ({ post }) => {
       </Box>
       {
         images.length > 0 && (
-          <Grid
-            overflow='hidden'
-            border='1px solid #ccc'
-            rounded='xl'
-            gap='.25rem'
-            gridTemplateColumns={ images.length === 1 ? '1fr' : '1fr 1fr' }
-            gridTemplateRows={{
-              base: images.length > 2 ? '150px 150px' : '1fr',
-              md: images.length > 2 ? '200px 200px' : '1fr',
-              lg: images.length > 2 ? '300px 300px' : '1fr'
-            }}
-          >
-            {
-              images.map((image, i) => {
-                return (
-                  <AspectRatio
-                    // original ratio when length is 1, 1/1 when length !== 1
-                    ratio={images.length === 1 ? undefined : 1 }
-                    key={image.id}
-                    gridColumnStart={ (images.length === 3 && i === 2) ? 'span 2' : '' }
-                    onClick={ (e) => { e.stopPropagation(); onOpenImage(image.url) } }
-                    
-                  >
-                    <Box
-                      cursor='pointer'
-                      backgroundImage={`url('${image.url}')`}
-                      backgroundRepeat='no-repeat'
-                      backgroundPosition='center'
-                      backgroundSize='cover'
-                    />
-                  </AspectRatio>
-                )
-              })
-            }
-          </Grid>
+          <Gallery images={images} />
         )
       }
       <Box />

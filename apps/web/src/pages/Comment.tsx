@@ -2,18 +2,18 @@ import { useRef } from 'react'
 import { mutate } from 'swr'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Flex, Grid, useToast } from '@chakra-ui/react'
-import { CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
+import { Comment, CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
 import { createComment } from '@twitt-duck/services'
 import { useAppSelector } from '@twitt-duck/state'
-import { usePost } from '@twitt-duck/hooks'
+import { useComment, usePost } from '@twitt-duck/hooks'
 
 import { AppLayout } from '../layouts'
 
-export const PostPage = () => {
+export const CommentPage = () => {
   const { user } = useAppSelector( state => state.auth)
   const { pathname } = useLocation()
   const toast = useToast()
-  const postId = pathname.split('/')[pathname.split('/').length-1] 
+  const commentId = pathname.split('/')[pathname.split('/').length-1] 
   const contentElementRef = useRef<HTMLDivElement>(null)
   const placeholder = 'Escribe un comentario'
 
@@ -24,7 +24,8 @@ export const PostPage = () => {
     return <></> 
   }
   
-  const { post, isLoading } = usePost(postId)
+  const { comment, isLoading } = useComment(commentId)
+  // const { post, isLoading } = usePost(postId)
   if( isLoading ) return <Loader />
 
   const removePlaceholder = () => {
@@ -47,46 +48,46 @@ export const PostPage = () => {
     }
   }
 
-  if( !post ) {
+  if( !comment ) {
     navigate('/')
     return <></>
   }
 
-  const onCreateComment = async () => {
-    const token = localStorage.getItem('token')
-    const content = contentElementRef.current?.innerText
+  // const onCreateComment = async () => {
+  //   const token = localStorage.getItem('token')
+  //   const content = contentElementRef.current?.innerText
 
-    if( !content || content?.trim() === '' ) return
-    if( content === placeholder ) return
-    if( !token ) return
+  //   if( !content || content?.trim() === '' ) return
+  //   if( content === placeholder ) return
+  //   if( !token ) return
 
-    try {
-      const { msg } = await createComment(post.id, content, token )
+  //   try {
+  //     const { msg } = await createComment(post.id, content, token )
       
-      toast({
-        title: msg,
-        position: 'top',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      })
+  //     toast({
+  //       title: msg,
+  //       position: 'top',
+  //       status: 'success',
+  //       duration: 3000,
+  //       isClosable: true
+  //     })
 
-      mutate(`http://localhost:5000/api/post/${postId}`)
+  //     mutate(`http://localhost:5000/api/post/${postId}`)
 
-      contentElementRef.current.innerText = placeholder
-    } catch (error) {
-      console.error(error)
-      if( typeof error === 'string' ) {
-        toast({
-          title: error,
-          position: 'top',
-          status: 'error',
-          duration: 3000,
-          isClosable: true
-        })
-      }
-    }
-  }
+  //     contentElementRef.current.innerText = placeholder
+  //   } catch (error) {
+  //     console.error(error)
+  //     if( typeof error === 'string' ) {
+  //       toast({
+  //         title: error,
+  //         position: 'top',
+  //         status: 'error',
+  //         duration: 3000,
+  //         isClosable: true
+  //       })
+  //     }
+  //   }
+  // }
 
   return (
     <AppLayout>
@@ -94,9 +95,7 @@ export const PostPage = () => {
         gap='1rem'
         gridTemplateColumns='1fr'
       >
-        <Post
-          post={post}
-        />
+        <Comment comment={comment} />
         <Grid
           gridTemplateColumns='48px 1fr'
           columnGap='.5rem'
@@ -125,19 +124,19 @@ export const PostPage = () => {
             <Button
               size={'sm'}
               color='#fff'
-              bgGradient='linear(to-r, blue.400, cyan.400)'
-              _hover={{ bgGradient: 'linear(to-r, blue.500, cyan.500)'}}
-              onClick={ () => onCreateComment() }
+              bgGradient='linear(to-b, cyan.400, teal.200)'
+              _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
+              // onClick={ () => onCreateComment() }
             >
             Agregar comentario
             </Button>
           </Flex>
         </Grid>
 
-        <CommentsList
+        {/* <CommentsList
           comments={post.comments}
           post={post}
-        />
+        /> */}
       </Grid>
 
     </AppLayout>

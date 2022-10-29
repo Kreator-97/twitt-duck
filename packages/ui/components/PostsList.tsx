@@ -1,6 +1,6 @@
+import { FC } from 'react'
 import { Box, Grid, Heading } from '@chakra-ui/react'
 import { Post as PostType } from '@twitt-duck/state'
-import { FC } from 'react'
 
 import { Post } from '.'
 
@@ -10,7 +10,6 @@ interface Props {
 }
 
 export const PostsList: FC<Props> = ({posts, showFeedMessage = false}) => {
-
 
   return (
     <Grid
@@ -36,18 +35,14 @@ export const PostsList: FC<Props> = ({posts, showFeedMessage = false}) => {
         )
       }
       {
-        (posts.length === 0)
-          ? 'Personaliza tu feed siguiendo a personas'
-          : (
-            posts.map((post) => {
-              return (
-                <Post
-                  key={post.id}
-                  post={post}
-                />
-              )
-            })
+        posts.map((post) => {
+          return (
+            <Post
+              key={post.id}
+              post={post}
+            />
           )
+        })
       }
     </Grid>
   )

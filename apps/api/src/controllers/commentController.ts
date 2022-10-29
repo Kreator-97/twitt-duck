@@ -8,6 +8,44 @@ interface CommentReponse extends ApiResponse {
   comment?: Comment
 }
 
+export const getCommentById = async (req: Request, res: Response ) => {
+
+  const commentId = req.params.commentId
+
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+    include: {
+      author: true,
+      post: {
+        include: {
+          author: true
+        }
+      },
+      likes: {
+        include: {
+          user: true,
+        }
+      },
+      reposts: {
+        include: { originalComment: true, author: true }
+      },
+    }
+  })
+
+  if( !comment ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `No existe el comentario con el id ${commentId}`
+    })
+  }
+
+  return res.status(200).json({
+    ok: true,
+    msg: 'ok',
+    comment,
+  })
+}
+
 export const AddComment = async (req: Request, res:Response<CommentReponse>) => {
   const postId = req.params.postId
   const { content }= req.body

@@ -54,7 +54,7 @@ export const NewPost: FC = () => {
     if( !content || content.trim() === '') return
     if( content === placeholder ) return
 
-    if( Number(fileList?.length) >= 4 ) {
+    if( Number(fileList?.length) > 4 ) {
       toast({
         title: 'Advertencia',
         description: 'Solamente se pueden subir un máximo de 4 imagenes por publicación',
@@ -214,8 +214,8 @@ export const NewPost: FC = () => {
             type='submit'
             size='sm'
             color='#fff'
-            bgGradient='linear(to-b, cyan.400, teal.200)'
-            _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
+            bgGradient='linear(to-r, blue.400, cyan.400)'
+            _hover={{ bgGradient: 'linear(to-r, blue.500, cyan.500)'}}
           >
             Publicar
           </Button>
