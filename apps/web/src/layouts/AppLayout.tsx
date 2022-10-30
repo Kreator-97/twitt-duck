@@ -1,7 +1,8 @@
 import { FC } from 'react'
-import { mutate } from 'swr'
 import { Box, Grid } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
+import { useAppSelector } from '@twitt-duck/state'
+import { mutate } from '@twitt-duck/services'
 
 import {
   BottomBar,
@@ -13,7 +14,6 @@ import {
   Toolbar,
 } from '@twitt-duck/ui'
 
-import { useAppSelector } from '@twitt-duck/state'
 
 interface Props {
   children: React.ReactNode;
@@ -29,17 +29,7 @@ export const AppLayout: FC<Props> = ({children }) => {
   }
 
   const onSuccess = () => {
-    mutate('http://localhost:5000/api/feed/public-posts')
-    const token = localStorage.getItem('token')
-    mutate(['http://localhost:5000/api/feed/', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }])
-    if( pathname.startsWith('/post/') ) {
-      const URLToReload = `http://localhost:5000/api${pathname}`
-      mutate(URLToReload)
-    }
+    mutate(pathname)
   }
 
   return (

@@ -1,5 +1,4 @@
 import { FC, MouseEvent, useMemo } from 'react'
-import { mutate } from 'swr'
 import { useLocation } from 'react-router-dom'
 import { Box, Flex, useToast } from '@chakra-ui/react'
 import { AiOutlineRetweet } from 'react-icons/ai'
@@ -17,11 +16,12 @@ import {
 
 import {
   createRepost,
+  mutate,
   toggleLikeComment,
   toggleLikePost
 } from '@twitt-duck/services'
 
-import { PostIcon } from './PostIcon'
+import { PostIcon } from './'
 
 interface Props {
   comments  : Comment[];
@@ -52,17 +52,8 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       if( type === 'comment' ) {
         await toggleLikeComment(actionId, token || '')
       }
-      mutate('http://localhost:5000/api/post/')
-      mutate(['http://localhost:5000/api/feed/', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }])
 
-      if( pathname.startsWith('/post/') ) {
-        const URLToReload = `http://localhost:5000/api${pathname}`
-        mutate(URLToReload)
-      }
+      mutate(pathname)
     } catch (error) {
       console.log(error)
     }
@@ -70,7 +61,6 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
 
   const onRepost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
-
     if( repostActive ) {
       dispatch(openRemoveRepostModal(actionId))
       return
@@ -81,17 +71,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
     try {
       await createRepost(type, actionId, token || '')
 
-      mutate('http://localhost:5000/api/feed/public-posts')
-      mutate(['http://localhost:5000/api/feed/', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }])
-
-      if( pathname.startsWith('/post/') ) {
-        const URLToReload = `http://localhost:5000/api${pathname}`
-        mutate(URLToReload)
-      }
+      mutate(pathname)
 
       toast({
         title: 'Has difundido esta publicación',

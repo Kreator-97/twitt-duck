@@ -13,6 +13,7 @@
     "typescript": "*"
   },
   "dependencies": {
-    "@twitt-duck/state": "*"
+    "@twitt-duck/state": "*",
+    "swr": "^1.3.0"
   }
 }

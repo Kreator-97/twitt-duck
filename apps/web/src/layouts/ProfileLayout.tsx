@@ -2,15 +2,23 @@ import { FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Grid } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
-import { Navbar, BottomBar, Loader, SearchModal, Toolbar, UserDetail } from '@twitt-duck/ui'
 import { useUser } from '@twitt-duck/hooks'
+import { mutate } from '@twitt-duck/services'
+import {
+  BottomBar,
+  ConfirmRemoveRepost,
+  Loader,
+  Navbar,
+  SearchModal,
+  Toolbar,
+  UserDetail,
+} from '@twitt-duck/ui'
 
 interface Props {
   children: React.ReactNode;
 }
 
 // this layout work for users pages and profile page
-
 export const ProfileLayout: FC<Props> = ({ children }) => {
   const {pathname} = useLocation()
   const { user } = useAppSelector(state => state.auth)
@@ -22,12 +30,16 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
   }
 
   const username = pathname.startsWith('/profile')
-    ? user.username 
+    ? user.username
     : pathname.split('/')[pathname.split('/').length-1]
 
   const { user: userDetail, isLoading } = useUser(username)
 
   if( isLoading ) return <Loader />
+
+  const onSuccess = () => {
+    mutate(pathname)
+  }
 
   return (
     <Box
@@ -65,7 +77,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
           <Toolbar />
           <Box
             as='main'
-            p='1rem'
+            p={{ base: '.5rem', md: '1rem' }}
             bg='white'
             boxShadow='md'
             rounded='md'
@@ -73,12 +85,12 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
             {
               children
             }
-          
           </Box>
         </Grid>
       </Box>
       <BottomBar />
       <SearchModal />
+      <ConfirmRemoveRepost onSuccess={ onSuccess }/>
     </Box>
   )
 }

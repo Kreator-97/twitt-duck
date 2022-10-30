@@ -1,15 +1,14 @@
 import { Request, Response } from 'express'
+import { Comment } from '@prisma/client'
 
 import prisma from '../lib/prisma'
 import { ApiResponse } from '../interfaces'
-import { Comment } from '@prisma/client'
 
 interface CommentReponse extends ApiResponse {
   comment?: Comment
 }
 
 export const getCommentById = async (req: Request, res: Response ) => {
-
   const commentId = req.params.commentId
 
   const comment = await prisma.comment.findUnique({
@@ -17,18 +16,42 @@ export const getCommentById = async (req: Request, res: Response ) => {
     include: {
       author: true,
       post: {
+        include: { author: true }
+      },
+      likes: {
+        include: { user: true, }
+      },
+      reposts: {
+        include: {
+          originalComment: true,
+          author: true
+        }
+      },
+      comment: {
         include: {
           author: true
         }
       },
-      likes: {
+      comments: {
         include: {
-          user: true,
+          author: true,
+          likes: { include: { user: true } },
+          reposts: {
+            include: { author: true }
+          },
+          post: {
+            include: { author: true }
+          },
+          comments: {
+            include: { comment: true }
+          },
+          comment: {
+            include: {
+              author: true
+            }
+          }
         }
-      },
-      reposts: {
-        include: { originalComment: true, author: true }
-      },
+      }
     }
   })
 
@@ -74,6 +97,19 @@ export const AddComment = async (req: Request, res:Response<CommentReponse>) => 
     })
   }
 
+  const post = await prisma.post.findUnique({
+    where: {
+      id: postId
+    }
+  })
+
+  if( !post ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `No existe el post con el id ${postId}`
+    })
+  }
+
   try {
     const comment = await prisma.comment.create({
       data: {
@@ -93,6 +129,55 @@ export const AddComment = async (req: Request, res:Response<CommentReponse>) => 
     console.log(error)
     return res.status(500).json({
       msg: 'Ocurrio un error al intentar crear el post',
+      ok: false
+    })
+  }
+}
+
+export const addSubcomment = async (req: Request, res: Response) => {
+  const { commentId, content } = req.body
+  const userId = req.userId
+
+  const user = await prisma.user.findUnique({where: { id: userId }})
+
+  if( !user ) {
+    return res.status(404).json({
+      msg: `No existe el usuario con el id ${userId}`,
+      ok: false
+    })
+  }
+
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id: commentId
+    }
+  })
+
+  if( !comment ) {
+    return res.status(404).json({
+      ok : false,
+      msg: `No existe el comentario con el id ${commentId}`
+    })
+  }
+
+  try {
+    const comment = await prisma.comment.create({
+      data: {
+        authorId: user.id,
+        content,
+        commentId
+      },
+    })
+
+    return res.status(200).json({
+      ok: true,
+      msg: 'subcomentario creado',
+      comment
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      msg: 'ocurrió un error al intentar crear el subcomentario',
       ok: false
     })
   }

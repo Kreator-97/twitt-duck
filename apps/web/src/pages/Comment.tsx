@@ -2,10 +2,10 @@ import { useRef } from 'react'
 import { mutate } from 'swr'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Button, Flex, Grid, useToast } from '@chakra-ui/react'
-import { Comment, CommentsList, Loader, Post, UserAvatar } from '@twitt-duck/ui'
-import { createComment } from '@twitt-duck/services'
+import { Comment, CommentsList, Loader, UserAvatar } from '@twitt-duck/ui'
+import { createSubcomment } from '@twitt-duck/services'
 import { useAppSelector } from '@twitt-duck/state'
-import { useComment, usePost } from '@twitt-duck/hooks'
+import { useComment } from '@twitt-duck/hooks'
 
 import { AppLayout } from '../layouts'
 
@@ -25,7 +25,6 @@ export const CommentPage = () => {
   }
   
   const { comment, isLoading } = useComment(commentId)
-  // const { post, isLoading } = usePost(postId)
   if( isLoading ) return <Loader />
 
   const removePlaceholder = () => {
@@ -53,41 +52,41 @@ export const CommentPage = () => {
     return <></>
   }
 
-  // const onCreateComment = async () => {
-  //   const token = localStorage.getItem('token')
-  //   const content = contentElementRef.current?.innerText
+  const onCreateSubcomment = async () => {
+    const token = localStorage.getItem('token')
+    const content = contentElementRef.current?.innerText
 
-  //   if( !content || content?.trim() === '' ) return
-  //   if( content === placeholder ) return
-  //   if( !token ) return
+    if( !content || content?.trim() === '' ) return
+    if( content === placeholder ) return
+    if( !token ) return
 
-  //   try {
-  //     const { msg } = await createComment(post.id, content, token )
+    try {
+      const { msg } = await createSubcomment(comment.id, content, token )
       
-  //     toast({
-  //       title: msg,
-  //       position: 'top',
-  //       status: 'success',
-  //       duration: 3000,
-  //       isClosable: true
-  //     })
+      toast({
+        title: msg,
+        position: 'top',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      })
 
-  //     mutate(`http://localhost:5000/api/post/${postId}`)
+      mutate(`http://localhost:5000/api/comment/${comment.id}`)
 
-  //     contentElementRef.current.innerText = placeholder
-  //   } catch (error) {
-  //     console.error(error)
-  //     if( typeof error === 'string' ) {
-  //       toast({
-  //         title: error,
-  //         position: 'top',
-  //         status: 'error',
-  //         duration: 3000,
-  //         isClosable: true
-  //       })
-  //     }
-  //   }
-  // }
+      contentElementRef.current.innerText = placeholder
+    } catch (error) {
+      console.error(error)
+      if( typeof error === 'string' ) {
+        toast({
+          title: error,
+          position: 'top',
+          status: 'error',
+          duration: 3000,
+          isClosable: true
+        })
+      }
+    }
+  }
 
   return (
     <AppLayout>
@@ -124,19 +123,18 @@ export const CommentPage = () => {
             <Button
               size={'sm'}
               color='#fff'
-              bgGradient='linear(to-b, cyan.400, teal.200)'
-              _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
-              // onClick={ () => onCreateComment() }
+              bgGradient='linear(to-r, blue.400, cyan.400)'
+              _hover={{ bgGradient: 'linear(to-r, blue.500, cyan.500)' }}
+              onClick={ () => onCreateSubcomment() }
             >
-            Agregar comentario
+              Agregar comentario
             </Button>
           </Flex>
         </Grid>
 
-        {/* <CommentsList
-          comments={post.comments}
-          post={post}
-        /> */}
+        <CommentsList
+          comments={comment.comments}
+        />
       </Grid>
 
     </AppLayout>

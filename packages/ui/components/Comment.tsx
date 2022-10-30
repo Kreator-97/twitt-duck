@@ -3,8 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Box, Grid, Text } from '@chakra-ui/react'
 import { Comment as CommentType } from '@twitt-duck/state'
 
-import { UserAvatar } from './UserAvatar'
-import { PostActions } from './PostActions'
+import { PostActions, UserAvatar } from './'
 
 interface Props {
   comment: CommentType;
@@ -12,10 +11,10 @@ interface Props {
 
 export const Comment: FC<Props> = ({comment}) => {
   const navigate = useNavigate()
-
   const { author } = comment
 
-  // console.log(comment)
+  const replyTo = comment.post?.author.username || comment.comment?.author.username || ''
+
   return (
     <Grid
       bgColor='#fff'
@@ -28,9 +27,8 @@ export const Comment: FC<Props> = ({comment}) => {
       transition='background .3s ease-out'
       cursor='pointer'
       onClick={ () => navigate(`/comment/${comment.id}`) }
-
       _hover={{
-        backgroundColor: '#EEE'
+        backgroundColor: 'rgb(238, 245, 255)'
       }}
     >
       <Box>
@@ -51,26 +49,23 @@ export const Comment: FC<Props> = ({comment}) => {
           { 'En respuesta a ' }
           <Text
             as='span'
-            color='cyan.500'
+            color='blue.500'
           >
-            <Link to={`/user/${comment.post.author.username}`}
-            > @{ comment.post.author.username }
+            <Link to={`/user/${replyTo}`}
+            > @{ replyTo }
             </Link>
           </Text>
         </Text>
       </Box>
       <Box />
-      <Box
-        minHeight='3rem'
-      >
+      <Box minHeight='3rem'>
         <Text>{ comment.content }</Text>
       </Box>
       <Box />
-      {/* FIXME: fix this on schema */}
       <PostActions
         type='comment'
-        actionId={comment.id}
-        comments={ [] }
+        actionId={ comment.id }
+        comments={ comment.comments }
         likes={ comment.likes }
         reposts={ comment.reposts }
       />

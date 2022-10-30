@@ -22,14 +22,11 @@ export const UserInfo: FC<Props> = ({username}) => {
     return likes.map(like => like.post)
   }, [likes])
 
-  if( isLoading ) {
-    return <Loader />
-  }
+  if( isLoading ) return <Loader />
 
   return (
     <Tabs
       colorScheme='blue'
-      mb='4'
     >
       <TabList>
         <Tab>Publicaciones</Tab>
@@ -38,7 +35,7 @@ export const UserInfo: FC<Props> = ({username}) => {
       </TabList>
 
       <TabPanels>
-        <TabPanel>
+        <TabPanel p='0'>
           <PostsList posts={posts} showFeedMessage={false} />
           {
             (posts.length === 0) &&
@@ -47,12 +44,14 @@ export const UserInfo: FC<Props> = ({username}) => {
                   as='h3'
                   fontSize='sm'
                   textAlign='center'
+                  p={2}
+                  mt={2}
                 >No existen publicaciones hechas
                 </Heading>
               )
           }
         </TabPanel>
-        <TabPanel>
+        <TabPanel p='0'>
           <PostsList posts={likedPost} showFeedMessage={false} />
           {
             (likes.length === 0) &&
@@ -61,13 +60,34 @@ export const UserInfo: FC<Props> = ({username}) => {
                 as='h3'
                 fontSize='sm'
                 textAlign='center'
-              >Sin información disponible
+                p={2}
+                mt={2}
+              >
+                Sin información disponible
               </Heading>
             )
           }
         </TabPanel>
-        <TabPanel>
-          <Gallery images={images} />
+        <TabPanel p='0'>
+          {
+            images.length > 0 && (
+              <Gallery images={images} />
+            )
+          }
+          {
+            (images.length === 0) &&
+            (
+              <Heading
+                as='h3'
+                fontSize='sm'
+                textAlign='center'
+                p={2}
+                mt={2}
+              >
+                Sin información disponible
+              </Heading>
+            )
+          }
         </TabPanel>
       </TabPanels>
     </Tabs>

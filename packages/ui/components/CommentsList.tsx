@@ -1,14 +1,13 @@
 import { FC } from 'react'
 import { Box} from '@chakra-ui/react'
-import { Comment as CommentType, Post } from '@twitt-duck/state'
+import { Comment as CommentType } from '@twitt-duck/state'
 import { Comment } from '.'
 
 interface Props {
   comments: CommentType[];
-  post    : Post;
 }
 
-export const CommentsList: FC<Props> = ({comments, post}) => {
+export const CommentsList: FC<Props> = ({comments}) => {
 
   return (
     <Box
@@ -18,7 +17,7 @@ export const CommentsList: FC<Props> = ({comments, post}) => {
       {
         comments.map( comment => {
           return (
-            <Comment key={comment.id} comment={comment} post={post} />
+            <Comment key={comment.id} comment={comment} />
           )
         })
       }

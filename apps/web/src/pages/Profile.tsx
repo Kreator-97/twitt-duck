@@ -7,9 +7,7 @@ import { ProfileLayout } from '../layouts'
 export const ProfilePage = () => {
   const { user } = useAppSelector( state => state.auth )
 
-  if( !user ) {
-    return <></>
-  }
+  if( !user ) return <></>
 
   return (
     <ProfileLayout>

@@ -10,8 +10,6 @@ interface Response {
 export const useComment = (commentId: string) => {
   const { data, error } = useSWR<Response>(`http://localhost:5000/api/comment/${commentId}`)
 
-  console.log(data)
-
   return {
     comment: data?.comment || null,
     isLoading: !data && !error,

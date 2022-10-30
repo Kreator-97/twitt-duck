@@ -62,11 +62,14 @@ model Comment {
   createdAt       DateTime    @default(now())
   privacy         Privacy     @default(ALL)
   author          User        @relation(fields: [authorId], references: [id])
-  post            Post        @relation(fields: [postId], references: [id])
   authorId        String
-  postId          String
+  post            Post?       @relation(fields: [postId], references: [id])
+  postId          String?
   likes           Likes[]
   reposts         Repost[]
+  comments        Comment[]   @relation("comments")
+  comment         Comment?    @relation("comments", fields: [commentId], references: [id])
+  commentId       String?
 }
 
 model Repost {

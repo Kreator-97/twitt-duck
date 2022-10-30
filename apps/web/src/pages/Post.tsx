@@ -136,7 +136,6 @@ export const PostPage = () => {
 
         <CommentsList
           comments={post.comments}
-          post={post}
         />
       </Grid>
 

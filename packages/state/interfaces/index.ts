@@ -38,10 +38,11 @@ export interface Comment {
   author      : User;
   authorId    : string;
   privacy     : Privacy;
-  comments    : Number;
-  post        : Post;
+  post?       : Post;
+  comment?    : Comment;
   likes       : Like[];
   reposts     : Repost[];
+  comments    : Comment[];
 }
 
 export interface Repost {
