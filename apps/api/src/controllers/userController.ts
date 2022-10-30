@@ -36,6 +36,9 @@ export const getUserInfo = async (req: Request, res: Response) => {
       reposts: {
         include: { author: true }
       }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   })
 
@@ -66,7 +69,12 @@ export const getUserInfo = async (req: Request, res: Response) => {
           },
         }
       },
-      user: true
+      user: true,
+    },
+    orderBy: {
+      post: {
+        createdAt: 'desc'
+      }
     }
   })
 
@@ -76,6 +84,11 @@ export const getUserInfo = async (req: Request, res: Response) => {
         authorId: user.id
       }
     },
+    orderBy: {
+      post: {
+        createdAt: 'desc'
+      }
+    }
   })
 
   return res.status(200).json({
