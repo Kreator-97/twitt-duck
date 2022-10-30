@@ -27,6 +27,22 @@ export const createComment = async (postId: string, content: string, token: stri
   return data
 }
 
+export const createSubcomment = async (commentId: string, content: string, token: string) => {
+  const data = await request<Props>('/api/comment/subcomment', {
+    method: 'POST',
+    body: JSON.stringify({content, commentId}),
+    contentType: 'application/json',
+    token
+  })
+
+  if( !data.ok ) {
+    console.log(data.errors)
+    return Promise.reject(data.msg)
+  }
+
+  return data
+}
+
 export const toggleLikeComment = async (commentId: string, token: string) => {
   await request(`/api/comment/${commentId}/toggle-like`, {
     method: 'PUT',

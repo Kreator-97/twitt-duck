@@ -9,8 +9,8 @@ export interface User {
   description?  : string
   profilePic    : string
   backgroundPic?: string
-  followers     : Followers[]
-  following     : Following[]
+  followers     : Follow[]
+  following     : Follow[]
   posts         : Post
   role          : Role
   active        : Boolean
@@ -38,25 +38,24 @@ export interface Comment {
   author      : User;
   authorId    : string;
   privacy     : Privacy;
-  comments    : Number;
+  post?       : Post;
+  comment?    : Comment;
   likes       : Like[];
   reposts     : Repost[];
+  comments    : Comment[];
 }
 
 export interface Repost {
   id               : string;
   author           : User;
-  originalPost    ?: Post;
-  originalComment ?: Comment
+  originalPost     : Post;
+  originalComment  : Comment
 }
 
-export interface Followers {
+export interface Follow {
   id: string;
-  user: User
-}
-export interface Following {
-  id: string;
-  user: User
+  user: User;
+  followingTo: User
 }
 
 export interface Images {
@@ -68,12 +67,27 @@ export interface Images {
 export interface Like {
   id: string;
   user: User;
-  post: {
-    id: string
-  };
+  post: Post;
+
 }
 
 type Role = 'USER' | 'ADMIN'
 type Provider = 'CREDENTIALS' | 'GOOGLE'
 type Visibility = 'HIDDEN' | 'VISIBLE'
 type Privacy = 'ONLY_ME' | 'ONLY_FOLLOWERS' | 'ALL' 
+
+
+export interface Feed {
+  [key: string]: FeedItem
+}
+
+type FeedItem = {
+  type: 'post';
+  posts: Post;
+} | {
+  type: 'repost';
+  reposts: Repost;
+} | {
+  type: 'repost-comment';
+  comments: Repost;
+}

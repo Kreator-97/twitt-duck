@@ -1,35 +1,57 @@
 import { Provider } from 'react-redux'
-
 import { useAppDispatch, useAppSelector } from './app/hooks'
-import { store } from './app/store'
 import { AuthState, finishChecking, login } from './app/slices/authSlice'
-import { UIState, closeSearchBar, openSearchBar, openConfirmLogoutModal, closeConfirmLogoutModal, closeVisorImage, openVisorImage, closeRemoveRepostModal, openRemoveRepostModal } from './app/slices/uiSlice'
-import { Post, User, Comment, Images, Like, Repost } from './interfaces'
+import { store } from './app/store'
+
+import {
+  closeConfirmLogoutModal,
+  closeRemoveRepostModal,
+  closeSearchBar,
+  closeVisorImage,
+  openConfirmLogoutModal,
+  openRemoveRepostModal,
+  openSearchBar,
+  openVisorImage,
+  UIState,
+} from './app/slices/uiSlice'
+
+import {
+  Comment,
+  Feed,
+  Follow,
+  Images,
+  Like,
+  Post,
+  Repost,
+  User,
+} from './interfaces'
 
 export {
+  closeConfirmLogoutModal,
+  closeRemoveRepostModal,
+  closeSearchBar,
+  closeVisorImage,
+  finishChecking,
+  login,
+  openConfirmLogoutModal,
+  openRemoveRepostModal,
+  openSearchBar,
+  openVisorImage,
   Provider,
+  store,
   useAppDispatch,
   useAppSelector,
-  store,
-  login,
-  finishChecking,
-  closeSearchBar,
-  openSearchBar,
-  closeConfirmLogoutModal,
-  openConfirmLogoutModal,
-  closeVisorImage,
-  openVisorImage,
-  closeRemoveRepostModal,
-  openRemoveRepostModal
 }
 
 export type {
   AuthState,
-  UIState,
-  Post,
-  User,
   Comment,
+  Follow,
   Images,
   Like,
+  Post,
   Repost,
+  UIState,
+  User,
+  Feed,
 }

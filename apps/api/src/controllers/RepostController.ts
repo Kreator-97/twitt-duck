@@ -43,9 +43,11 @@ export const createRepost = async (req: Request, res: Response<RepostResponse>) 
     where: {
       OR: [
         {
+          authorId: user.id,
           originalPostId: postId,
         },
         {
+          authorId: user.id,
           originalCommentId: postId,
         }
       ]
@@ -58,6 +60,7 @@ export const createRepost = async (req: Request, res: Response<RepostResponse>) 
       msg: 'El usuario ya difundió esta publicación'
     })
   }
+
 
   try {
     let repost: Repost | undefined

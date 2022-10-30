@@ -7,11 +7,11 @@ import { MdArrowBack } from 'react-icons/md'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
 import { useAppDispatch, login } from '@twitt-duck/state'
 import { googleRequest, registerRequest } from '@twitt-duck/services'
+import { useForm } from '@twitt-duck/hooks'
 
 import { AuthLayout } from '../layouts'
 import { DBLocal } from '../utils'
 import { notEmptyString } from '../utils/validations'
-import { useForm } from '../hooks/useForm'
 
 import {
   Box,
@@ -40,7 +40,6 @@ export const RegisterPage = () => {
   const toast = useToast()
   const [ showErrors, setShowErrors ] = useState(false)
 
-
   const { email, fullname, password, errors, onInputChange, onResetForm } = useForm({
     fullname: '',
     email   : '',
@@ -62,7 +61,7 @@ export const RegisterPage = () => {
       DBLocal.saveUserAndTokenInLocal(user, token)
 
       // continue at the customize profile page
-      navigate(`/auth/customize?email=${email}`)
+      navigate('/auth/customize')
 
     } catch (error: any) { // eslint-disable-line
       console.error(error)
@@ -80,9 +79,11 @@ export const RegisterPage = () => {
   const onGoogleSignIn = async (googleToken: string) => {
     try {
       const { user, token } = await googleRequest(googleToken)
+      
+      DBLocal.saveUserAndTokenInLocal(user, token)
 
       if( !user.active ) {
-        navigate(`/auth/customize?email=${user.email}`)
+        navigate('/auth/customize')
         return
       }
 
@@ -94,11 +95,8 @@ export const RegisterPage = () => {
         position: 'top',
         isClosable: true,
       })
-  
+      
       dispatch( login(user) )
-
-      DBLocal.saveUserAndTokenInLocal(user, token)
-
       navigate('/')
     } catch (error: any) { //eslint-disable-line
       console.log(error)

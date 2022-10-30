@@ -23,10 +23,11 @@ export const ImageVisor = () => {
           backdropFilter='blur(1px)'
         />
         <ModalContent boxShadow='none' rounded='md' p='.5rem' backgroundColor='transparent'>
-          <ModalCloseButton />
+          <ModalCloseButton color='white' bgColor='#333' borderRadius='100%' />
           <Image
             rounded='md'
             src={ imageVisor.imageURL }
+            maxH='95vh'
           />
         </ModalContent>
       </Modal>

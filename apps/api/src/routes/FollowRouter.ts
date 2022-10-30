@@ -1,12 +1,17 @@
 import { Router } from 'express'
 import { param } from 'express-validator'
-import { addFollower } from '../controllers/followController'
+import { addFollower, getFollowsByUsername } from '../controllers/followController'
 import { validateFields, verifyUser } from '../middlewares'
 
 export const FollowRouter = Router()
 
-FollowRouter.post('/:userIdToFollow', [
+FollowRouter.get('/:username', [
+  param('username', 'username es obligatorio').notEmpty(),
+  validateFields,
+], getFollowsByUsername)
+
+FollowRouter.post('/:username', [
   verifyUser,
-  param('userIdToFollow', 'userIdToFollow es obligatorio').notEmpty(),
+  param('username', 'username es obligatorio').notEmpty(),
   validateFields,
 ], addFollower)

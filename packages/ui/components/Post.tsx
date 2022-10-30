@@ -1,42 +1,33 @@
 import { FC } from 'react'
 import { Avatar, Box, Text, Grid } from '@chakra-ui/react'
-import { AspectRatio } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import { openVisorImage, Post as PostType, useAppDispatch, openRemoveRepostModal} from '@twitt-duck/state'
+import { Post as PostType } from '@twitt-duck/state'
 
-import { PostActions } from './PostActions'
+import { Gallery, PostActions } from '.'
 
 interface Props {
   post: PostType;
-  onLikeEvent?: (postId: string) => void;
-  onRepostEvent?: (postId: string, type: 'comment' | 'post') => void;
 }
 
-export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
+export const Post: FC<Props> = ({ post }) => {
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
 
   const { author, content, likes, comments, reposts, createdAt, images } = post
 
-  const onOpenImage = (imageURL: string) => {
-    dispatch(openVisorImage(imageURL))
-  }
-
-  const onRepostCancelEvent = async (postId: string) => {
-    dispatch(openRemoveRepostModal(postId))
-  }
-  
   return (
     <Grid
       bg='white'
-      mb={{ base: '4' }}
-      boxShadow='base'
+      boxShadow='md'
       gridTemplateColumns='48px 1fr'
       p={{ base: '.5rem', lg: '.5rem' }}
       rowGap={{ base: '.5rem', lg: '.5rem' }}
       columnGap={{ base: '.5rem', lg: '.5rem' }}
       onClick={ () => navigate(`/post/${post.id}`) }
       cursor='pointer'
+      transition='background .3s ease-out'
+      _hover={{
+        backgroundColor: 'rgb(238, 245, 255)'
+      }}
     >
       <Box width='48px'>
         <Avatar
@@ -88,54 +79,17 @@ export const Post: FC<Props> = ({post, onLikeEvent, onRepostEvent}) => {
       </Box>
       {
         images.length > 0 && (
-          <Grid
-            overflow='hidden'
-            border='1px solid #ccc'
-            rounded='xl'
-            gap='.25rem'
-            gridTemplateColumns={ images.length === 1 ? '1fr' : '1fr 1fr' }
-            gridTemplateRows={{
-              base: images.length > 2 ? '150px 150px' : '1fr',
-              md: images.length > 2 ? '200px 200px' : '1fr',
-              lg: images.length > 2 ? '300px 300px' : '1fr'
-            }}
-          >
-            {
-              images.map((image, i) => {
-                return (
-                  <AspectRatio
-                    // original ratio when length is 1, 1/1 when length !== 1
-                    ratio={images.length === 1 ? undefined : 1 }
-                    key={image.id}
-                    gridColumnStart={ (images.length === 3 && i === 2) ? 'span 2' : '' }
-                    onClick={ (e) => { e.stopPropagation(); onOpenImage(image.url) } }
-                    
-                  >
-                    <Box
-                      cursor='pointer'
-                      backgroundImage={`url('${image.url}')`}
-                      backgroundRepeat='no-repeat'
-                      backgroundPosition='center'
-                      backgroundSize='cover'
-                    />
-                  </AspectRatio>
-                )
-              })
-            }
-          </Grid>
+          <Gallery images={images} />
         )
       }
       <Box />
       <Box>
         <PostActions
-          onRepostCancelEvent={ onRepostCancelEvent }
           type='post'
           actionId={post.id}
           comments={comments}
           likes={likes}
           reposts={reposts}
-          onLikeEvent={ onLikeEvent }
-          onRepostEvent={ onRepostEvent }
         />
       </Box>
     </Grid>

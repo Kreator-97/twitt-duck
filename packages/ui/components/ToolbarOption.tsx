@@ -23,9 +23,9 @@ export const ToolbarOption: FC<Props> = ({Icon, title, url}) => {
       alignItems='center'
       gap={{sm: '.5rem', lg: '1rem'}}
       mb={{sm: '2', lg: '4'}}
-      color={ url === pathname ? 'cyan.600' : 'inherit' }
+      color={ url === pathname ? 'blue.500' : 'inherit' }
       cursor='pointer'
-      _hover={{ backgroundColor: 'gray.200', color: 'cyan.600' }}
+      _hover={{ backgroundColor: 'gray.200', color: 'blue.500' }}
       transition='all .2s ease-in-out'
       rounded='md'
       onClick={ () => goToPage() }

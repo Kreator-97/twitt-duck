@@ -1,11 +1,10 @@
 {
-  "name": "@twitt-duck/ui",
+  "name": "@twitt-duck/hooks",
   "version": "0.0.0",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
+  "main": "./index.ts",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint *.tsx"
+    "lint": "eslint ./hooks"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.39.0",
@@ -16,7 +15,6 @@
   },
   "dependencies": {
     "@twitt-duck/state": "*",
-    "@twitt-duck/hooks": "*",
     "react": "*",
     "swr": "^1.3.0"
   }

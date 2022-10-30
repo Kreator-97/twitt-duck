@@ -1,11 +1,27 @@
 import { FC, MouseEvent, useMemo } from 'react'
-import { Box, Flex } from '@chakra-ui/react'
-import { Comment, Like, Repost, useAppSelector } from '@twitt-duck/state'
+import { useLocation } from 'react-router-dom'
+import { Box, Flex, useToast } from '@chakra-ui/react'
 import { AiOutlineRetweet } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import { HiOutlineHeart } from 'react-icons/hi'
 
-import { PostIcon } from './PostIcon'
+import {
+  Comment,
+  Like,
+  openRemoveRepostModal,
+  Repost,
+  useAppDispatch,
+  useAppSelector
+} from '@twitt-duck/state'
+
+import {
+  createRepost,
+  mutate,
+  toggleLikeComment,
+  toggleLikePost
+} from '@twitt-duck/services'
+
+import { PostIcon } from './'
 
 interface Props {
   comments  : Comment[];
@@ -13,33 +29,60 @@ interface Props {
   reposts   : Repost[];
   actionId  : string;
   type      : 'comment' | 'post';
-  onLikeEvent?: (actionId: string) => void;
-  onRepostEvent?: (actionId: string, type: 'comment' | 'post') => void;
-  onRepostCancelEvent?: (actionId: string, type: 'comment' | 'post') => void;
+  onRepostSuccess ?: () => void;
+  onLikeSuccess   ?: () => void;
 }
 
-// this component perform all actions over the Post or comment passed as actionId:
-// actiones likes, reposts, comment
-
-export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, type, onLikeEvent, onRepostEvent, onRepostCancelEvent }) => {
+export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, type }) => {
+  const { pathname } = useLocation()
+  const dispatch = useAppDispatch()
   const { user } = useAppSelector(state => state.auth)
-  
+  const toast = useToast()
+
   const repostActive = useMemo(() => reposts.some( repost => repost.author.id === user?.id), [reposts])
 
   const onLikePost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
-    onLikeEvent && onLikeEvent(actionId)
+    const token = localStorage.getItem('token')
+
+    try {
+      if( type === 'post' ) {
+        await toggleLikePost(actionId, token || '')
+      }
+      if( type === 'comment' ) {
+        await toggleLikeComment(actionId, token || '')
+      }
+
+      mutate(pathname)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const onRepost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
-
     if( repostActive ) {
-      onRepostCancelEvent && onRepostCancelEvent(actionId, type)
+      dispatch(openRemoveRepostModal(actionId))
       return
     }
-    
-    onRepostEvent && onRepostEvent(actionId, type)
+
+    const token = localStorage.getItem('token')
+
+    try {
+      await createRepost(type, actionId, token || '')
+
+      mutate(pathname)
+
+      toast({
+        title: 'Has difundido esta publicación',
+        position: 'top',
+        isClosable: true,
+        status: 'success',
+        duration: 3000,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -53,7 +96,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
     >
       <Box>
         <PostIcon
-          icon={BiCommentDetail}
+          icon={ BiCommentDetail }
           title='Comentar'
           count={ comments ? comments.length : 0 }
         />
@@ -61,7 +104,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       <Box>
         <PostIcon
           active={ repostActive }
-          icon={AiOutlineRetweet}
+          icon={ AiOutlineRetweet }
           title='Difundir'
           count={ reposts.length }
           onClick={ onRepost }
@@ -70,9 +113,9 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       <Box>
         <PostIcon
           active={ likes.some( like => like.user.id === user?.id) }
-          icon={HiOutlineHeart}
+          icon={ HiOutlineHeart }
           title='Me gusta'
-          count={likes.length}
+          count={ likes.length }
           onClick={ onLikePost }
         />
       </Box>

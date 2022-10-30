@@ -25,7 +25,7 @@ export const BottomBarIcon: FC<Props> = ({Icon, label, to, onClick}) => {
         size={{ base: 'sm', sm: 'md' }}
         aria-label={label}
         icon={ <Icon />}
-        color={ pathname === to ? 'cyan.600' : 'inherit' }
+        color={ pathname === to ? 'blue.500' : 'inherit' }
         _hover={{
           color: 'red.400',
           backgroundColor: 'gray.200'
