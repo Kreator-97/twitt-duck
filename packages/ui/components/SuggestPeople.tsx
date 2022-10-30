@@ -15,6 +15,7 @@ export const SuggestPeople: FC = () => {
       bg='white'
       p='4'
       boxShadow='md'
+      display={ suggestedUsers.length === 0 ? 'none' : 'block' }
     >
       <Text
         as='h2'

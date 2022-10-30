@@ -8,7 +8,12 @@ interface Response {
 }
 
 export const useSuggestedPeople = () => {
-  const { data, error } = useSWR<Response>('http://localhost:5000/api/suggested-people')
+  const token = localStorage.getItem('token')
+  const { data, error } = useSWR<Response>(['http://localhost:5000/api/suggested-people/', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }])
 
   return {
     users: data?.users || [],
