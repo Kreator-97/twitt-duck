@@ -20,7 +20,12 @@ export const Gallery: FC<Props> = ({images}) => {
       rounded='xl'
       gap='.25rem'
       gridTemplateColumns={ images.length === 1 ? '1fr' : '1fr 1fr' }
-      gridTemplateRows={{
+      // gridTemplateRows={{
+      //   base: images.length > 2 ? '150px 150px' : '1fr',
+      //   md: images.length > 2 ? '200px 200px' : '1fr',
+      //   lg: images.length > 2 ? '300px 300px' : '1fr'
+      // }}
+      gridAutoRows={{
         base: images.length > 2 ? '150px 150px' : '1fr',
         md: images.length > 2 ? '200px 200px' : '1fr',
         lg: images.length > 2 ? '300px 300px' : '1fr'
