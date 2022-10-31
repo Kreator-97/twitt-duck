@@ -26,7 +26,8 @@ export const getSuggestedPeople = async (req: Request, res: Response) => {
     const users = await prisma.user.findMany({
       where: {
         id: {
-          notIn: followingIds
+          notIn: followingIds,
+          not: userId,
         }
       },
       orderBy: {
