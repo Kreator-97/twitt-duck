@@ -51,7 +51,9 @@ export const UserInfo: FC<Props> = ({username}) => {
               )
           }
         </TabPanel>
-        <TabPanel p='0'>
+        <TabPanel
+          p={{ base: '.5rem 0 0', md: '1rem 0 0' }}
+        >
           <PostsList posts={likedPost} showFeedMessage={false} />
           {
             (likes.length === 0) &&
@@ -68,7 +70,9 @@ export const UserInfo: FC<Props> = ({username}) => {
             )
           }
         </TabPanel>
-        <TabPanel p={{base: '.5rem 0 0', md: '1rem 0 0'}}>
+        <TabPanel
+          p={{ base: '.5rem 0 0', md: '1rem 0 0' }}
+        >
           {
             images.length > 0 && (
               <Gallery images={images} />

@@ -23,12 +23,13 @@ export const SuggestPeople: FC = () => {
       >¿A quien seguir?</Text>
       <Box>
         {
-          suggestedUsers.map(({id, fullname, profilePic, username}) => (
+          suggestedUsers.map(({id, fullname, profilePic, username, description}) => (
             <Follow
               key={ id }
               name={ fullname }
               imgURL={ profilePic }
               username={ username }
+              description={ description }
             />
           ))
         }

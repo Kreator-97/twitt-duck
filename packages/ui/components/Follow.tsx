@@ -1,9 +1,10 @@
 import { FC } from 'react'
+import { mutate } from 'swr'
 import { Avatar, Box, Button, Grid, Text } from '@chakra-ui/react'
 import { createFollow } from '@twitt-duck/services'
 import { useAppSelector } from '@twitt-duck/state'
 import { useFollow } from '@twitt-duck/hooks'
-import { mutate } from 'swr'
+import { Link } from 'react-router-dom'
 
 interface Props {
   name        : string;
@@ -37,24 +38,55 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
       mb='4'
       alignItems='center'
       gap='0 .5rem'
-      gridTemplateColumns='32px 1fr auto'
+      gridTemplateColumns='48px 1fr auto'
       boxShadow='md'
       p='2'
     >
       <Avatar
-        size='sm'
+        size='md'
         src={imgURL}
       />
-      <Text
-        title={name}
-        maxHeight='1.4rem'
-        fontWeight='bold'
-        fontSize='sm'
-        textOverflow='ellipsis'
-        overflow='hidden'
-      >
-        { name }
-      </Text>
+      <Box>
+
+        <Text
+          title={name}
+          maxHeight='1.4rem'
+          fontWeight='bold'
+          fontSize='sm'
+          textOverflow='ellipsis'
+          overflow='hidden'
+          display='block'
+        >
+          <Link to={`/user/${username}`} >
+            <Text
+              as='span'
+              _hover={{ color: 'blue.500' }}
+            >
+              { name }
+            </Text>
+          </Link>
+        </Text>
+        <Text
+          title={username}
+          maxHeight='1.4rem'
+          fontWeight='400'
+          fontSize='sm'
+          textOverflow='ellipsis'
+          overflow='hidden'
+          display='block'
+        >
+          <Link
+            to={`/user/${username}`}
+          >
+            <Text
+              as='span'
+              _hover={{ color: 'blue.500' }}
+            >
+              @{ username }
+            </Text>
+          </Link>
+        </Text>
+      </Box>
       <Button
         boxShadow='md'
         size='sm'

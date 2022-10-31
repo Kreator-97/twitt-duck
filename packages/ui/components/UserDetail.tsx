@@ -93,8 +93,8 @@ export const UserDetail: FC<Props> = ({ user }) => {
           width='100%'
           display={ pathname.startsWith('/profile') ? 'none' : 'block' }
           color='#fff'
-          bgGradient='linear(to-b, cyan.400, teal.200)'
-          _hover={{ bgGradient: 'linear(to-b, cyan.600, teal.300)'}}
+          bgGradient='linear(to-r, blue.400, cyan.400)'
+          _hover={{ bgGradient: 'linear(to-b, blue.500, cyan.500)'}}
         >
           Seguir
         </Button>
