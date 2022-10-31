@@ -16,7 +16,8 @@ import {
   RepostRouter,
   SuggestedPeopleRouter,
   UploadRouter,
-  UserRouter
+  UserRouter,
+  SearchRouter
 } from '../routes'
 
 dotenv.config()
@@ -60,6 +61,7 @@ export class Server {
     this.app.use('/api/repost/',  RepostRouter )
     this.app.use('/api/follow/',  FollowRouter )
     this.app.use('/api/feed/',    FeedRouter )
+    this.app.use('/api/search/',  SearchRouter )
     this.app.use('/api/suggested-people/', SuggestedPeopleRouter )
   }
 

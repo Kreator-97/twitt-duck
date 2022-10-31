@@ -1,3 +1,4 @@
+import { KeyboardEvent, useState } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { HamburgerIcon } from '@chakra-ui/icons'
@@ -25,6 +26,24 @@ import { ConfirmLogout } from './'
 export const Navbar = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const [ query, setQuery] = useState('')
+  
+  const onSearch = (e: KeyboardEvent) => {
+    if(e.key === 'Enter' ) {
+      setQuery('')
+      navigate(`/search?query=${query}`)
+    }
+  }
+
+  const onSearchButtonClick = () => {
+    if( query === '' ) {
+      dispatch(openSearchBar())
+      return
+    }
+
+    setQuery('')
+    navigate(`/search?query=${query}`)
+  }
 
   return (
     <Flex
@@ -79,11 +98,17 @@ export const Navbar = () => {
         </Text>
 
         <Flex justifyContent='end' gap='1rem' maxWidth='250px'>
-          <Input placeholder='Buscar' display={{base: 'none', lg: 'block' }} />
+          <Input
+            placeholder='Buscar'
+            display={{ base: 'none', lg: 'block' }}
+            onChange={ (e) => setQuery(e.target.value) }
+            value={query}
+            onKeyDown={ onSearch }
+          />
           <IconButton
             aria-label='Buscar'
             icon={ <HiOutlineSearch /> }
-            onClick={ () => dispatch(openSearchBar()) }
+            onClick={ () => onSearchButtonClick() }
           ></IconButton>
         </Flex>
       </Grid>

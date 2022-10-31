@@ -28,6 +28,7 @@ import {
   UserDetail,
   UserFeed,
   UserInfo,
+  Follow,
 } from './components'
 import { theme } from './theme'
 
@@ -39,6 +40,7 @@ export {
   ConfirmLogout,
   ConfirmRemoveRepost,
   ChakraProvider,
+  Follow,
   FormChangePassword,
   FormChangeProfileInfo,
   FormInput,

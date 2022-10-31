@@ -1,7 +1,7 @@
 import { Box, Grid, Heading } from '@chakra-ui/react'
 import { usePublicFeed, useSuggestedPeople } from '@twitt-duck/hooks'
 import { Loader, PostsList } from '@twitt-duck/ui'
-import { Follow } from '@twitt-duck/ui/components'
+import { Follow } from '@twitt-duck/ui'
 
 import { AppLayout } from '../layouts'
 
@@ -30,7 +30,19 @@ export const ExplorePage = () => {
         {
           suggestedUsers.map((user) => {
             return (
-              <Follow key={user.id} name={user.fullname} imgURL={user.profilePic} username={user.username} description={user.description} />
+              <Box
+                key={user.id}
+                gridColumnStart={ suggestedUsers.length === 1 ? 'span 2' : '1/1' }
+              >
+
+                <Follow
+                  name={user.fullname}
+                  imgURL={user.profilePic}
+                  username={user.username}
+                  description={user.description}
+                
+                />
+              </Box>
             )
           })
         }
@@ -43,7 +55,7 @@ export const ExplorePage = () => {
           fontSize='md'
           textAlign='center'
           mb='4'
-        >Publicaciones que te puede interesar</Heading>
+        >Publicaciones que te pueden interesar</Heading>
         <PostsList posts={posts} />
       </Box>
     </AppLayout>
