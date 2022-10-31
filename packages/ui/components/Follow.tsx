@@ -1,17 +1,18 @@
 import { FC } from 'react'
-import { Avatar, Button, Grid, Text } from '@chakra-ui/react'
+import { Avatar, Box, Button, Grid, Text } from '@chakra-ui/react'
 import { createFollow } from '@twitt-duck/services'
 import { useAppSelector } from '@twitt-duck/state'
-import { mutate } from 'swr'
 import { useFollow } from '@twitt-duck/hooks'
+import { mutate } from 'swr'
 
 interface Props {
-  name: string;
-  imgURL: string;
-  username: string;
+  name        : string;
+  imgURL      : string;
+  username    : string;
+  description?: string;
 }
 
-export const Follow: FC<Props> = ({name, imgURL, username}) => {
+export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
   const { user } = useAppSelector(state => state.auth)
 
   if( !user ) {
@@ -22,7 +23,6 @@ export const Follow: FC<Props> = ({name, imgURL, username}) => {
   const { following } = useFollow(user.username)
 
   const onFollow = async () => {
-
     const token = localStorage.getItem('token')
     try {
       await createFollow(username, token || '')
@@ -36,8 +36,10 @@ export const Follow: FC<Props> = ({name, imgURL, username}) => {
     <Grid
       mb='4'
       alignItems='center'
-      gap='.5rem'
+      gap='0 .5rem'
       gridTemplateColumns='32px 1fr auto'
+      boxShadow='md'
+      p='2'
     >
       <Avatar
         size='sm'
@@ -58,7 +60,7 @@ export const Follow: FC<Props> = ({name, imgURL, username}) => {
         size='sm'
         color='#fff'
         bgGradient='linear(to-r, blue.400, cyan.400)'
-        _hover={{ bgGradient: 'linear(to-r, blue.500, cyan.500)'}}
+        _hover={{ bgGradient: 'linear(to-r, blue.500, cyan.500)' }}
         onClick={ () => onFollow() }
       >
         {
@@ -67,6 +69,11 @@ export const Follow: FC<Props> = ({name, imgURL, username}) => {
             : 'Seguir'
         }
       </Button>
+      <Box />
+      <Text
+        fontSize='sm'
+        color='gray.500'
+      >{ description }</Text>
     </Grid>
   )
 }
