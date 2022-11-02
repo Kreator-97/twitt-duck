@@ -24,6 +24,7 @@ export const ExplorePage = () => {
           textAlign='center'
           mb='4'
           gridColumnStart='span 2'
+          color='#333'
         >
           Usuarios que puedes seguir
         </Heading>
@@ -55,7 +56,10 @@ export const ExplorePage = () => {
           fontSize='md'
           textAlign='center'
           mb='4'
-        >Publicaciones que te pueden interesar</Heading>
+          color='#333'
+        >
+          Publicaciones que te pueden interesar
+        </Heading>
         <PostsList posts={posts} />
       </Box>
     </AppLayout>

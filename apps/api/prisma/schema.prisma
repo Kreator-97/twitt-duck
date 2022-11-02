@@ -29,6 +29,7 @@ model User {
   comments      Comment[]
   likes         Likes[]
   reposts       Repost[]
+  notifications Notification[] @relation("user")
 }
 
 model Post {
@@ -43,6 +44,22 @@ model Post {
   images          Images[]
   authorId        String?
   comments        Comment[]
+}
+
+model Notification {
+  id          String            @id @default(uuid())
+  title       String
+  user        User              @relation("user", fields: [userId], references: [id])
+  userId      String
+  isRead      Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+  type        NotificationType
+
+  // not relation needed for the followings fields
+  fromUserId  String
+  commentId   String?
+  postId      String?
+  likeId      String?
 }
 
 model Follow {
@@ -97,6 +114,12 @@ model Images {
   url       String
   post      Post      @relation(fields: [postId], references: [id])
   postId    String
+}
+
+enum NotificationType {
+  POST
+  COMMENT
+  LIKE
 }
 
 enum Role {

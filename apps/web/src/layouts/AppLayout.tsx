@@ -14,7 +14,6 @@ import {
   Toolbar,
 } from '@twitt-duck/ui'
 
-
 interface Props {
   children: React.ReactNode;
 }

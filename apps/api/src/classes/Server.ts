@@ -17,22 +17,25 @@ import {
   SuggestedPeopleRouter,
   UploadRouter,
   UserRouter,
-  SearchRouter
+  SearchRouter,
+  NotificationRouter
 } from '../routes'
 
 dotenv.config()
 
 export class Server {
-  app: Express
-  port: number
+  app   : Express
+  port  : number
   server: HTTPServer
-  io: SocketServer
+  io    : SocketServer
 
   constructor() {
     this.app    = express()
     this.port   = Number( process.env.PORT ) || 5000
     this.server = createServer(this.app)
-    this.io     = new SocketServer( this.server )
+    this.io     = new SocketServer( this.server, {
+      cors: { origin: '*' }
+    })
 
     // set middlewares
     this.middleware()
@@ -62,6 +65,7 @@ export class Server {
     this.app.use('/api/follow/',  FollowRouter )
     this.app.use('/api/feed/',    FeedRouter )
     this.app.use('/api/search/',  SearchRouter )
+    this.app.use('/api/notification/', NotificationRouter )
     this.app.use('/api/suggested-people/', SuggestedPeopleRouter )
   }
 

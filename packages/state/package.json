@@ -5,6 +5,10 @@
   "types": "./index.tsx",
   "license": "MIT",
   "scripts": {},
-  "dependencies": {},
+  "dependencies": {
+    "socket.io-client": "*",
+    "@twitt-duck/hooks": "*",
+    "react": "*"
+  },
   "devDependencies": {}
 }

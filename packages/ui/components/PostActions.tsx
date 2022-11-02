@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useMemo } from 'react'
+import { FC, MouseEvent, useContext, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Box, Flex, useToast } from '@chakra-ui/react'
 import { AiOutlineRetweet } from 'react-icons/ai'
@@ -10,6 +10,7 @@ import {
   Like,
   openRemoveRepostModal,
   Repost,
+  SocketContext,
   useAppDispatch,
   useAppSelector
 } from '@twitt-duck/state'
@@ -34,12 +35,14 @@ interface Props {
 }
 
 export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, type }) => {
+  const { socket } = useContext(SocketContext)
   const { pathname } = useLocation()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(state => state.auth)
   const toast = useToast()
 
-  const repostActive = useMemo(() => reposts.some( repost => repost.author.id === user?.id), [reposts])
+  const isRepostActive = useMemo(() => reposts.some( repost => repost.author.id === user?.id), [reposts])
+  const isLikeActive = useMemo(() => likes.some( like => like.user.id === user?.id), [reposts])
 
   const onLikePost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
@@ -54,6 +57,12 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       }
 
       mutate(pathname)
+      socket?.emit('user-notification-like', {
+        msg: 'nueva notificación',
+        id: actionId,
+        type,
+        isNew: !isLikeActive,
+      })
     } catch (error) {
       console.log(error)
     }
@@ -61,7 +70,8 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
 
   const onRepost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
-    if( repostActive ) {
+    if( isRepostActive ) {
+      console.log({isActive: isRepostActive})
       dispatch(openRemoveRepostModal(actionId))
       return
     }
@@ -103,7 +113,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       </Box>
       <Box>
         <PostIcon
-          active={ repostActive }
+          active={ isRepostActive }
           icon={ AiOutlineRetweet }
           title='Difundir'
           count={ reposts.length }
@@ -112,7 +122,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       </Box>
       <Box>
         <PostIcon
-          active={ likes.some( like => like.user.id === user?.id) }
+          active={ isLikeActive }
           icon={ HiOutlineHeart }
           title='Me gusta'
           count={ likes.length }

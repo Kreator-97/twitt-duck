@@ -1,7 +1,8 @@
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Flex, Input, IconButton, FormControl } from '@chakra-ui/react'
-import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
+import { Box, Flex, Input, IconButton, FormControl, Text } from '@chakra-ui/react'
+import { useAppDispatch, openSearchBar, loadState } from '@twitt-duck/state'
+import { useNotifications } from '@twitt-duck/hooks'
 import {
   HiOutlineHome,
   HiOutlineBell,
@@ -12,12 +13,21 @@ import {
 
 import { ToolbarOption } from './ToolbarOption'
 
-export const Toolbar = () => {
-  const dispatch = useAppDispatch()
-  const [ query, setQuery] = useState('')
-  
-  const navigate = useNavigate()
+// TODO: move useNotification inv on a better place
 
+export const Toolbar = () => {
+  const { notifications } = useNotifications()
+  const dispatch = useAppDispatch()
+  console.log(notifications)
+
+  useEffect(() => {
+    if( notifications ) {
+      dispatch( loadState(notifications) )
+    }
+  }, [])
+
+  const [ query, setQuery] = useState('')
+  const navigate = useNavigate()
   const onSearch = (e: FormEvent ) => {
     e.preventDefault()
 
@@ -46,11 +56,30 @@ export const Toolbar = () => {
           url={'/'}
         />
           
-        <ToolbarOption
-          Icon={HiOutlineBell}
-          title='Notificaciones'
-          url={'/notification'}
-        />
+        <Box
+          position='relative'
+        >
+          <ToolbarOption
+            Icon={HiOutlineBell}
+            title='Notificaciones'
+            url={'/notification'}
+          />
+          <Box
+            position='absolute'
+            top='0'
+            right='-12px'
+            borderRadius='100%'
+            bgColor='blue.500'
+            color='white'
+            width='22px'
+            height='22px'
+            textAlign='center'
+            fontSize='sm'
+            fontWeight={600}
+          >
+            <Text>{ notifications?.length }</Text>
+          </Box>
+        </Box>
           
         <ToolbarOption
           Icon={HiOutlineHashtag}
