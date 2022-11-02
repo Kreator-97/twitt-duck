@@ -11,15 +11,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "prepare": "husky install"
+    "lint": "turbo run lint"
   },
   "keywords": [],
   "author": "Donato Monzon",
   "license": "ISC",
   "devDependencies": {
-    "husky": "^8.0.0",
-    "lint-staged": "^13.0.3",
     "turbo": "^1.5.5",
     "typescript": "^4.8.4"
   },
