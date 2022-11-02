@@ -43,7 +43,11 @@ export const socketController = async (socket:Socket) => {
 
     if( !payload.isNew ) {
       try {
-        removeNotification(payload, user.id)
+        const notification = await removeNotification(payload, user.id)
+
+        if( notification ) {
+          socket.to(notification.userId).emit('remove-notification', notification)
+        }
       } catch(error) {
         console.log(error)
       }

@@ -1,13 +1,15 @@
 import { useEffect } from 'react'
-import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
+import { finishChecking, loadState, login, useAppDispatch } from '@twitt-duck/state'
 import { ImageVisor } from '@twitt-duck/ui'
 
 import { AppRouter } from './routes/AppRouter'
 import { DBLocal } from './utils'
 import './index.css'
+import { useNotifications } from '@twitt-duck/hooks'
 
 function App() {
   const dispatch = useAppDispatch()
+  const { notifications } = useNotifications()
 
   useEffect(() => {
     const user = DBLocal.loadUserFromLocal()
@@ -17,6 +19,12 @@ function App() {
       dispatch(finishChecking())
     }
   }, [])
+
+  useEffect(() => {
+    if( notifications ) {
+      dispatch( loadState(notifications) )
+    }
+  }, [notifications])
 
   return (
     <div>

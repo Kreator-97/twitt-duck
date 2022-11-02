@@ -42,7 +42,7 @@ export const createLikeNotification = async (notificationInfo: NotificationInfo,
   return Promise.reject('No se pudo crear la notificación. Post no existe')
 }
 
-export const removeNotification =  async (notification: NotificationInfo, userId: string) => {
+export const removeNotification = async (notification: NotificationInfo, userId: string):Promise<Notification| null> => {
   const { type, id } = notification
 
   if( type === 'post') {
@@ -56,13 +56,18 @@ export const removeNotification =  async (notification: NotificationInfo, userId
 
     if( notification ) {
       await prisma.notification.delete({where: { id: notification.id }})
+      return notification
     }
   }
+
+  return null
 }
 
 export const getNotifications = async (req: Request, res: Response ) => {
   const userId = req.userId
-  const user = await prisma.user.findUnique({ where: { id: userId } })
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  })
 
   if( !user ) {
     return res.status(404).json({
@@ -75,7 +80,9 @@ export const getNotifications = async (req: Request, res: Response ) => {
     const notifications = await prisma.notification.findMany({
       where: {
         userId,
-        isRead: false
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
@@ -89,4 +96,67 @@ export const getNotifications = async (req: Request, res: Response ) => {
   }
 
   return res.status(200)
+}
+
+export const markAllNotificationsAsRead = async (req:Request, res: Response) => {
+  const userId = req.userId 
+  const user = await prisma.user.findUnique({ where: { id: userId }})
+
+  if( !user ) {
+    return res.status(200).json({
+      ok: false,
+      msg: `No existe el usuario con el id ${userId}`
+    })
+  }
+
+  try {
+    await prisma.notification.updateMany({
+      where: {
+        userId: user.id
+      },
+      data: {
+        isRead: true
+      }
+    })
+    return res.status(200).json({
+      ok: true,
+      msg: 'Todas las notificaciones leidas'
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      ok: false,
+      msg: 'Ocurrio un error al marcar las notificaciones como leídas'
+    })
+  }
+}
+
+export const deleteNotification = async (req: Request, res: Response) => {
+  const userId = req.userId
+  const notificationId = req.params.notificationId
+
+  const user = await prisma.user.findUnique({where: { id: userId } })
+
+  if( !user ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `no existe el usuario con el id ${userId}`
+    })
+  }
+
+  try {
+    await prisma.notification.delete({ where: { id: notificationId }})
+
+    return res.status(200).json({
+      ok: true,
+      msg: 'Se ha eliminado la notificación'
+    })
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      ok: false,
+      msg: 'No se pudo eliminar la notificación'
+    })
+  }
 }

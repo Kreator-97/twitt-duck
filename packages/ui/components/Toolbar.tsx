@@ -1,8 +1,7 @@
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Flex, Input, IconButton, FormControl, Text } from '@chakra-ui/react'
-import { useAppDispatch, openSearchBar, loadState } from '@twitt-duck/state'
-import { useNotifications } from '@twitt-duck/hooks'
+import { useAppDispatch, openSearchBar, useAppSelector } from '@twitt-duck/state'
 import {
   HiOutlineHome,
   HiOutlineBell,
@@ -13,21 +12,17 @@ import {
 
 import { ToolbarOption } from './ToolbarOption'
 
-// TODO: move useNotification inv on a better place
-
 export const Toolbar = () => {
-  const { notifications } = useNotifications()
   const dispatch = useAppDispatch()
-  console.log(notifications)
-
-  useEffect(() => {
-    if( notifications ) {
-      dispatch( loadState(notifications) )
-    }
-  }, [])
+  const { notifications } = useAppSelector( state => state.notification)
 
   const [ query, setQuery] = useState('')
   const navigate = useNavigate()
+
+  const notificationsNoRead = useMemo(() => {
+    return notifications.filter(notification => !notification.isRead )
+  }, [notifications])
+
   const onSearch = (e: FormEvent ) => {
     e.preventDefault()
 
@@ -76,8 +71,15 @@ export const Toolbar = () => {
             textAlign='center'
             fontSize='sm'
             fontWeight={600}
+            display={ notificationsNoRead?.length === 0 ? 'none' : 'block' }
           >
-            <Text>{ notifications?.length }</Text>
+            <Text>
+              { 
+                (notificationsNoRead?.length > 9)
+                  ? '+9'
+                  : notificationsNoRead?.length
+              }
+            </Text>
           </Box>
         </Box>
           

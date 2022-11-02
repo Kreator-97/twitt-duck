@@ -16,8 +16,17 @@ export const notificationSlice = createSlice({
     loadState: (state, action: PayloadAction<Notification[]>) => {
       return {... state, notifications: action.payload}
     },
+    addNotification: (state, action: PayloadAction<Notification>) => {
+      return {notifications: [...state.notifications, action.payload]}
+    },
+    removeNotification: ( state, action: PayloadAction<string> ) => {
+      return {
+        ...state,
+        notifications: state.notifications.filter( notification => notification.id !== action.payload)
+      }
+    }
   }
 })
 
 export default notificationSlice.reducer
-export const { loadState } = notificationSlice.actions
+export const { loadState, addNotification, removeNotification } = notificationSlice.actions
