@@ -74,7 +74,7 @@ export const CommentPage = () => {
   return (
     <AppLayout>
       <Grid
-        gap='1rem'
+        gap={{ base: '.5rem', lg: '1rem' }}
         gridTemplateColumns='1fr'
       >
         <Comment comment={comment} />
