@@ -14,16 +14,17 @@ export const ExplorePage = () => {
   return (
     <AppLayout>
       <Grid
-        gridTemplateColumns={{ base: '1fr', md: '1fr 1fr' }}
+        gridTemplateColumns='1fr'
         p={{ base: 2, md: 4 }}
         bgColor='white'
-        gap='1rem'
       >
         <Heading
           fontSize='md'
           textAlign='center'
-          mb='4'
-          gridColumnStart='span 2'
+          color='#333'
+          paddingBottom='4'
+          borderBottom='1px solid'
+          borderColor='gray.300'
         >
           Usuarios que puedes seguir
         </Heading>
@@ -32,15 +33,14 @@ export const ExplorePage = () => {
             return (
               <Box
                 key={user.id}
-                gridColumnStart={ suggestedUsers.length === 1 ? 'span 2' : '1/1' }
+                borderBottom='1px solid'
+                borderColor='gray.200'
               >
-
                 <Follow
                   name={user.fullname}
                   imgURL={user.profilePic}
                   username={user.username}
                   description={user.description}
-                
                 />
               </Box>
             )
@@ -55,7 +55,10 @@ export const ExplorePage = () => {
           fontSize='md'
           textAlign='center'
           mb='4'
-        >Publicaciones que te pueden interesar</Heading>
+          color='#333'
+        >
+          Publicaciones que te pueden interesar
+        </Heading>
         <PostsList posts={posts} />
       </Box>
     </AppLayout>

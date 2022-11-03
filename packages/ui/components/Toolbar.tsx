@@ -1,7 +1,7 @@
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Flex, Input, IconButton, FormControl } from '@chakra-ui/react'
-import { useAppDispatch, openSearchBar } from '@twitt-duck/state'
+import { Box, Flex, Input, IconButton, FormControl, Text } from '@chakra-ui/react'
+import { useAppDispatch, openSearchBar, useAppSelector } from '@twitt-duck/state'
 import {
   HiOutlineHome,
   HiOutlineBell,
@@ -14,9 +14,14 @@ import { ToolbarOption } from './ToolbarOption'
 
 export const Toolbar = () => {
   const dispatch = useAppDispatch()
+  const { notifications } = useAppSelector( state => state.notification)
+
   const [ query, setQuery] = useState('')
-  
   const navigate = useNavigate()
+
+  const notificationsNoRead = useMemo(() => {
+    return notifications.filter(notification => !notification.isRead )
+  }, [notifications])
 
   const onSearch = (e: FormEvent ) => {
     e.preventDefault()
@@ -46,11 +51,37 @@ export const Toolbar = () => {
           url={'/'}
         />
           
-        <ToolbarOption
-          Icon={HiOutlineBell}
-          title='Notificaciones'
-          url={'/notification'}
-        />
+        <Box
+          position='relative'
+        >
+          <ToolbarOption
+            Icon={HiOutlineBell}
+            title='Notificaciones'
+            url={'/notification'}
+          />
+          <Box
+            position='absolute'
+            top='0'
+            right='-12px'
+            borderRadius='100%'
+            bgColor='blue.500'
+            color='white'
+            width='22px'
+            height='22px'
+            textAlign='center'
+            fontSize='sm'
+            fontWeight={600}
+            display={ notificationsNoRead?.length === 0 ? 'none' : 'block' }
+          >
+            <Text>
+              { 
+                (notificationsNoRead?.length > 9)
+                  ? '+9'
+                  : notificationsNoRead?.length
+              }
+            </Text>
+          </Box>
+        </Box>
           
         <ToolbarOption
           Icon={HiOutlineHashtag}

@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux'
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import { AuthState, finishChecking, login } from './app/slices/authSlice'
+import { loadState } from './app/slices/notificationSlice'
 import { store } from './app/store'
 
 import {
@@ -21,10 +22,14 @@ import {
   Follow,
   Images,
   Like,
+  Notification,
+  NotificationPayload,
   Post,
   Repost,
   User,
 } from './interfaces'
+
+import { SocketProvider, SocketContext } from './context'
 
 export {
   closeConfirmLogoutModal,
@@ -33,12 +38,15 @@ export {
   closeVisorImage,
   finishChecking,
   login,
+  loadState,
   openConfirmLogoutModal,
   openRemoveRepostModal,
   openSearchBar,
   openVisorImage,
   Provider,
   store,
+  SocketContext,
+  SocketProvider,
   useAppDispatch,
   useAppSelector,
 }
@@ -48,6 +56,8 @@ export type {
   Comment,
   Follow,
   Images,
+  Notification,
+  NotificationPayload,
   Like,
   Post,
   Repost,

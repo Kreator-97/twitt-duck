@@ -14,7 +14,7 @@ export const PostsList: FC<Props> = ({posts, showFeedMessage = false}) => {
   return (
     <Grid
       gridTemplateColumns='1fr'
-      gap='1rem'
+      gap={{base: '.5rem', lg: '1rem' }}
     >
       {
         showFeedMessage && (

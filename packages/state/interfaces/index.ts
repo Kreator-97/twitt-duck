@@ -14,6 +14,7 @@ export interface User {
   posts         : Post
   role          : Role
   active        : Boolean
+  notifications : Notification[] 
 }
 
 export interface Post {
@@ -68,8 +69,26 @@ export interface Like {
   id: string;
   user: User;
   post: Post;
-
 }
+
+export interface Notification {
+  id        : string;
+  title     : string;
+  user      : User;
+  isRead    : boolean;
+  fromUserId: string;
+  actionId  : string; 
+  type     ?: NotificationType
+}
+
+export interface NotificationPayload {
+  type  : 'post' | 'comment' | 'repost' | 'user';
+  msg   : string;
+  id    : string;
+  isNew : boolean;
+}
+
+type NotificationType = 'POST' | 'COMMENT' | 'LIKE'
 
 type Role = 'USER' | 'ADMIN'
 type Provider = 'CREDENTIALS' | 'GOOGLE'

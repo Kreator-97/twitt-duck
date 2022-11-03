@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
 import { ImageVisor } from '@twitt-duck/ui'
+import { finishChecking, login, useAppDispatch } from '@twitt-duck/state'
 
 import { AppRouter } from './routes/AppRouter'
 import { DBLocal } from './utils'

@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC, useContext, useMemo } from 'react'
 import { mutate } from 'swr'
 import { Avatar, Box, Button, Grid, Text } from '@chakra-ui/react'
 import { createFollow } from '@twitt-duck/services'
-import { useAppSelector } from '@twitt-duck/state'
+import { NotificationPayload, SocketContext, useAppSelector } from '@twitt-duck/state'
 import { useFollow } from '@twitt-duck/hooks'
 import { Link } from 'react-router-dom'
 
@@ -15,6 +15,7 @@ interface Props {
 
 export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
   const { user } = useAppSelector(state => state.auth)
+  const { socket } = useContext(SocketContext)
 
   if( !user ) {
     console.error('usuario invalido')
@@ -23,11 +24,26 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
 
   const { following } = useFollow(user.username)
 
+  const isFollowing = useMemo(() => following.some(follow => follow.followingTo.username === username ), [following])
+
   const onFollow = async () => {
     const token = localStorage.getItem('token')
+
+    // TODO: toggle on following here
+    if( isFollowing ) return
+
     try {
       await createFollow(username, token || '')
       mutate(`http://localhost:5000/api/follow/${user?.username}`)
+
+      const notification: NotificationPayload = {
+        id: username,
+        type: 'user',
+        isNew: false,
+        msg: 'nuevo seguidor',
+      }
+
+      socket?.emit('user-notification-follower', notification)
     } catch (error) {
       console.error(error)
     }
@@ -35,11 +51,11 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
 
   return (
     <Grid
-      mb='4'
       alignItems='center'
       gap='0 .5rem'
       gridTemplateColumns='48px 1fr auto'
       boxShadow='md'
+      bgColor='white'
       p='2'
     >
       <Avatar
@@ -96,9 +112,7 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
         onClick={ () => onFollow() }
       >
         {
-          following.some(follow => follow.followingTo.username === username )
-            ? 'Siguiendo'
-            : 'Seguir'
+          (isFollowing) ? 'Siguiendo' : 'Seguir'
         }
       </Button>
       <Box />

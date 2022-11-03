@@ -73,14 +73,22 @@ export const login = async (req: Request, res: Response<UserResponse>) => {
     })
   }
 
-  const token = signToken({ id: user.id })
-
-  return res.status(200).json({
-    ok : true,
-    msg: 'Inicio de sesión exitoso',
-    token,
-    user: {...user, password: '' }
-  })
+  try {
+    const token = signToken({ id: user.id })
+    
+    return res.status(200).json({
+      ok : true,
+      msg: 'Inicio de sesión exitoso',
+      token,
+      user: {...user, password: '' }
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg: 'Ocurrió un error en el servidor',
+      ok: false
+    })
+  }
 }
 
 export const renewToken = async (req: Request, res: Response) => {
@@ -93,12 +101,20 @@ export const renewToken = async (req: Request, res: Response) => {
     })
   }
 
-  const token = signToken({ id: userId })
-
-  res.json({
-    ok: true,
-    token,
-  })
+  try {
+    const token = signToken({ id: userId })
+  
+    return res.status(200).json({
+      ok: true,
+      token,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg: 'Ocurrió un error en el servidor',
+      ok: false
+    })
+  }
 }
 
 export const activateUser = async (req: Request, res: Response<UserResponse>) => {
@@ -131,14 +147,22 @@ export const activateUser = async (req: Request, res: Response<UserResponse>) =>
     }
   })
 
-  const token = signToken({ id: user.id })
-
-  return res.status(200).json({
-    msg: 'Se ha finalizado el perfil del usuario',
-    ok: true,
-    token,
-    user: {...user, password: '' }
-  })
+  try {
+    const token = signToken({ id: user.id })
+  
+    return res.status(200).json({
+      msg: 'Se ha finalizado el perfil del usuario',
+      ok: true,
+      token,
+      user: {...user, password: '' }
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg: 'Ocurrió un error en el servidor',
+      ok: false
+    })
+  }
 }
 
 export const signInGoogle = async (req: Request, res: Response<UserResponse>) => {
@@ -159,14 +183,22 @@ export const signInGoogle = async (req: Request, res: Response<UserResponse>) =>
     const isUserExists = await prisma.user.findUnique({ where: { email }})
 
     if( isUserExists ) {
-      const token = signToken({ id: isUserExists.id })
-
-      return res.status(200).json({
-        msg: 'Inicio de sesión con Google exitoso',
-        ok: true,
-        user: isUserExists,
-        token
-      })
+      try {
+        const token = signToken({ id: isUserExists.id })
+  
+        return res.status(200).json({
+          msg: 'Inicio de sesión con Google exitoso',
+          ok: true,
+          user: isUserExists,
+          token
+        })
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({
+          msg: 'Ocurrió un error en el servidor',
+          ok: false
+        })
+      }
     }
 
     const user = await prisma.user.create({
@@ -194,7 +226,7 @@ export const signInGoogle = async (req: Request, res: Response<UserResponse>) =>
 
     return res.status(400).json({
       ok: false,
-      msg: 'Ocurrio un error con el proeevedor de autenticación'
+      msg: 'Ocurrio un error con el proveedor de autenticación'
     })
   }
 }

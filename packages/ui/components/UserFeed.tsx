@@ -18,7 +18,7 @@ export const UserFeed: FC<Props> = ({feed}) => {
   return (
     <Grid
       gridTemplateColumns={'1fr'}
-      gap='1rem'
+      gap={{base: '.5rem', lg: '1rem' }}
     >
       {
         feedList.map((item) => {

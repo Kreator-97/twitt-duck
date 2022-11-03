@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useMemo } from 'react'
+import { FC, MouseEvent, useContext, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Box, Flex, useToast } from '@chakra-ui/react'
 import { AiOutlineRetweet } from 'react-icons/ai'
@@ -8,8 +8,10 @@ import { HiOutlineHeart } from 'react-icons/hi'
 import {
   Comment,
   Like,
+  NotificationPayload,
   openRemoveRepostModal,
   Repost,
+  SocketContext,
   useAppDispatch,
   useAppSelector
 } from '@twitt-duck/state'
@@ -34,12 +36,14 @@ interface Props {
 }
 
 export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, type }) => {
+  const { socket } = useContext(SocketContext)
   const { pathname } = useLocation()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(state => state.auth)
   const toast = useToast()
 
-  const repostActive = useMemo(() => reposts.some( repost => repost.author.id === user?.id), [reposts])
+  const isRepostActive = useMemo(() => reposts.some( repost => repost.author.id === user?.id), [reposts])
+  const isLikeActive = useMemo(() => likes.some( like => like.user.id === user?.id), [reposts])
 
   const onLikePost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
@@ -53,6 +57,14 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
         await toggleLikeComment(actionId, token || '')
       }
 
+      const notification: NotificationPayload = {
+        msg: 'nueva notificación',
+        id: actionId,
+        type,
+        isNew: !isLikeActive,
+      }
+
+      socket?.emit('user-notification-like', notification)
       mutate(pathname)
     } catch (error) {
       console.log(error)
@@ -61,7 +73,8 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
 
   const onRepost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
-    if( repostActive ) {
+    if( isRepostActive ) {
+      console.log({isActive: isRepostActive})
       dispatch(openRemoveRepostModal(actionId))
       return
     }
@@ -80,6 +93,15 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
         status: 'success',
         duration: 3000,
       })
+
+      const notification: NotificationPayload = {
+        msg: 'nueva notificación',
+        id: actionId,
+        type,
+        isNew: !isLikeActive,
+      }
+
+      socket?.emit('user-notification-repost', notification)
     } catch (error) {
       console.log(error)
     }
@@ -103,7 +125,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       </Box>
       <Box>
         <PostIcon
-          active={ repostActive }
+          active={ isRepostActive }
           icon={ AiOutlineRetweet }
           title='Difundir'
           count={ reposts.length }
@@ -112,7 +134,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       </Box>
       <Box>
         <PostIcon
-          active={ likes.some( like => like.user.id === user?.id) }
+          active={ isLikeActive }
           icon={ HiOutlineHeart }
           title='Me gusta'
           count={ likes.length }
