@@ -59,7 +59,7 @@ model Notification {
   fromUserId  String
   commentId   String?
   postId      String?
-  likeId      String?
+  repostId    String?
 }
 
 model Follow {

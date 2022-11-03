@@ -5,7 +5,7 @@ export interface ApiResponse {
 }
 
 export interface NotificationInfo {
-  type  : 'post' | 'comment' | 'user';
+  type  : 'post' | 'comment' | 'repost';
   msg   : string;
   id    : string;
   isNew : boolean;

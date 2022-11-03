@@ -1,8 +1,14 @@
 import { Socket } from 'socket.io'
-import { createLikeNotification, removeNotification } from '../controllers/notificationController'
 import { NotificationInfo } from '../interfaces'
 import prisma from '../lib/prisma'
 import { validateToken } from '../util/jwt'
+
+import {
+  createCommentNotification,
+  createLikeNotification,
+  createRepostNotification,
+  removeNotification
+} from '../socket/notificationSocketController'
 
 export const socketController = async (socket:Socket) => {
   console.log('Cliente conectado', socket.id)
@@ -31,11 +37,12 @@ export const socketController = async (socket:Socket) => {
   })
 
   socket.on('user-notification-like', async (payload: NotificationInfo) => {
-    
     if( payload.isNew ) {
       try {
         const notification = await createLikeNotification(payload, user.id)
-        socket.to(notification.userId).emit('notification', notification)
+        if( notification ) {
+          socket.to(notification.userId).emit('notification', notification)
+        }
       } catch (error) {
         console.error(error)
       }
@@ -51,6 +58,30 @@ export const socketController = async (socket:Socket) => {
       } catch(error) {
         console.log(error)
       }
+    }
+  })
+
+  socket.on('user-notification-comment', async (payload: NotificationInfo) => {
+    try {
+      const notification = await createCommentNotification(payload, user.id)
+
+      if( notification ) {
+        socket.to(notification.userId).emit('notification', notification)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  socket.on('user-notification-repost', async(payload: NotificationInfo) => {
+    try {
+      const notification = await createRepostNotification(payload, user.id)
+      console.log(notification)
+      if( notification ) {
+        socket.to(notification.userId).emit('notification', notification)
+      }
+    } catch (error) {
+      console.log(error)
     }
   })
 }

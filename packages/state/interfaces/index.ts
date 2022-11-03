@@ -83,6 +83,13 @@ export interface Notification {
   type     ?: NotificationType
 }
 
+export interface NotificationPayload {
+  type  : 'post' | 'comment' | 'repost';
+  msg   : string;
+  id    : string;
+  isNew : boolean;
+}
+
 type NotificationType = 'POST' | 'COMMENT' | 'LIKE'
 
 type Role = 'USER' | 'ADMIN'

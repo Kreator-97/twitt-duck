@@ -8,6 +8,7 @@ import { HiOutlineHeart } from 'react-icons/hi'
 import {
   Comment,
   Like,
+  NotificationPayload,
   openRemoveRepostModal,
   Repost,
   SocketContext,
@@ -56,13 +57,15 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
         await toggleLikeComment(actionId, token || '')
       }
 
-      mutate(pathname)
-      socket?.emit('user-notification-like', {
+      const notification: NotificationPayload = {
         msg: 'nueva notificación',
         id: actionId,
         type,
         isNew: !isLikeActive,
-      })
+      }
+
+      socket?.emit('user-notification-like', notification)
+      mutate(pathname)
     } catch (error) {
       console.log(error)
     }
@@ -90,6 +93,15 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
         status: 'success',
         duration: 3000,
       })
+
+      const notification: NotificationPayload = {
+        msg: 'nueva notificación',
+        id: actionId,
+        type,
+        isNew: !isLikeActive,
+      }
+
+      socket?.emit('user-notification-repost', notification)
     } catch (error) {
       console.log(error)
     }

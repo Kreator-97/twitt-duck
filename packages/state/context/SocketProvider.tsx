@@ -20,6 +20,7 @@ export const SocketProvider: FC<Props> = ({children}) => {
 
   useEffect(() => {
     socket?.on('notification', (payload) => {
+      console.log({payload})
       dispatch( addNotification( payload as Notification ) )
     })
   }, [socket])
