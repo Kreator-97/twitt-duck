@@ -5,6 +5,7 @@ import { validateToken } from '../util/jwt'
 
 import {
   createCommentNotification,
+  createFollowerNotification,
   createLikeNotification,
   createRepostNotification,
   removeNotification
@@ -76,10 +77,20 @@ export const socketController = async (socket:Socket) => {
   socket.on('user-notification-repost', async(payload: NotificationInfo) => {
     try {
       const notification = await createRepostNotification(payload, user.id)
-      console.log(notification)
+
       if( notification ) {
         socket.to(notification.userId).emit('notification', notification)
       }
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  socket.on('user-notification-follower', async (payload) => {
+    console.log(payload)
+    try {
+      const notification = await createFollowerNotification(payload, user.id)
+      socket.to(notification.userId).emit('notification', notification)
     } catch (error) {
       console.log(error)
     }

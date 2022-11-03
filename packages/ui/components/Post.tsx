@@ -99,7 +99,9 @@ export const Post: FC<Props> = ({ post }) => {
         )
       }
       <Box />
-      <Box>
+      <Box
+        onMouseUp={ (e) => e.stopPropagation() }
+      >
         <PostActions
           type='post'
           actionId={post.id}

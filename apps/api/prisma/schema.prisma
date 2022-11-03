@@ -57,9 +57,11 @@ model Notification {
 
   // not relation needed for the followings fields
   fromUserId  String
-  commentId   String?
-  postId      String?
-  repostId    String?
+  actionId    String?
+  // commentId   String?
+  // postId      String?
+  // repostId    String?
+  // followeerId String?
 }
 
 model Follow {
@@ -120,6 +122,7 @@ enum NotificationType {
   POST
   COMMENT
   LIKE
+  USER
 }
 
 enum Role {

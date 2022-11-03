@@ -77,14 +77,12 @@ export interface Notification {
   user      : User;
   isRead    : boolean;
   fromUserId: string;
-  commentId?: string;
-  postId   ?: string;
-  likeId   ?: string;
+  actionId  : string; 
   type     ?: NotificationType
 }
 
 export interface NotificationPayload {
-  type  : 'post' | 'comment' | 'repost';
+  type  : 'post' | 'comment' | 'repost' | 'user';
   msg   : string;
   id    : string;
   isNew : boolean;

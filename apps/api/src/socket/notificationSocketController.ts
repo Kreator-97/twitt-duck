@@ -31,7 +31,7 @@ export const createLikeNotification = async (notificationInfo: NotificationInfo,
           userId: post.author.id,
           fromUserId: userId,
           type: 'POST',
-          postId: id
+          actionId: id
         }
       })
       return notification
@@ -64,7 +64,7 @@ export const createLikeNotification = async (notificationInfo: NotificationInfo,
           userId: comment.author.id,
           fromUserId: userId,
           type: 'COMMENT',
-          commentId: id
+          actionId: id
         }
       })
       return notification
@@ -112,7 +112,7 @@ export const createCommentNotification = async( notificationInfo: NotificationIn
           title: `El usuario @${user.username} comentó tu publicación`,
           type: 'POST',
           userId: post.author.id,
-          postId: post.id,
+          actionId: post.id,
         }
       })
       
@@ -150,7 +150,7 @@ export const createCommentNotification = async( notificationInfo: NotificationIn
           title: `El usuario @${user.username} respondió tu comentario`,
           type: 'COMMENT',
           userId: comment.author.id,
-          commentId: comment.id,
+          actionId: comment.id,
         }
       })
       
@@ -198,7 +198,7 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
           title: `El usuario @${user.username} difundió tu publicación`,
           type: 'POST',
           userId: post.author.id,
-          postId: post.id,
+          actionId: post.id,
         }
       })
       
@@ -233,7 +233,7 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
           userId: comment.author.id,
           fromUserId: userId,
           type: 'COMMENT',
-          commentId: notificationInfo.id
+          actionId: notificationInfo.id
         }
       })
       return notification
@@ -245,6 +245,41 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
   return null
 }
 
+export const createFollowerNotification = async (notificationInfo: NotificationInfo, userId: string):Promise<Notification> => {
+
+  const user = await prisma.user.findUnique({ where: { id: userId }})
+  const username = notificationInfo.id
+
+  if( !user ) {
+    return Promise.reject('No existe el usuario con el id proporcionado')
+  }
+
+  const userToNotificate = await prisma.user.findUnique({
+    where: { username }
+  })
+
+  if( !userToNotificate ) {
+    return Promise.reject(`No se ha encontrado al usuario con username ${username}`)
+  }
+
+  try {
+    const notification = await prisma.notification.create({
+      data: {
+        fromUserId: user.id,
+        title: `El usuario ${user.username} ha comenzado a seguirte`,
+        type: 'USER',
+        userId: userToNotificate.id,
+        actionId: user.username
+      }
+    })
+
+    return notification
+
+  } catch (error) {
+    return Promise.reject('Ocurrió un error al intentar crear la notificación de nuevo seguidor')
+  }
+}
+
 export const removeNotification = async (notificationInfo: NotificationInfo, userId: string):Promise<Notification| null> => {
   const { type, id } = notificationInfo
 
@@ -252,7 +287,7 @@ export const removeNotification = async (notificationInfo: NotificationInfo, use
     const notification = await prisma.notification.findFirst({
       where: {
         type: 'POST',
-        postId: id,
+        actionId: id,
         fromUserId: userId
       }
     })
@@ -267,7 +302,7 @@ export const removeNotification = async (notificationInfo: NotificationInfo, use
     const notification = await prisma.notification.findFirst({
       where: {
         type: 'COMMENT',
-        commentId: id,
+        actionId: id,
         fromUserId: userId
       }
     })

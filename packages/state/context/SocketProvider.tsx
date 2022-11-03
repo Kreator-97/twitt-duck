@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const SocketProvider: FC<Props> = ({children}) => {
-  const { socket, connectSocket } = useSocket('http://localhost:5000')
+  const { socket, connectSocket, reloadSocket } = useSocket('http://localhost:5000')
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const SocketProvider: FC<Props> = ({children}) => {
   }, [socket])
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, reloadSocket }}>
       { children }
     </SocketContext.Provider>
   )

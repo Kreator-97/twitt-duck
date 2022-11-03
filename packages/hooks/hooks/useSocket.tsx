@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client'
 export const useSocket = (url: string) => {
   const [ socket, setSocket ] = useState<Socket | null>(null)
   const [ online, setOnline] = useState(false)
-  const token = localStorage.getItem('token')
+  const [ token, setToken ] = useState(localStorage.getItem('token'))
   
   const disconnectSocket = () => {
     socket?.disconnect()
@@ -12,12 +12,26 @@ export const useSocket = (url: string) => {
   }
 
   const connectSocket = useCallback( () => {
-    const socket = io(url, {
+    const newSocket = io(url, {
       extraHeaders: {
         'token': token || '',
       }
     })
-    setSocket(socket)
+    setSocket(newSocket)
+  }, [url])
+
+  const reloadSocket = useCallback( () => {
+    socket?.disconnect()
+    const token = localStorage.getItem('token')
+
+    const newSocket = io(url, {
+      extraHeaders: {
+        'token': token || '',
+      }
+    })
+
+    setToken(token)
+    setSocket(newSocket)
   }, [url])
 
   useEffect(() => {
@@ -25,7 +39,9 @@ export const useSocket = (url: string) => {
   }, [socket])
 
   useEffect(() => {
-    socket?.on('connect', () => setOnline(true))
+    socket?.on('connect', () => {
+      setOnline(true)
+    })
   }, [socket])
 
   useEffect(() => {
@@ -35,6 +51,7 @@ export const useSocket = (url: string) => {
   return {
     connectSocket,
     disconnectSocket,
+    reloadSocket,
     online,
     socket,
   }

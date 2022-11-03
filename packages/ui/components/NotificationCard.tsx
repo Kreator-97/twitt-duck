@@ -17,7 +17,8 @@ const mutateNotifications = (token: string) => mutate(['http://localhost:5000/ap
 }])
 
 export const NotificationCard: FC<Props> = ({notification}) => {
-  const url = `/${notification.type?.toLowerCase()}/${notification.postId}`
+  const url = `/${notification.type?.toLowerCase()}/${notification.actionId}`
+  
   const navigate = useNavigate()
 
   const onNotificationDelete = async (notificationId: string) => {
