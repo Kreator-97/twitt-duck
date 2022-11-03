@@ -42,6 +42,15 @@ export const InsertContent: FC<Props> = ({onSubmit, user}) => {
 
     contentElementRef.current.innerText = placeholder
   }
+  
+  const onPaste = () => {
+    setTimeout(() => {
+      if( contentElementRef.current ) {
+        const innerText = contentElementRef.current.innerText
+        contentElementRef.current.innerText = innerText
+      }
+    }, 0)
+  }
 
   return (
     <Grid
@@ -55,13 +64,14 @@ export const InsertContent: FC<Props> = ({onSubmit, user}) => {
       <UserAvatar name={user.fullname} imgURL={ user.profilePic } />
       <Box
         contentEditable
-        _focus={{ outline: 'none', borderBottom: '1px solid #CCC'}}
         ref={ contentElementRef }
         suppressContentEditableWarning
-        onFocus={ () => removePlaceholder() }
-        onBlur={ () => setPlaceholder() }
         minHeight='3rem'
         borderBottom='1px solid #CCC'
+        onFocus={ () => removePlaceholder() }
+        onBlur={ () => setPlaceholder() }
+        onPaste={onPaste}
+        _focus={{ outline: 'none', borderBottom: '1px solid #CCC'}}
       >
         { placeholder }
       </Box>

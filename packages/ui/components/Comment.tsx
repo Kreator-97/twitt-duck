@@ -59,7 +59,7 @@ export const Comment: FC<Props> = ({comment}) => {
       </Box>
       <Box />
       <Box minHeight='3rem'>
-        <Text>{ comment.content }</Text>
+        <Text whiteSpace='pre'>{ comment.content }</Text>
       </Box>
       <Box />
       <PostActions
