@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Box, Grid, Text } from '@chakra-ui/react'
 import { Comment as CommentType } from '@twitt-duck/state'
@@ -15,6 +15,15 @@ export const Comment: FC<Props> = ({comment}) => {
 
   const replyTo = comment.post?.author.username || comment.comment?.author.username || ''
 
+  const onNavigate = (e: MouseEvent) => {
+    e.stopPropagation()
+    const tagName = (e.target as HTMLDivElement).tagName
+
+    if( tagName === 'DIV' ) {
+      navigate(`/comment/${comment.id}`)
+    }
+  }
+
   return (
     <Grid
       bgColor='#fff'
@@ -22,11 +31,11 @@ export const Comment: FC<Props> = ({comment}) => {
       border='1px solid #EEE'
       key={comment.id}
       gridTemplateColumns='48px 1fr'
-      gap='.5rem'
+      rowGap='.5rem'
       alignItems='center'
       transition='background .3s ease-out'
       cursor='pointer'
-      onClick={ () => navigate(`/comment/${comment.id}`) }
+      onMouseUp={ onNavigate }
       _hover={{
         backgroundColor: 'rgb(238, 245, 255)'
       }}
@@ -38,12 +47,15 @@ export const Comment: FC<Props> = ({comment}) => {
         />
       </Box>
       <Box>
-        <Text>
+        <Text px='2' display='inline-block'>
           { author.fullname + ' - ' }
           <Text color='gray.500' as='span'>@{author.username}
           </Text>
         </Text>
+        <br />
         <Text
+          px='2'
+          display='inline-block'
           color='gray.500'
         >
           { 'En respuesta a ' }
@@ -58,7 +70,11 @@ export const Comment: FC<Props> = ({comment}) => {
         </Text>
       </Box>
       <Box />
-      <Box minHeight='3rem'>
+      <Box
+        minHeight='3rem'
+        px='2'
+        display='inline-block'
+      >
         <Text whiteSpace='pre'>{ comment.content }</Text>
       </Box>
       <Box />
