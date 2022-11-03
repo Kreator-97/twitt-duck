@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { mutate } from 'swr'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { Box, Flex, Grid, Icon, Text } from '@chakra-ui/react'
 import { Notification } from '@twitt-duck/state'
@@ -10,18 +10,36 @@ interface Props {
   notification: Notification;
 }
 
+const mutateNotifications = (token: string) => mutate(['http://localhost:5000/api/notification', {
+  headers: {
+    authorization: `Bearer ${token}`
+  }
+}])
+
 export const NotificationCard: FC<Props> = ({notification}) => {
   const url = `/${notification.type?.toLowerCase()}/${notification.postId}`
+  const navigate = useNavigate()
 
   const onNotificationDelete = async (notificationId: string) => {
     const token = localStorage.getItem('token')
-    await deleteNotificationRequest(notificationId, token || '')
+    if( !token ) return
 
-    mutate(['http://localhost:5000/api/notification', {
-      headers: {
-        authorization: `Bearer ${token}`
-      }
-    }])
+    await deleteNotificationRequest(notificationId, token || '')
+    mutateNotifications(token)
+  }
+
+  const onNotificationRead = (notificationId: string, url: string) => {
+    const token = localStorage.getItem('token')
+    if( token ) {
+      fetch(`http://localhost:5000/api/notification/${notificationId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then(() => {
+        navigate(url)
+        mutateNotifications(token)
+      })
+    }
   }
 
   return (
@@ -49,8 +67,13 @@ export const NotificationCard: FC<Props> = ({notification}) => {
             height='12px'
             rounded='full'
           />
-          <Text as='span' color='blue.500'>
-            <Link to={url}> Ver notificación </Link>
+          <Text
+            as='span'
+            color='blue.500'
+            onClick={ () => onNotificationRead(notification.id, url) }
+            cursor='pointer'
+          >
+            <Text> Ver notificación </Text>
           </Text>
         </Flex>
         <Text>

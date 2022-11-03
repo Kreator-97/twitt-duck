@@ -20,21 +20,23 @@ export const NotificationPage = () => {
 
   useEffect(() => {
     const token = DBLocal.getTokenFromLocal()
+
     if( token ) {
-      fetch('http://localhost:5000/api/notification/mark-all-as-read', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-        .then( () => {
-          setTimeout(() => {
-            mutate(['http://localhost:5000/api/notification', {
-              headers: {
-                authorization: `Bearer ${token}`
-              }
-            }])
-          }, 3000)
+      const timer = setTimeout(() => {
+        fetch('http://localhost:5000/api/notification/mark-all-as-read', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }).then(() => {
+          mutate(['http://localhost:5000/api/notification', {
+            headers: {
+              authorization: `Bearer ${token}`
+            }
+          }])
         })
+      }, 3000)
+
+      return () => clearTimeout(timer)
     }
   }, [])
 
