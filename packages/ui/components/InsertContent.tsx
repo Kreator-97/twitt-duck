@@ -37,7 +37,6 @@ export const InsertContent: FC<Props> = ({onSubmit, user}) => {
 
     if( !content || content?.trim() === '' ) return
     if( content === placeholder ) return
-    console.log(content)
 
     onSubmit && onSubmit(content)
 

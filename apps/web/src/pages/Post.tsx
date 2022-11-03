@@ -55,8 +55,6 @@ export const PostPage = () => {
         isNew: false,
       }
 
-      console.log({notification})
-
       socket?.emit('user-notification-comment', notification)
 
     } catch (error) {
