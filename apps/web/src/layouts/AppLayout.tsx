@@ -10,7 +10,6 @@ import {
   Navbar,
   SearchModal,
   SuggestPeople,
-  Tendencies,
   Toolbar,
 } from '@twitt-duck/ui'
 
@@ -68,8 +67,6 @@ export const AppLayout: FC<Props> = ({children }) => {
           {
             <Box>
               <SuggestPeople />
-              <div style={{ height: '1rem'}}></div>
-              <Tendencies />
             </Box>
           }
         </Box>

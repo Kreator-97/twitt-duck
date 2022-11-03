@@ -9,28 +9,39 @@ export const SuggestPeople: FC = () => {
 
   return (
     <Box
-      bg='white'
-      p='4'
-      boxShadow='md'
       display={ suggestedUsers.length === 0 ? 'none' : 'block' }
     >
-      <Text
-        as='h2'
-        fontSize='xl'
-        fontWeight='bold'
-        textAlign='center'
-        mb='2'
-      >¿A quien seguir?</Text>
+      <Box
+        py='2'
+        bg='white'
+        boxShadow='md'
+        borderBottom='1px solid'
+        borderColor='gray.300'
+      >
+        <Text
+          as='h2'
+          fontSize='xl'
+          fontWeight='bold'
+          textAlign='center'
+          mb='2'
+          color='#333'
+        >¿A quien seguir?</Text>
+      </Box>
       <Box>
         {
           suggestedUsers.map(({id, fullname, profilePic, username, description}) => (
-            <Follow
+            <Box
               key={ id }
-              name={ fullname }
-              imgURL={ profilePic }
-              username={ username }
-              description={ description }
-            />
+              borderBottom='1px solid'
+              borderColor='gray.200'
+            >
+              <Follow
+                name={ fullname }
+                imgURL={ profilePic }
+                username={ username }
+                description={ description }
+              />
+            </Box>
           ))
         }
       </Box>

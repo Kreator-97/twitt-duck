@@ -35,11 +35,11 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
 
   return (
     <Grid
-      mb='4'
       alignItems='center'
       gap='0 .5rem'
       gridTemplateColumns='48px 1fr auto'
       boxShadow='md'
+      bgColor='white'
       p='2'
     >
       <Avatar
