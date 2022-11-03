@@ -35,7 +35,7 @@ export const getSuggestedPeople = async (req: Request, res: Response) => {
           _count: 'desc'
         }},
         
-      take: 5,
+      take: 10,
       include: {
         followers: true, following: true
       }
