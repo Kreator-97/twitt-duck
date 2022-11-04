@@ -1,9 +1,8 @@
 import { useContext } from 'react'
-import { mutate } from 'swr'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Grid, useToast } from '@chakra-ui/react'
 import { Comment, CommentsList, InsertContent, Loader } from '@twitt-duck/ui'
-import { createSubcomment } from '@twitt-duck/services'
+import { createSubcomment, mutateCommentPage } from '@twitt-duck/services'
 import { NotificationPayload, SocketContext, useAppSelector } from '@twitt-duck/state'
 import { useComment } from '@twitt-duck/hooks'
 
@@ -47,7 +46,7 @@ export const CommentPage = () => {
         isClosable: true
       })
 
-      mutate(`http://localhost:5000/api/comment/${comment.id}`)
+      mutateCommentPage(commentId)
 
       const notification: NotificationPayload = {
         msg: 'nueva notificación',
@@ -79,12 +78,8 @@ export const CommentPage = () => {
       >
         <Comment comment={comment} />
         <InsertContent user={user} onSubmit={ onCreateSubcomment } />
-
-        <CommentsList
-          comments={comment.comments}
-        />
+        <CommentsList comments={comment.comments} />
       </Grid>
-
     </AppLayout>
   )
 }

@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { User } from '@twitt-duck/state'
+import { FC, useMemo } from 'react'
+import { useAppSelector, User } from '@twitt-duck/state'
 import { HiUser } from 'react-icons/hi'
 import { useLocation } from 'react-router-dom'
 import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
@@ -10,6 +10,11 @@ interface Props {
 
 export const UserDetail: FC<Props> = ({ user }) => {
   const { pathname } = useLocation()
+  const { user: userAuth } = useAppSelector(state => state.auth)
+
+  const isFollowing = useMemo( () => user?.followers.some(
+    (follower) => follower.userId === userAuth?.id
+  ), [user])
 
   return (
     <Grid
@@ -96,7 +101,7 @@ export const UserDetail: FC<Props> = ({ user }) => {
           bgGradient='linear(to-r, blue.400, cyan.400)'
           _hover={{ bgGradient: 'linear(to-b, blue.500, cyan.500)'}}
         >
-          Seguir
+          { isFollowing ? 'Siguiendo' : 'Seguir' }
         </Button>
       </Box>
     </Grid>

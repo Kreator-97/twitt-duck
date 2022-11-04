@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Box, Grid } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
 import { useAppSelector } from '@twitt-duck/state'
-import { mutate } from '@twitt-duck/services'
+import { mutateAllPages } from '@twitt-duck/services'
 
 import {
   BottomBar,
@@ -27,7 +27,7 @@ export const AppLayout: FC<Props> = ({children }) => {
   }
 
   const onSuccess = () => {
-    mutate(pathname)
+    mutateAllPages(pathname)
   }
 
   return (

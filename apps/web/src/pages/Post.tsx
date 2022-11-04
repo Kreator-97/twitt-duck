@@ -1,10 +1,9 @@
 import { useContext } from 'react'
-import { mutate } from 'swr'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Grid, useToast } from '@chakra-ui/react'
-import { CommentsList, InsertContent, Loader, Post } from '@twitt-duck/ui'
 import { usePost } from '@twitt-duck/hooks'
-import { createComment } from '@twitt-duck/services'
+import { createComment, mutatePostPage } from '@twitt-duck/services'
+import { CommentsList, InsertContent, Loader, Post } from '@twitt-duck/ui'
 import { NotificationPayload, SocketContext, useAppSelector } from '@twitt-duck/state'
 
 import { AppLayout } from '../layouts'
@@ -46,7 +45,7 @@ export const PostPage = () => {
         isClosable: true
       })
 
-      mutate(`http://localhost:5000/api/post/${postId}`)
+      mutatePostPage(postId)
 
       const notification: NotificationPayload = {
         msg: 'nueva notificación',

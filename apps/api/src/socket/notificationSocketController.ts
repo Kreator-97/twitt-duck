@@ -192,6 +192,8 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
         return null
       }
 
+      if( post?.author?.id === user.id ) return null
+
       const notification = await prisma.notification.create({
         data: {
           fromUserId: user.id,
@@ -210,7 +212,6 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
   }
 
   if( notificationInfo.type === 'comment' ) {
-    console.log('creando notificacion de like comment')
     const comment = await prisma.comment.findUnique({
       where: { id: notificationInfo.id },
       include: {
@@ -224,6 +225,8 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
     if( !comment.author ) {
       return Promise.reject('No se pudo crear la notificación. Author no encontrado no existe')
     }
+
+    if( comment?.author?.id === user.id ) return null
 
     try {
       if( userId === comment.author.id ) return null

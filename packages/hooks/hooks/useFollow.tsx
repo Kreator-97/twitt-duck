@@ -6,8 +6,10 @@ interface Response {
   following: Follow[];
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const useFollow = (username: string) => {
-  const { data, error } = useSWR<Response>(`http://localhost:5000/api/follow/${username}`)
+  const { data, error } = useSWR<Response>(`${BASE_URL}/api/follow/${username}`)
 
   return {
     followers: data?.followers || [],

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Grid } from '@chakra-ui/react'
 import { useAppSelector } from '@twitt-duck/state'
 import { useUser } from '@twitt-duck/hooks'
-import { mutate } from '@twitt-duck/services'
+import { mutateAllPages } from '@twitt-duck/services'
 import {
   BottomBar,
   ConfirmRemoveRepost,
@@ -38,7 +38,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
   if( isLoading ) return <Loader />
 
   const onSuccess = () => {
-    mutate(pathname)
+    mutateAllPages(pathname)
   }
 
   return (

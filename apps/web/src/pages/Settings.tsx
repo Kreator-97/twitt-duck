@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useAppSelector, User } from '@twitt-duck/state'
-import { ChangeBackgroundPicture, FormChangePassword, FormChangeProfileInfo, Loader } from '@twitt-duck/ui'
 import { useNavigate } from 'react-router-dom'
-import { mutate } from 'swr'
+import { ChangeBackgroundPicture, FormChangePassword, FormChangeProfileInfo, Loader } from '@twitt-duck/ui'
 
 import {
   Tab,
@@ -14,6 +13,7 @@ import {
 
 import { DBLocal } from '../utils'
 import { ProfileLayout } from '../layouts'
+import { mutateUser } from '@twitt-duck/services'
 
 export const SettingsPage = () => {
   const navigate = useNavigate()
@@ -27,7 +27,7 @@ export const SettingsPage = () => {
   }
 
   const onProfileUpdate = (user: User, token: string) => {
-    mutate(`http://localhost:5000/api/user/${user.username}`)
+    mutateUser(user.username)
     DBLocal.saveUserAndTokenInLocal(user, token)
   }
 

@@ -7,8 +7,10 @@ interface Response {
   comment : Comment;
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const useComment = (commentId: string) => {
-  const { data, error } = useSWR<Response>(`http://localhost:5000/api/comment/${commentId}`)
+  const { data, error } = useSWR<Response>(`${BASE_URL}/api/comment/${commentId}`)
 
   return {
     comment: data?.comment || null,

@@ -7,9 +7,11 @@ interface Response {
   users: User[]
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const useSuggestedPeople = () => {
   const token = localStorage.getItem('token')
-  const { data, error } = useSWR<Response>(['http://localhost:5000/api/suggested-people/', {
+  const { data, error } = useSWR<Response>([`${BASE_URL}/api/suggested-people/`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }

@@ -10,8 +10,10 @@ interface Props {
   children: React.ReactNode;
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const SocketProvider: FC<Props> = ({children}) => {
-  const { socket, connectSocket, reloadSocket } = useSocket('http://localhost:5000')
+  const { socket, connectSocket, reloadSocket } = useSocket(`${BASE_URL}/`)
   const dispatch = useAppDispatch()
 
   useEffect(() => {

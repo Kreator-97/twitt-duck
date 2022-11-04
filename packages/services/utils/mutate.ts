@@ -3,35 +3,57 @@ import { mutate as mutateSWR } from 'swr'
 
 // this custom mutate works to re-fetch all the pages depending on current pathname page
 
-export const mutate = (pathname: string) => {
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
+export const mutateAllPages = (pathname: string) => {
   const token = localStorage.getItem('token')
-  mutateSWR(['http://localhost:5000/api/feed/', {
+  mutateSWR([`${BASE_URL}/api/feed/`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
   }])
-  mutateSWR(['http://localhost:5000/api/feed/public-posts', {
+  mutateSWR([`${BASE_URL}/api/feed/public-posts`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
   }])
   
   if( pathname.startsWith('/post/') ) {
-    const URLToReload = `http://localhost:5000/api${pathname}`
+    const URLToReload = `${BASE_URL}/api${pathname}`
     mutateSWR(URLToReload)
   }
   if( pathname.startsWith('/comment/') ) {
-    const URLToReload = `http://localhost:5000/api${pathname}`
+    const URLToReload = `${BASE_URL}/api${pathname}`
     mutateSWR(URLToReload)
   }
   if( pathname.startsWith('/user/') ) {
     const username = pathname.split('/')[pathname.split('/').length-1]
-    const URLToReload = `http://localhost:5000/api/user/info/${username}`
+    const URLToReload = `${BASE_URL}/api/user/info/${username}`
     mutateSWR(URLToReload)
   }
   if( pathname.startsWith('/profile') ) {
     const user = JSON.parse(localStorage.getItem('user') || '{}') as User
-    const URLToReload = `http://localhost:5000/api/user/info/${user.username}`
+    const URLToReload = `${BASE_URL}/api/user/info/${user.username}`
     mutateSWR(URLToReload)
   }
+}
+
+export const mutateNotifications = (token: string) => {
+  const url = `${BASE_URL}/api/notification`
+  mutateSWR([url, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  }])
+}
+
+export const mutateCommentPage = (commentId: string) => mutateSWR(`${BASE_URL}/api/comment/${commentId}`)
+
+export const mutatePostPage = (postId: string) => mutateSWR(`${BASE_URL}/api/post/${postId}`)
+
+export const mutateUser = (username: string) => mutateSWR(`${BASE_URL}/api/user/${username}`)
+
+export const mutateFollows = (username: string) => {
+  const url = `${BASE_URL}/api/follow/${username}`
+  mutateSWR(url)
 }
