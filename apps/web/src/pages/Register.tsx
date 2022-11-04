@@ -5,7 +5,6 @@ import { FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
-import { useAppDispatch, login } from '@twitt-duck/state'
 import { googleRequest, registerRequest } from '@twitt-duck/services'
 import { useForm } from '@twitt-duck/hooks'
 
@@ -35,7 +34,6 @@ const validations = {
 }
 
 export const RegisterPage = () => {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const toast = useToast()
   const [ showErrors, setShowErrors ] = useState(false)
@@ -63,16 +61,18 @@ export const RegisterPage = () => {
       // continue at the customize profile page
       navigate('/auth/customize')
 
-    } catch (error: any) { // eslint-disable-line
+    } catch (error) {
       console.error(error)
-      toast({
-        title: 'No se pudo crear la cuenta',
-        description: error,
-        status: 'error',
-        duration: 5000,
-        position: 'top',
-        isClosable: true,
-      })
+      if( typeof error === 'string' ) {
+        toast({
+          title: 'No se pudo crear la cuenta',
+          description: error,
+          status: 'error',
+          duration: 5000,
+          position: 'top',
+          isClosable: true,
+        })
+      }
     }
   }
 
@@ -89,25 +89,29 @@ export const RegisterPage = () => {
 
       toast({
         title: 'Inicio de sesión.',
-        description: 'Has iniciado sessión exitosamente',
+        description: 'Has iniciado sesión exitosamente',
         status: 'success',
         duration: 3000,
         position: 'top',
         isClosable: true,
       })
-      
-      dispatch( login(user) )
-      navigate('/')
-    } catch (error: any) { //eslint-disable-line
+
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+
+    } catch (error) {
       console.log(error)
-      toast({
-        title: 'No se pudo crear la cuenta',
-        description: error,
-        status: 'error',
-        duration: 3000,
-        position: 'top',
-        isClosable: true,
-      })
+      if( typeof error === 'string' ) {
+        toast({
+          title: 'No se pudo crear la cuenta',
+          description: error,
+          status: 'error',
+          duration: 3000,
+          position: 'top',
+          isClosable: true,
+        })
+      }
     }
   }
 

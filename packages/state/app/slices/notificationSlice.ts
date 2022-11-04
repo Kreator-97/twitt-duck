@@ -29,4 +29,4 @@ export const notificationSlice = createSlice({
 })
 
 export default notificationSlice.reducer
-export const { loadState, addNotification, removeNotification } = notificationSlice.actions
+export const { addNotification, removeNotification, loadState } = notificationSlice.actions

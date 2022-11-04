@@ -20,7 +20,8 @@ export const useSocket = (url: string) => {
     setSocket(newSocket)
   }, [url])
 
-  const reloadSocket = useCallback( () => {
+  const reloadSocket = () => {
+    socket?.removeAllListeners('notification')
     socket?.disconnect()
     const token = localStorage.getItem('token')
 
@@ -32,7 +33,7 @@ export const useSocket = (url: string) => {
 
     setToken(token)
     setSocket(newSocket)
-  }, [url])
+  }
 
   useEffect(() => {
     setOnline( socket?.connected || false)
