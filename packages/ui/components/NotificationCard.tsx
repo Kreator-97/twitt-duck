@@ -2,9 +2,8 @@ import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { Box, Flex, Grid, Icon, Text } from '@chakra-ui/react'
-import { Notification } from '@twitt-duck/state'
-import { deleteNotificationRequest } from '@twitt-duck/services'
-import { mutateNotifications } from '@twitt-duck/services'
+import { loadNotifications, Notification, useAppDispatch } from '@twitt-duck/state'
+import { deleteNotificationRequest, getNotificationsRequest } from '@twitt-duck/services'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || ''
 
@@ -13,6 +12,7 @@ interface Props {
 }
 
 export const NotificationCard: FC<Props> = ({notification}) => {
+  const dispatch = useAppDispatch()
   const url = `/${notification.type?.toLowerCase()}/${notification.actionId}`
   
   const navigate = useNavigate()
@@ -22,21 +22,32 @@ export const NotificationCard: FC<Props> = ({notification}) => {
     if( !token ) return
 
     await deleteNotificationRequest(notificationId, token || '')
-    mutateNotifications(token)
+    try {
+      const notifications = await getNotificationsRequest(token)
+      dispatch(loadNotifications(notifications))
+      
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  const onNotificationRead = (notificationId: string, url: string) => {
+  const onNotificationRead = async (notificationId: string, url: string) => {
     const token = localStorage.getItem('token')
     if( token ) {
       // TODO: make service of this fetch
-      fetch(`${BASE_URL}/api/notification/${notificationId}`, {
+      await fetch(`${BASE_URL}/api/notification/${notificationId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
-      }).then(() => {
-        mutateNotifications(token)
-        navigate(url)
       })
+      try {
+        const notifications = await getNotificationsRequest(token)
+        dispatch(loadNotifications(notifications))
+        
+      } catch (error) {
+        console.error(error)
+      }
+      navigate(url)
     }
   }
 

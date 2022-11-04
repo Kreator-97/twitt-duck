@@ -38,15 +38,6 @@ export const mutateAllPages = (pathname: string) => {
   }
 }
 
-export const mutateNotifications = (token: string) => {
-  const url = `${BASE_URL}/api/notification`
-  mutateSWR([url, {
-    headers: {
-      authorization: `Bearer ${token}`
-    }
-  }])
-}
-
 export const mutateCommentPage = (commentId: string) => mutateSWR(`${BASE_URL}/api/comment/${commentId}`)
 
 export const mutatePostPage = (postId: string) => mutateSWR(`${BASE_URL}/api/post/${postId}`)

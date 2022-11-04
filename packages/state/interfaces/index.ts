@@ -57,8 +57,8 @@ export interface Follow {
   id: string;
   user: User;
   userId: string;
-  followingId: User
-  following: User
+  followingId: string;
+  followingTo: User;
 }
 
 export interface Images {

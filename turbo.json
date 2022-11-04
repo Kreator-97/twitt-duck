@@ -9,6 +9,9 @@
     },
     "build":{
       "dependsOn": ["^build"]
+    },
+    "start": {
+      "outputs": []
     }
   }
 }

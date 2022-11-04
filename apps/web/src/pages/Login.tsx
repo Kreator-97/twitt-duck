@@ -20,14 +20,16 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react'
+import { login, useAppDispatch } from '@twitt-duck/state'
 
 const validations = { email: notEmptyString, password: notEmptyString }
 
 export const LoginPage = () => {
   const [ showErrors, setShowErrors ] = useState(false)
+  const dispatch = useAppDispatch()
   const toast = useToast()
-
   const navigate = useNavigate()
+
   const { email, password, errors, onResetForm, onInputChange } = useForm({
     email: '',
     password: ''
@@ -61,9 +63,8 @@ export const LoginPage = () => {
         isClosable: true,
       })
 
-      setTimeout(() => {
-        window.location.reload()
-      }, 1000)
+      dispatch(login(user))
+      navigate('/')
     } catch (error: any) { // eslint-disable-line
       console.error(error)
       toast({
@@ -95,10 +96,9 @@ export const LoginPage = () => {
         position: 'top',
         isClosable: true,
       })
-  
-      setTimeout(() => {
-        window.location.reload()
-      }, 1000)
+
+      dispatch(login(user))
+      navigate('/')
     } catch (error: any) { //eslint-disable-line
       console.log(error)
       toast({

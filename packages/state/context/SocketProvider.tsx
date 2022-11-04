@@ -1,10 +1,10 @@
 import React,{ FC, useEffect } from 'react'
 import { useSocket } from '@twitt-duck/hooks'
+import { getNotificationsRequest } from '@twitt-duck/services';
 
 import { SocketContext } from '.'
 import { useAppDispatch } from '../app/hooks';
-import { Notification } from '../interfaces';
-import { addNotification, removeNotification } from '../app/slices/notificationSlice';
+import { removeNotification, loadNotifications } from '../app/slices/notificationSlice';
 
 interface Props {
   children: React.ReactNode;
@@ -21,8 +21,16 @@ export const SocketProvider: FC<Props> = ({children}) => {
   }, [])
 
   useEffect(() => {
-    socket?.on('notification', (payload) => {
-      dispatch( addNotification( payload as Notification ) )
+    socket?.on('notification', async (payload) => {
+      const token = localStorage.getItem('token')
+      if( token ) {
+        try {
+          const notifications = await getNotificationsRequest(token)
+          dispatch( loadNotifications(notifications) )
+        } catch (error) {
+          console.error(error)
+        }
+      }
     })
   }, [socket])
 

@@ -23,6 +23,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react'
+import { login, useAppDispatch } from '@twitt-duck/state'
 
 const validations = {
   fullname: notEmptyString,
@@ -35,6 +36,7 @@ const validations = {
 
 export const RegisterPage = () => {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const toast = useToast()
   const [ showErrors, setShowErrors ] = useState(false)
 
@@ -95,11 +97,9 @@ export const RegisterPage = () => {
         position: 'top',
         isClosable: true,
       })
-
-      setTimeout(() => {
-        window.location.reload()
-      }, 1000)
-
+      
+      dispatch(login(user))
+      navigate('/')
     } catch (error) {
       console.log(error)
       if( typeof error === 'string' ) {
