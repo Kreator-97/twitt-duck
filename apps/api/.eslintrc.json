@@ -34,5 +34,6 @@
       "warn",
       "always"
     ]
-  }
+  },
+  "ignorePatterns": ["/src/public/*"]
 }
