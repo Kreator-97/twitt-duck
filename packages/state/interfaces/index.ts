@@ -56,7 +56,9 @@ export interface Repost {
 export interface Follow {
   id: string;
   user: User;
-  followingTo: User
+  userId: string;
+  followingId: string;
+  followingTo: User;
 }
 
 export interface Images {

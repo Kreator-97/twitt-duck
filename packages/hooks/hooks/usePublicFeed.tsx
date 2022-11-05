@@ -11,9 +11,11 @@ interface Response {
   publicPosts: Post[];
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const usePublicFeed = () => {
   const token = localStorage.getItem('token')
-  const { data, error } = useSWR<Response>(['http://localhost:5000/api/feed/public-posts', {
+  const { data, error } = useSWR<Response>([`${BASE_URL}/api/feed/public-posts`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }

@@ -1,13 +1,16 @@
 import { useEffect, useMemo } from 'react'
-import { mutate } from 'swr'
 import { Box, Heading, Text } from '@chakra-ui/react'
-import { useAppSelector } from '@twitt-duck/state'
+import { loadNotifications, useAppDispatch, useAppSelector } from '@twitt-duck/state'
 import { NotificationCard } from '@twitt-duck/ui'
+import { getNotificationsRequest } from '@twitt-duck/services'
 
 import { AppLayout } from '../layouts/AppLayout'
 import { DBLocal } from '../utils'
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const NotificationPage = () => {
+  const dispatch = useAppDispatch()
   const { notifications } = useAppSelector(state => state.notification)
 
   const notificationsNoRead = useMemo(() => {
@@ -23,16 +26,15 @@ export const NotificationPage = () => {
 
     if( token ) {
       const timer = setTimeout(() => {
-        fetch('http://localhost:5000/api/notification/mark-all-as-read', {
+        // TODO: make service of this fetch
+        fetch(`${BASE_URL}/api/notification/mark-all-as-read`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         }).then(() => {
-          mutate(['http://localhost:5000/api/notification', {
-            headers: {
-              authorization: `Bearer ${token}`
-            }
-          }])
+          getNotificationsRequest(token).then((notifications) => {
+            dispatch( loadNotifications(notifications) )
+          })
         })
       }, 3000)
 

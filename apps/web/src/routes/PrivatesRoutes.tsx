@@ -49,6 +49,10 @@ export const PrivateRoutes: FC<Props> = ({ isAuthenticated }) => {
           path='/comment/*'
           element={<CommentPage />}
         />
+        <Route
+          path='*'
+          element={<h1>La página no existe</h1>}
+        />
       </Routes>
     )
   }

@@ -2,7 +2,6 @@ import { FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import { FormInput, GoogleButton } from '@twitt-duck/ui'
-import { useAppDispatch, login } from '@twitt-duck/state'
 import { googleRequest, loginRequest } from '@twitt-duck/services'
 import { useForm } from '@twitt-duck/hooks'
 
@@ -21,6 +20,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react'
+import { login, useAppDispatch } from '@twitt-duck/state'
 
 const validations = { email: notEmptyString, password: notEmptyString }
 
@@ -28,8 +28,8 @@ export const LoginPage = () => {
   const [ showErrors, setShowErrors ] = useState(false)
   const dispatch = useAppDispatch()
   const toast = useToast()
-
   const navigate = useNavigate()
+
   const { email, password, errors, onResetForm, onInputChange } = useForm({
     email: '',
     password: ''
@@ -52,18 +52,18 @@ export const LoginPage = () => {
         navigate('/auth/customize')
         return
       }
-      
+      onResetForm()
+
       toast({
         title: 'Inicio de sesión.',
-        description: 'Has iniciado sessión exitosamente',
+        description: 'Has iniciado sesión exitosamente',
         status: 'success',
         duration: 3000,
         position: 'top',
         isClosable: true,
       })
 
-      dispatch( login(user) )
-      onResetForm()
+      dispatch(login(user))
       navigate('/')
     } catch (error: any) { // eslint-disable-line
       console.error(error)
@@ -90,14 +90,14 @@ export const LoginPage = () => {
 
       toast({
         title: 'Inicio de sesión.',
-        description: 'Has iniciado sessión exitosamente',
+        description: 'Has iniciado sesión exitosamente',
         status: 'success',
         duration: 3000,
         position: 'top',
         isClosable: true,
       })
-  
-      dispatch( login(user) )
+
+      dispatch(login(user))
       navigate('/')
     } catch (error: any) { //eslint-disable-line
       console.log(error)

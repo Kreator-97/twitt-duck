@@ -13,7 +13,7 @@ export const notificationSlice = createSlice({
   name: 'notification',
   initialState: initialState,
   reducers: {
-    loadState: (state, action: PayloadAction<Notification[]>) => {
+    loadNotifications: (state, action: PayloadAction<Notification[]>) => {
       return {... state, notifications: action.payload}
     },
     addNotification: (state, action: PayloadAction<Notification>) => {
@@ -29,4 +29,4 @@ export const notificationSlice = createSlice({
 })
 
 export default notificationSlice.reducer
-export const { loadState, addNotification, removeNotification } = notificationSlice.actions
+export const { addNotification, removeNotification, loadNotifications } = notificationSlice.actions

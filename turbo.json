@@ -6,6 +6,12 @@
     },
     "lint": {
       "outputs": []
+    },
+    "build":{
+      "dependsOn": ["^build"]
+    },
+    "start": {
+      "outputs": []
     }
   }
 }

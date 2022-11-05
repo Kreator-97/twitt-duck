@@ -1,3 +1,5 @@
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 type Options = {
   method?: string;
   body  ?: string | FormData;
@@ -37,7 +39,7 @@ export const request = async <T>(endpoint: string, options: Options):Promise<T> 
       requestOptions.body = options.body
     }
     
-    const res = await fetch(`http://localhost:5000${endpoint}`, requestOptions)
+    const res = await fetch(`${BASE_URL}${endpoint}`, requestOptions)
 
     const data = await res.json()
     return data

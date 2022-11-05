@@ -1,22 +1,18 @@
 import { FC } from 'react'
-import { mutate } from 'swr'
 import { useNavigate } from 'react-router-dom'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { Box, Flex, Grid, Icon, Text } from '@chakra-ui/react'
-import { Notification } from '@twitt-duck/state'
-import { deleteNotificationRequest } from '@twitt-duck/services'
+import { loadNotifications, Notification, useAppDispatch } from '@twitt-duck/state'
+import { deleteNotificationRequest, getNotificationsRequest } from '@twitt-duck/services'
+
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
 
 interface Props {
   notification: Notification;
 }
 
-const mutateNotifications = (token: string) => mutate(['http://localhost:5000/api/notification', {
-  headers: {
-    authorization: `Bearer ${token}`
-  }
-}])
-
 export const NotificationCard: FC<Props> = ({notification}) => {
+  const dispatch = useAppDispatch()
   const url = `/${notification.type?.toLowerCase()}/${notification.actionId}`
   
   const navigate = useNavigate()
@@ -26,20 +22,32 @@ export const NotificationCard: FC<Props> = ({notification}) => {
     if( !token ) return
 
     await deleteNotificationRequest(notificationId, token || '')
-    mutateNotifications(token)
+    try {
+      const notifications = await getNotificationsRequest(token)
+      dispatch(loadNotifications(notifications))
+      
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  const onNotificationRead = (notificationId: string, url: string) => {
+  const onNotificationRead = async (notificationId: string, url: string) => {
     const token = localStorage.getItem('token')
     if( token ) {
-      fetch(`http://localhost:5000/api/notification/${notificationId}`, {
+      // TODO: make service of this fetch
+      await fetch(`${BASE_URL}/api/notification/${notificationId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
-      }).then(() => {
-        navigate(url)
-        mutateNotifications(token)
       })
+      try {
+        const notifications = await getNotificationsRequest(token)
+        dispatch(loadNotifications(notifications))
+        
+      } catch (error) {
+        console.error(error)
+      }
+      navigate(url)
     }
   }
 

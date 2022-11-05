@@ -1,7 +1,6 @@
 import { FC, FormEvent, useRef, useState } from 'react'
-import { mutate } from 'swr'
 import { MdOutlineImage } from 'react-icons/md'
-import { createPost, uploadMultipleImagesRequest } from '@twitt-duck/services'
+import { createPost, mutateAllPages, uploadMultipleImagesRequest } from '@twitt-duck/services'
 import {
   Box,
   Button,
@@ -15,9 +14,11 @@ import {
 } from '@chakra-ui/react'
 
 import { Loader } from '.'
+import { useLocation } from 'react-router-dom'
 
 export const NewPost: FC = () => {
   const toast = useToast()
+  const { pathname } = useLocation()
   const contentElementRef = useRef<HTMLDivElement>(null)
   const inputImagesRef = useRef<HTMLInputElement>(null)
   const [ privacy, setPrivacy] = useState<string>('ALL')
@@ -95,12 +96,9 @@ export const NewPost: FC = () => {
         position: 'top',
         isClosable: true,
       })
-      mutate('http://localhost:5000/api/feed/public-posts')
-      mutate(['http://localhost:5000/api/feed/', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }])
+
+      mutateAllPages(pathname)
+
       setCreatePostLoading(false)
     } catch (error) {
       setCreatePostLoading(false)

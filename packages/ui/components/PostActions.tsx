@@ -18,7 +18,7 @@ import {
 
 import {
   createRepost,
-  mutate,
+  mutateAllPages,
   toggleLikeComment,
   toggleLikePost
 } from '@twitt-duck/services'
@@ -65,7 +65,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
       }
 
       socket?.emit('user-notification-like', notification)
-      mutate(pathname)
+      mutateAllPages(pathname)
     } catch (error) {
       console.log(error)
     }
@@ -74,7 +74,6 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
   const onRepost = async (e: MouseEvent<HTMLDivElement> ) => {
     e.stopPropagation()
     if( isRepostActive ) {
-      console.log({isActive: isRepostActive})
       dispatch(openRemoveRepostModal(actionId))
       return
     }
@@ -84,7 +83,7 @@ export const PostActions: FC<Props> = ({ comments, likes, reposts, actionId, typ
     try {
       await createRepost(type, actionId, token || '')
 
-      mutate(pathname)
+      mutateAllPages(pathname)
 
       toast({
         title: 'Has difundido esta publicación',

@@ -8,9 +8,11 @@ interface Response {
   users : User[];
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+
 export const useSearch = (query: string) => {
 
-  const { data, error } = useSWR<Response>(`http://localhost:5000/api/search/${query}`)
+  const { data, error } = useSWR<Response>(`${BASE_URL}/api/search/${query}`)
 
   return {
     posts: data?.posts || [],

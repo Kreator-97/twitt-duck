@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useRef, useState } from 'react'
-import { updateProfileImageRequest, updateUserRequest } from '@twitt-duck/services'
+import { mutateUser, updateProfileImageRequest, updateUserRequest } from '@twitt-duck/services'
 import { login, useAppDispatch, User } from '@twitt-duck/state'
 
 import { Box,
@@ -55,9 +55,10 @@ export const FormChangeProfileInfo: FC<Props> = ({user, setIsLoading, onComplete
       })
 
       if( user ) {
-        localStorage.setItem('user', JSON.stringify({user}))
+        localStorage.setItem('user', JSON.stringify(user))
         localStorage.setItem('token', token)
         dispatch( login(user) )
+        mutateUser(user.username)
       }
     } catch (error) {
       if( typeof error === 'string' ) {

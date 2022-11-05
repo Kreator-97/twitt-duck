@@ -1,7 +1,6 @@
 import { FC, useContext, useMemo } from 'react'
-import { mutate } from 'swr'
 import { Avatar, Box, Button, Grid, Text } from '@chakra-ui/react'
-import { createFollow } from '@twitt-duck/services'
+import { createFollow, mutateFollows } from '@twitt-duck/services'
 import { NotificationPayload, SocketContext, useAppSelector } from '@twitt-duck/state'
 import { useFollow } from '@twitt-duck/hooks'
 import { Link } from 'react-router-dom'
@@ -34,7 +33,7 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
 
     try {
       await createFollow(username, token || '')
-      mutate(`http://localhost:5000/api/follow/${user?.username}`)
+      mutateFollows(user.username)
 
       const notification: NotificationPayload = {
         id: username,

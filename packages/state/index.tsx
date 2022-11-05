@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux'
 import { useAppDispatch, useAppSelector } from './app/hooks'
 import { AuthState, finishChecking, login } from './app/slices/authSlice'
-import { loadState } from './app/slices/notificationSlice'
+import { loadNotifications } from './app/slices/notificationSlice'
 import { store } from './app/store'
 
 import {
@@ -38,7 +38,7 @@ export {
   closeVisorImage,
   finishChecking,
   login,
-  loadState,
+  loadNotifications,
   openConfirmLogoutModal,
   openRemoveRepostModal,
   openSearchBar,
