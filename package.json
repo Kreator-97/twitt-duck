@@ -13,8 +13,9 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "prepare": "husky install",
-    "build": "turbo run build",
-    "start": "turbo run start"
+    "start": "turbo run start",
+    "build:web": "turbo run build:web",
+    "build:api": "turbo run build:api"
   },
   "keywords": [],
   "author": "Donato Monzon",

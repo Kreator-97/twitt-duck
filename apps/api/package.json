@@ -7,8 +7,11 @@
     "start": "node ./dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --exit-child --watch src ./src/index.ts",
-    "build": "tsc -p .",
-    "lint": "eslint ./src"
+    "build:api": "yarn prepare-build && tsc -p .",
+    "lint": "eslint ./src",
+    "clean-public": "rm -rf ./src/public/*",
+    "copy-react-app": "cp -r ../web/dist/* ./src/public/",
+    "prepare-build": "yarn clean-public && yarn copy-react-app"
   },
   "keywords": [],
   "author": "Donato Monzon",

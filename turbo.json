@@ -7,8 +7,20 @@
     "lint": {
       "outputs": []
     },
-    "build":{
+    "build": {
       "dependsOn": ["^build"]
+    },
+    "build:web": {
+      "cache": false,
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "build:api": {
+      "cache": false,
+      "outputs": [
+        "dist/**"
+      ]
     },
     "start": {
       "outputs": []

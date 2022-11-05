@@ -24,4 +24,19 @@ Las pruebas de la aplicación fueron hechas utilizando las siguientes librerías
 
 Este repositorio es un monorepo que tiene como dependencia clave **turborepo**.
 
+### Crear build de producción
+Para poder crear la build de producción necesitas seguir los siguientes pasos:
+
+Primero debes de generar la aplicación de React:
+
+```
+yarn build:web
+```
+
+Después ejecuta el comando para generar el servidor de Express:
+
+```
+yarn build:api
+```
+
 ### Pruebas ( en progreso 🚧 )
