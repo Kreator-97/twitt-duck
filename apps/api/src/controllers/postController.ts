@@ -50,6 +50,17 @@ export const getAllPosts = async (req: Request, res: Response<PostResponse >) =>
 export const getPostsByUsername = async (req: Request, res: Response<PostResponse >) => {
   const username = req.params.username.toString()
 
+  const user = await prisma.user.findUnique({
+    where: { username }
+  })
+
+  if( !user ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `No existe el usuario con el username ${username}`
+    })
+  }
+
   const posts = await prisma.post.findMany({
     where: { author: { username } },
     include: {
@@ -147,7 +158,14 @@ export const createPost = async (req: Request, res: Response<PostResponse> ) => 
   if( !(images instanceof Array) ) {
     return res.status(400).json({
       ok: false,
-      msg: 'images on req.body must to be a instance of Array'
+      msg: 'El parámetro images debe de ser un Array'
+    })
+  }
+
+  if( images.some((img) => !(img.startsWith('https://')) ) ) {
+    return res.status(400).json({
+      ok: false,
+      msg: 'Los valores en images deben de ser válidos'
     })
   }
 
@@ -175,9 +193,9 @@ export const createPost = async (req: Request, res: Response<PostResponse> ) => 
     }
   }})
 
-  return res.status(200).json({
+  return res.status(201).json({
     ok : true,
-    msg: 'New post created',
+    msg: 'Nuevo post creado',
     post,
   })
 }
@@ -190,7 +208,7 @@ export const updatePostPrivacy = async (req: Request, res: Response<PostResponse
   if( !PRIVACY_VALUES.includes(privacy) ) {
     return res.status(400).json({
       ok: false,
-      msg: 'the only privacy values permited are: ' + PRIVACY_VALUES.join(', ')
+      msg: 'Los unicos valores permitidos son: ' + PRIVACY_VALUES.join(', ')
     })
   }
 
@@ -218,7 +236,7 @@ export const updatePostPrivacy = async (req: Request, res: Response<PostResponse
 
   return res.status(200).json({
     ok: true,
-    msg: `privacy post set on '${privacy}'`
+    msg: `Privacidad del post configurada en '${privacy}'`
   })
 }
 

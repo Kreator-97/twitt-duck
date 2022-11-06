@@ -42,6 +42,7 @@ const users = [
 ]
 
 async function cleanDB () {
+  await prisma.comment.deleteMany()
   await prisma.post.deleteMany()
   await prisma.user.deleteMany()
 }

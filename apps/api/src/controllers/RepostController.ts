@@ -84,7 +84,7 @@ export const createRepost = async (req: Request, res: Response<RepostResponse>) 
     
     return res.status(201).json({
       ok: true,
-      msg: 'ok',
+      msg: 'repost creado',
       repost,
     })
   } catch (error) {

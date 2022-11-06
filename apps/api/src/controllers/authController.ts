@@ -13,7 +13,7 @@ interface UserResponse extends ApiResponse {
 }
 
 export const register = async (req: Request, res: Response<UserResponse>) => {
-  const { fullname, email, password} = req.body
+  const { fullname, email, password } = req.body
 
   const isThisEmailExists = await prisma.user.findUnique({ where: { email }})
 
@@ -35,9 +35,9 @@ export const register = async (req: Request, res: Response<UserResponse>) => {
 
     const token = signToken({ id: user.id })
 
-    return res.status(200).json({
+    return res.status(201).json({
       ok: true,
-      msg: 'new user created',
+      msg: 'Usuario nuevo creado',
       user,
       token,
     })
@@ -67,9 +67,9 @@ export const login = async (req: Request, res: Response<UserResponse>) => {
   const isValidPassword = bcrypt.compareSync(password, user.password)
 
   if( !isValidPassword ) {
-    return res.status(404).json({
+    return res.status(400).json({
       ok: false,
-      msg: 'Error de credentiales'
+      msg: 'Error de credenciales'
     })
   }
 

@@ -3,7 +3,7 @@ import { expect, describe, it, beforeAll } from 'vitest'
 import prisma from '../lib/prisma'
 import { api } from './helpers/api'
 
-describe('test on /api/user/ endpoint', async () => {
+describe('test on endpoint: /api/user/', async () => {
 
   let token = undefined
   const updateUser = {
