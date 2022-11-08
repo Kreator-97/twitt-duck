@@ -147,14 +147,14 @@ export const LoginPage = () => {
           <Box>
             <FormLabel
               color='gray.600'
-            >Correo Electrónico</FormLabel>
+            >Correo Electrónico
+            </FormLabel>
             <FormInput
               placehorder='Introduce tu correo electrónico'
               type='email'
               name='email'
               value={ email }
               onChange={ onInputChange }
-              required
             />
             {
               ( errors.password && showErrors ) &&

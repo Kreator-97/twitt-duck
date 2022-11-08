@@ -280,3 +280,28 @@ export const changeBackgroundPicture = async (req: Request, res: Response) => {
     })
   }
 }
+
+export const deleteTestUser = async ( req: Request, res: Response ) => {
+  const env = process.env.NODE_ENV
+  if( (env === 'production' || env === 'development' ) ) return res.status(400).json({
+    ok: false,
+    msg: 'This endpoint only works on testing'
+  })
+
+  const email = req.params.email
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email }})
+    if( !user ) return res.status(404).json({ok: false})
+
+    await prisma.user.delete({ where: { email }}) 
+  
+    return res.status(202).json({
+      ok: true,
+      msg: 'user deleted'
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ok: false})
+  }
+}

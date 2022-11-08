@@ -19,8 +19,8 @@ Este proyecto esta realizado utilizando las siguientes tecnologías:
 - Redux Toolkit
 
 Las pruebas de la aplicación fueron hechas utilizando las siguientes librerías:
-- Jest
-- Cypress
+- Vitest con supertest en el backend
+- Cypress en el frontend
 
 Este repositorio es un monorepo que tiene como dependencia clave **turborepo**.
 
@@ -29,14 +29,29 @@ Para poder crear la build de producción necesitas seguir los siguientes pasos:
 
 Primero debes de generar la aplicación de React:
 
-```
+```bash
 yarn build:web
 ```
 
 Después ejecuta el comando para generar el servidor de Express:
 
-```
+```bash
 yarn build:api
 ```
 
 ### Pruebas ( en progreso 🚧 )
+Para ejecutar las pruebas del servidor ejecuta: 
+
+```bash
+yarn test:api
+```
+
+Para ejecutar las pruebas del cliente web ejecuta:
+```bash
+yarn test:web
+```
+
+Si quieres ejecutar las pruebas abriendo cypress en el navegador, hazlo con el comando:
+```bash
+yarn test:cypress
+```

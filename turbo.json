@@ -7,6 +7,15 @@
     "lint": {
       "outputs": []
     },
+    "test": {},
+    "cypress:open": {},
+    "start-test-server": {},
+    "test:web": {
+      "dependsOn": ["start-test-server", "twitt-duck-web#cypress:open", "twitt-duck-web#dev"]
+    },
+    "test:api": {
+      "dependsOn": ["start-test-server","twitt-duck-api#test"]
+    },
     "build": {
       "dependsOn": ["^build"]
     },
