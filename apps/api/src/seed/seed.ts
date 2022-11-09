@@ -42,6 +42,11 @@ const users = [
 ]
 
 async function cleanDB () {
+  await prisma.images.deleteMany()
+  await prisma.follow.deleteMany()
+  await prisma.likes.deleteMany()
+  await prisma.repost.deleteMany()
+  await prisma.notification.deleteMany()
   await prisma.comment.deleteMany()
   await prisma.post.deleteMany()
   await prisma.user.deleteMany()

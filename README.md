@@ -44,6 +44,11 @@ yarn migrate:dev
 yarn migrate:test
 ```
 
+5- Carga la semilla con datos de prueba
+```
+yarn seed:dev
+```
+
 5- Corre el servidor de prueba
 ```
 yarn dev
@@ -77,6 +82,11 @@ yarn migrate:dev
 
 # testing
 yarn migrate:test
+```
+
+También debes de insertar los datos de prueba
+```
+yarn seed:test
 ```
 
 Para ejecutar las pruebas del backend ejecuta: 

@@ -16,7 +16,8 @@
     "clean-public": "rm -rf ./src/public/*",
     "copy-react-app": "cp -r ../web/dist/* ./src/public/",
     "prepare-build": "yarn clean-public && yarn copy-react-app",
-    "seed": "dotenv -e .env.test -- yarn ts-node ./src/seed/seed.ts"
+    "seed:test": "dotenv -e .env.test -- yarn ts-node ./src/seed/seed.ts",
+    "seed:dev": "dotenv -e .env.development -- yarn ts-node ./src/seed/seed.ts"
   },
   "keywords": [],
   "author": "Donato Monzon",

@@ -18,7 +18,9 @@
     "test:cypress": "turbo run test:cypress",
     "test:web": "turbo run test:web",
     "build:web": "turbo run build:web",
-    "build:api": "turbo run build:api"
+    "build:api": "turbo run build:api",
+    "seed:test": "turbo run seed:test",
+    "seed:dev": "turbo run seed:dev"
   },
   "keywords": [],
   "author": "Donato Monzon",
