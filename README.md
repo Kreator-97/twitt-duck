@@ -1,11 +1,7 @@
 # Twitt Duck 🦆
 Twitt Duck es una Clon de twitter realizado para propósitos educativos.
 
-Puedes iniciar un sesión o crear una cuenta de usuario para comenzar a realizar publicaciones o enviar mensajes privados a personas a las que sigues.
-
-También puedes ver los últimos temas en tendencias dentro de la red.
-
-## Más información ( en progreso 🚧 )
+Puedes iniciar un sesión o crear una cuenta de usuario para comenzar a realizar publicaciones y ver que dicen las personas a las que sigues.
 
 ## Tecnologías
 Este proyecto esta realizado utilizando las siguientes tecnologías:
@@ -14,7 +10,7 @@ Este proyecto esta realizado utilizando las siguientes tecnologías:
 - Chakra UI
 - Express
 - TypeScript
-- MongoDB
+- MySQL
 - Prisma ORM
 - Redux Toolkit
 
@@ -23,6 +19,35 @@ Las pruebas de la aplicación fueron hechas utilizando las siguientes librerías
 - Cypress en el frontend
 
 Este repositorio es un monorepo que tiene como dependencia clave **turborepo**.
+
+## Levantar el proyecto por primera vez
+Para levantar el proyecto sigue estos pasos
+
+1- Instala las dependencias
+```
+yarn install
+```
+
+2- Configura las variables de entorno que se encuentras en el archivo `env.example`
+
+3- Levanta el servidor de docker
+```
+docker compose up -d
+```
+
+4- Carga el esquema en la base de datos
+```
+# desarrollo
+yarn migrate:dev
+
+# testing
+yarn migrate:test
+```
+
+5- Corre el servidor de prueba
+```
+yarn dev
+```
 
 ### Crear build de producción
 Para poder crear la build de producción necesitas seguir los siguientes pasos:
@@ -39,8 +64,22 @@ Después ejecuta el comando para generar el servidor de Express:
 yarn build:api
 ```
 
-### Pruebas ( en progreso 🚧 )
-Para ejecutar las pruebas del servidor ejecuta: 
+### Pruebas
+Antes de comenzar a ejecutar las pruebas asegurar de levantar docker con el suguiente comando:
+```
+docker compose up -d
+```
+
+Asegurate de tener sincronizado el esquema de la base de datos de desarrollo con la de testing.
+```
+# desarrollo
+yarn migrate:dev
+
+# testing
+yarn migrate:test
+```
+
+Para ejecutar las pruebas del backend ejecuta: 
 
 ```bash
 yarn test:api
