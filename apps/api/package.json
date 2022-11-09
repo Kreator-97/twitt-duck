@@ -10,6 +10,7 @@
     "test": "dotenv -e .env.test -- vitest --run",
     "test:watch": "dotenv -e .env.test -- vitest",
     "migrate:test": "dotenv -e .env.test -- yarn prisma db push",
+    "migrate:dev": "dotenv -e .env.development -- yarn prisma db push",
     "build:api": "yarn prepare-build && tsc -p .",
     "lint": "eslint ./src",
     "clean-public": "rm -rf ./src/public/*",

@@ -54,11 +54,11 @@ export interface Repost {
 }
 
 export interface Follow {
-  id: string;
-  user: User;
-  userId: string;
-  followingId: string;
-  followingTo: User;
+  id          : string;
+  user        : User;
+  userId      : string;
+  followingId : string;
+  followingTo : User;
 }
 
 export interface Images {
@@ -68,7 +68,7 @@ export interface Images {
 }
 
 export interface Like {
-  id: string;
+  id  : string;
   user: User;
   post: Post;
 }
@@ -84,18 +84,19 @@ export interface Notification {
 }
 
 export interface NotificationPayload {
-  type  : 'post' | 'comment' | 'repost' | 'user';
-  msg   : string;
-  id    : string;
-  isNew : boolean;
+  type      : 'post' | 'comment' | 'repost' | 'user';
+  msg       : string;
+  id       ?: string;
+  username ?: string;
+  isNew     : boolean;
 }
 
 type NotificationType = 'POST' | 'COMMENT' | 'LIKE'
 
-type Role = 'USER' | 'ADMIN'
-type Provider = 'CREDENTIALS' | 'GOOGLE'
+type Role       = 'USER' | 'ADMIN'
+type Provider   = 'CREDENTIALS' | 'GOOGLE'
 type Visibility = 'HIDDEN' | 'VISIBLE'
-type Privacy = 'ONLY_ME' | 'ONLY_FOLLOWERS' | 'ALL' 
+type Privacy    = 'ONLY_ME' | 'ONLY_FOLLOWERS' | 'ALL' 
 
 
 export interface Feed {
@@ -103,12 +104,12 @@ export interface Feed {
 }
 
 type FeedItem = {
-  type: 'post';
-  posts: Post;
+  type  : 'post';
+  posts : Post;
 } | {
-  type: 'repost';
-  reposts: Repost;
+  type    : 'repost';
+  reposts : Repost;
 } | {
-  type: 'repost-comment';
+  type    : 'repost-comment';
   comments: Repost;
 }

@@ -1,9 +1,10 @@
 import { FC, useContext, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
-import { createFollow, mutateUser, unfollowRequest } from '@twitt-duck/services'
-import { NotificationPayload, SocketContext, useAppSelector, User } from '@twitt-duck/state'
+import { SocketContext, useAppSelector, User } from '@twitt-duck/state'
 import { HiUser } from 'react-icons/hi'
+import { createFollow, unfollowUser } from '../utils'
+import { mutateFollows } from '@twitt-duck/services'
 
 interface Props {
   user?: User;
@@ -23,31 +24,28 @@ export const UserDetail: FC<Props> = ({ user }) => {
 
     if( !user ) return
     if( !userAuth ) return
-
-    if( isFollowing ) {
-      try {
-        await unfollowRequest(user.username, token || '')
-        mutateUser(user.username)
-        return
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    if( !token ) return
 
     try {
-      await createFollow(user.username, token || '')
-      mutateUser(user.username)
-
-      const notification: NotificationPayload = {
-        id: user.username,
-        type: 'user',
-        isNew: false,
-        msg: 'nuevo seguidor',
-      }
-
-      socket?.emit('user-notification-follower', notification)
+      await createFollow(user.username, token, socket)
+      mutateFollows(userAuth.username)
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const onUnfollow = async () => {
+    const token = localStorage.getItem('token')
+
+    if( !user ) return
+    if( !userAuth ) return
+    if( !token ) return
+
+    try {
+      await unfollowUser(user.username, token, socket)
+      mutateFollows(userAuth.username)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -135,7 +133,7 @@ export const UserDetail: FC<Props> = ({ user }) => {
           color='#fff'
           bgGradient='linear(to-r, blue.400, cyan.400)'
           _hover={{ bgGradient: 'linear(to-b, blue.500, cyan.500)'}}
-          onClick={() => onFollow() }
+          onClick={() => isFollowing ? onUnfollow() : onFollow() }
         >
           { isFollowing ? 'Siguiendo' : 'Seguir' }
         </Button>

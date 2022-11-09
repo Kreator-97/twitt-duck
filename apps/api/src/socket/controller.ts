@@ -94,4 +94,13 @@ export const socketController = async (socket:Socket) => {
       console.log(error)
     }
   })
+
+  socket.on('remove-notification', async (payload: NotificationInfo) => {
+    try {
+      const notification = await removeNotification(payload, user.id)
+      socket.to(notification.userId).emit('notification', {})
+    } catch (error) {
+      console.log(error)
+    }
+  })
 }

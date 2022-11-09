@@ -6,7 +6,7 @@ interface Response {
   errors: string[]
 }
 
-export const createFollow = async (username: string, token: string) => {
+export const createFollowRequest = async (username: string, token: string) => {
   const data = await request<Response>(`/api/follow/${username}`, {
     method: 'POST',
     contentType: 'application/json',
