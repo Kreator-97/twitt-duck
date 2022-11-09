@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAppSelector, User } from '@twitt-duck/state'
 import { useNavigate } from 'react-router-dom'
 import { ChangeBackgroundPicture, FormChangePassword, FormChangeProfileInfo, Loader } from '@twitt-duck/ui'
+import { mutateUser } from '@twitt-duck/services'
 
 import {
   Tab,
@@ -13,7 +14,6 @@ import {
 
 import { DBLocal } from '../utils'
 import { ProfileLayout } from '../layouts'
-import { mutateUser } from '@twitt-duck/services'
 
 export const SettingsPage = () => {
   const navigate = useNavigate()
