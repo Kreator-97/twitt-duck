@@ -18,8 +18,10 @@ import {
   UploadRouter,
   UserRouter,
   SearchRouter,
-  NotificationRouter
+  NotificationRouter,
+  DBRouter
 } from '../routes'
+// import { resetDB } from '../controllers/resetController'
 
 dotenv.config()
 
@@ -67,6 +69,7 @@ export class Server {
     this.app.use('/api/search/',  SearchRouter )
     this.app.use('/api/notification/', NotificationRouter )
     this.app.use('/api/suggested-people/', SuggestedPeopleRouter )
+    this.app.use('/api/db/', DBRouter )
   }
 
   sockets () {

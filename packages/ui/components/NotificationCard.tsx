@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { Box, Flex, Grid, Icon, Text } from '@chakra-ui/react'
 import { loadNotifications, Notification, useAppDispatch } from '@twitt-duck/state'
-import { deleteNotificationRequest, getNotificationsRequest } from '@twitt-duck/services'
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || ''
+import {
+  deleteNotificationRequest,
+  getNotificationsRequest,
+  markNotificationAsReadRequest,
+} from '@twitt-duck/services'
 
 interface Props {
   notification: Notification;
@@ -33,13 +36,9 @@ export const NotificationCard: FC<Props> = ({notification}) => {
 
   const onNotificationRead = async (notificationId: string, url: string) => {
     const token = localStorage.getItem('token')
+
     if( token ) {
-      // TODO: make service of this fetch
-      await fetch(`${BASE_URL}/api/notification/${notificationId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      await markNotificationAsReadRequest(notificationId, token)
       try {
         const notifications = await getNotificationsRequest(token)
         dispatch(loadNotifications(notifications))

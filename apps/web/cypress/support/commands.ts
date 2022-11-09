@@ -33,6 +33,7 @@ declare global {
     interface Chainable {
       login(email: string, password: string): Chainable<void>
       register(email: string, password: string, username: string): Chainable<void>
+      closeSession(): Chainable<void>
       // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
       // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
       // visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
@@ -57,6 +58,12 @@ Cypress.Commands.add('register', (email, password, username) => {
   cy.get('textarea').type('Soy un simple usuario de prueba que debo de ser eliminado automáticamente')
   cy.contains('Listo!').click()
   cy.wait(1000)
+})
+
+Cypress.Commands.add('closeSession', () => {
+  cy.get('[data-test-id="menu-app"]').click()
+  cy.contains('Cerrar sesión').click()
+  cy.get('[data-test-id="confirm-logout"]').click()
 })
 
 export {}

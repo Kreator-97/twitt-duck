@@ -1,7 +1,6 @@
-import {} from 'cypress'
 
 describe('tests on search feature', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:5173')
     cy.login('test01@test.com', '12345678')
   })
@@ -12,10 +11,12 @@ describe('tests on search feature', () => {
     cy.contains('Usuarios encontrados').should('exist')
   })
   
-  it.only('should to find any post by searching', () => {
+  it('should to find any post by searching', () => {
     const query = 'prueba'
     cy.get('input[type="search"]').first().type(query).type('{enter}')
     cy.contains(`Resultados de búsqueda para "${query}"`).should('exist')
     cy.contains('Publicaciones encontradas').should('exist')
   })
 })
+
+export {}

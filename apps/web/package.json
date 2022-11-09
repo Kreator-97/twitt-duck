@@ -8,7 +8,8 @@
     "build:web": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint ./src",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:e2e": "cypress run"
   },
   "dependencies": {
     "@twitt-duck/hooks": "*",
@@ -27,6 +28,7 @@
     "@vitejs/plugin-react": "^2.1.0",
     "cypress": "^10.11.0",
     "eslint": "^8.24.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-react": "^7.31.8",
     "vite": "^3.1.0"
   },

@@ -1,7 +1,5 @@
-import {} from 'cypress'
-
 describe('tests on post actions', () => {
-  before(() => {
+  beforeEach(() => {
     cy.viewport(1280, 720)
     cy.visit('http://localhost:5173/')
     cy.login('test01@test.com', '12345678')
@@ -28,7 +26,7 @@ describe('tests on post actions', () => {
     cy.get('@like').click()
   })
 
-  it.only('users should be able to repost a post' , () => {
+  it('users should be able to repost a post' , () => {
     cy.get('[data-test-id="post-header"]').first().click()
     cy.get('[name="Difundir"]').as('repost').click()
     cy.wait(2000)
@@ -38,4 +36,11 @@ describe('tests on post actions', () => {
     cy.contains('Quitar difusión').click()
     cy.contains('Has dejado de difundir esta publicación')
   })
+
+  afterEach(() => {
+    // close session on each test
+    cy.closeSession()
+  })
 })
+
+export {}

@@ -1,6 +1,12 @@
 import { request } from '../utils/request'
 import { Notification } from '@twitt-duck/state'
 
+interface Response {
+  msg: string;
+  ok: boolean;
+  notifications: Notification[];
+}
+
 export const deleteNotificationRequest = async (notificationId: string, token: string) => {
   await request(`/api/notification/${notificationId}`, {
     method: 'DELETE',
@@ -9,10 +15,20 @@ export const deleteNotificationRequest = async (notificationId: string, token: s
   })
 }
 
-interface Response {
-  msg: string;
-  ok: boolean;
-  notifications: Notification[];
+export const markAllNotificationsAsReadRequest = async (token: string) => {
+  await request('/api/notification/mark-all-as-read', {
+    method: 'GET',
+    token,
+    contentType: 'application/json'
+  })
+}
+
+export const markNotificationAsReadRequest = async (notificationId: string, token: string) => {
+  await request(`/api/notification/${notificationId}`, {
+    method: 'GET',
+    token,
+    contentType: 'application/json'
+  })
 }
 
 export const getNotificationsRequest = async(token: string) => {

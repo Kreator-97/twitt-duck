@@ -1,5 +1,3 @@
-import {} from 'cypress'
-
 describe('tests over follow feature', () => {
   beforeEach(() => {
     cy.viewport(1280, 720)
@@ -12,3 +10,5 @@ describe('tests over follow feature', () => {
     cy.contains('Siguiendo').should('exist').click().should('have.text', 'Seguir')
   })
 })
+
+export {}

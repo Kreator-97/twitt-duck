@@ -2,12 +2,10 @@ import { useEffect, useMemo } from 'react'
 import { Box, Heading, Text } from '@chakra-ui/react'
 import { loadNotifications, useAppDispatch, useAppSelector } from '@twitt-duck/state'
 import { NotificationCard } from '@twitt-duck/ui'
-import { getNotificationsRequest } from '@twitt-duck/services'
+import { getNotificationsRequest, markAllNotificationsAsReadRequest } from '@twitt-duck/services'
 
 import { AppLayout } from '../layouts/AppLayout'
 import { DBLocal } from '../utils'
-
-const BASE_URL = import.meta.env.VITE_BASE_URL || ''
 
 export const NotificationPage = () => {
   const dispatch = useAppDispatch()
@@ -26,21 +24,24 @@ export const NotificationPage = () => {
 
     if( token ) {
       const timer = setTimeout(() => {
-        // TODO: make service of this fetch
-        fetch(`${BASE_URL}/api/notification/mark-all-as-read`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }).then(() => {
-          getNotificationsRequest(token).then((notifications) => {
-            dispatch( loadNotifications(notifications) )
+        markAllNotificationsAsReadRequest(token)
+          .then(() => {
+            getNotificationsRequest(token).then((notifications) => {
+              dispatch( loadNotifications(notifications) )
+            })
           })
-        })
       }, 3000)
 
       return () => clearTimeout(timer)
     }
   }, [])
+
+  const notificationMessage = useMemo(() => {
+    const amount = notificationsNoRead.length
+    return (amount === 0)
+      ? 'No tienes notificaciones nuevas'
+      : `Tienes ${amount} ${amount === 1 ? 'notificación' : 'notificaciones' } no leídas`
+  }, [notificationsNoRead])
 
   return (
     <AppLayout>
@@ -62,12 +63,7 @@ export const NotificationPage = () => {
         <Text
           textAlign='center'
         >
-          {
-            notificationsNoRead.length === 0
-              ? 'No tienes notificaciones'
-              : `Tienes ${notificationsNoRead.length} notificaciones no leídas`
-          }
-
+          { notificationMessage }
         </Text>
       </Box>
       {

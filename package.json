@@ -15,6 +15,7 @@
     "prepare": "husky install",
     "start": "turbo run start",
     "test:api": "turbo run test:api",
+    "test:cypress": "turbo run test:cypress",
     "test:web": "turbo run test:web",
     "build:web": "turbo run build:web",
     "build:api": "turbo run build:api"

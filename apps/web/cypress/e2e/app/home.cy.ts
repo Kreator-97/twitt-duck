@@ -1,5 +1,3 @@
-import {} from 'cypress'
-
 describe('tests on home page', () => {
 
   beforeEach(() => {
@@ -11,10 +9,10 @@ describe('tests on home page', () => {
   it('should to visit home page without errors', () => {
     cy.wait(2000)
     cy.contains('Perfil').click()
-    cy.contains('A quien seguir').should('exist')
+    cy.contains('@test01').should('exist')
   })
   
-  it.only('should can click over all toolbar options', () => {
+  it('should can click over all toolbar options', () => {
     cy.wait(2000)
 
     cy.contains('Notificaciones').click()
@@ -34,3 +32,5 @@ describe('tests on home page', () => {
     localStorage.removeItem('user')
   })
 })
+
+export {}

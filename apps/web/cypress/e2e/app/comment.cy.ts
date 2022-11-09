@@ -1,5 +1,3 @@
-import {} from 'cypress'
-
 describe('tests integrations on comment feature', () => {
   before(() => {
     cy.viewport(1280, 720)
@@ -14,3 +12,5 @@ describe('tests integrations on comment feature', () => {
     cy.contains('Comentario agregado').should('exist')
   })
 })
+
+export {}

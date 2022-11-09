@@ -1,9 +1,7 @@
-import {} from 'cypress'
-
 describe('tests on settings page', () => {
   const email = 'test-settings@test.com'
 
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:5173/')
     cy.register( email, '12345678', 'test-settings')
   })
@@ -19,26 +17,23 @@ describe('tests on settings page', () => {
     cy.contains('Información actualizada correctamente').should('exist')
   })
 
-  it.only('users should to change password correctly, logout and login with new password', () => {
+  it('users should to change password correctly, logout and login with new password', () => {
     cy.get('[data-test-id="menu-app"]').click()
     cy.contains('Configuración').click()
     cy.contains('Contraseña').click()
 
     cy.get('input[name="currentPassword"]').type('12345678')
     cy.get('input[name="newPassword"]').type('newpassword')
-
     cy.contains('Cambiar contraseña').click()
-    cy.get('[data-test-id="menu-app"]').click()
-    cy.contains('Cerrar sesión').click()
-    
-    cy.get('[data-test-id="confirm-logout"]').click()
-    cy.wait(2000)
+
+    cy.closeSession()
     cy.login(email, 'newpassword')
     cy.contains('Has iniciado sesión exitosamente').should('exist')
   })
 
-  after(() => {
+  afterEach(() => {
     cy.request('DELETE', `http://localhost:5000/api/user/test/${email}`)
   })
 })
 
+export {}

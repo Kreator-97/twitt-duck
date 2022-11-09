@@ -9,8 +9,12 @@
     },
     "test": {},
     "cypress:open": {},
+    "cypress:e2e": {},
     "start-test-server": {},
     "test:web": {
+      "dependsOn": ["start-test-server", "twitt-duck-web#cypress:e2e", "twitt-duck-web#dev"]
+    },
+    "test:cypress": {
       "dependsOn": ["start-test-server", "twitt-duck-web#cypress:open", "twitt-duck-web#dev"]
     },
     "test:api": {
