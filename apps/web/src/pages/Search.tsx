@@ -48,7 +48,7 @@ export const SearchPage = () => {
           textAlign='center'
           mb={2}
         >
-          Usuarios encontradas
+          Usuarios encontrados
         </Heading>
         {
           users.map((user) => {

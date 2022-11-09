@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -25,13 +27,36 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(email: string, password: string): Chainable<void>
+      register(email: string, password: string, username: string): Chainable<void>
+      // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      // visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+    }
+  }
+}
+
+Cypress.Commands.add('login', (email, password) => {
+  cy.get('input[type="email"]').type(email)
+  cy.get('input[type="password"]').type(password)
+  cy.get('button[type="submit"]').click()
+})
+
+Cypress.Commands.add('register', (email, password, username) => {
+  cy.contains(' Crea una cuenta').click()
+  cy.get('input[type="text"]').type('Usuario cypress 01')
+  cy.get('input[type="email"]').type(email)
+  cy.get('input[type="password"]').type(password)
+  cy.contains('Continuar').click()
+
+  cy.get('input[placeholder=\'Introduce tu nombre de usuario\']').type(username)
+  cy.get('textarea').type('Soy un simple usuario de prueba que debo de ser eliminado automáticamente')
+  cy.contains('Listo!').click()
+  cy.wait(1000)
+})
+
+export {}

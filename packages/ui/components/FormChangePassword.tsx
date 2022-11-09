@@ -19,7 +19,7 @@ export const FormChangePassword = () => {
 
     if( required.some(value => !value || value.trim() === '' || value.length <=7 ) ) {
       toast({
-        title: 'La conrtaseña tiene que tener 8 o más caracteres',
+        title: 'La contraseña tiene que tener 8 o más caracteres',
         isClosable: true,
         position: 'top',
         duration: 3000,

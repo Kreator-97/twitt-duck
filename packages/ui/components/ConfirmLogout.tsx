@@ -46,7 +46,14 @@ export const ConfirmLogout = () => {
             <Button color='white' colorScheme='cyan' mr={3} onClick={onClose}>
               Cancelar
             </Button>
-            <Button color='white' bg='red.400'  onClick={() => onLogout() }>Cerrar sesión</Button>
+            <Button
+              color='white'
+              bg='red.400'
+              onClick={() => onLogout()}
+              data-test-id='confirm-logout'
+            >
+              Cerrar sesión
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

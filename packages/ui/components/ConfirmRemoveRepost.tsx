@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { useAppDispatch, useAppSelector, closeRemoveRepostModal } from '@twitt-duck/state'
 import { deleteRepostRequest } from '@twitt-duck/services'
+import { useAppDispatch, useAppSelector, closeRemoveRepostModal } from '@twitt-duck/state'
 
 import {
   Button,
@@ -79,7 +79,7 @@ export const ConfirmRemoveRepost: FC<Props> = ({onSuccess}) => {
               onClick={ onConfirm }
               _hover={{ bgColor:'red.600', color: 'white' }}
             >
-              Quitar difunsión
+              Quitar difusión
             </Button>
             <Button onClick={onClose}>Cancelar</Button>
           </ModalFooter>

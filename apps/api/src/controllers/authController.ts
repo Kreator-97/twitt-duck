@@ -134,7 +134,7 @@ export const activateUser = async (req: Request, res: Response<UserResponse>) =>
   if( isThisUsernameExists ) {
     return res.status(400).json({
       ok: false,
-      msg: 'Este username no se encuentra disponible. Pruebe con otro'
+      msg: 'Este nombre de usuario no se encuentra disponible. Pruebe con otro'
     })
   }
 

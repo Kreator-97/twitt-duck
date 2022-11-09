@@ -72,6 +72,7 @@ export const InsertContent: FC<Props> = ({onSubmit, user}) => {
         onBlur={ () => setPlaceholder() }
         onPaste={onPaste}
         _focus={{ outline: 'none', borderBottom: '1px solid #CCC'}}
+        data-test-id='create-subcomment'
       >
         { placeholder }
       </Box>

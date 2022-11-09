@@ -1,6 +1,6 @@
 import { FC, useContext, useMemo } from 'react'
 import { Avatar, Box, Button, Grid, Text } from '@chakra-ui/react'
-import { createFollow, mutateFollows } from '@twitt-duck/services'
+import { createFollow, mutateFollows, unfollowRequest } from '@twitt-duck/services'
 import { NotificationPayload, SocketContext, useAppSelector } from '@twitt-duck/state'
 import { useFollow } from '@twitt-duck/hooks'
 import { Link } from 'react-router-dom'
@@ -28,8 +28,15 @@ export const Follow: FC<Props> = ({name, imgURL, username, description}) => {
   const onFollow = async () => {
     const token = localStorage.getItem('token')
 
-    // TODO: toggle on following here
-    if( isFollowing ) return
+    if( isFollowing ) {
+      try {
+        await unfollowRequest(username, token || '')
+        mutateFollows(user.username)
+        return
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
     try {
       await createFollow(username, token || '')

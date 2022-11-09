@@ -44,7 +44,9 @@ export const Post: FC<Props> = ({ post }) => {
           src={ author.profilePic }
         />
       </Box>
-      <Box>
+      <Box
+        data-test-id='post-header'
+      >
         <Text
           px='2'
           cursor='pointer'

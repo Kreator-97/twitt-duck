@@ -1,6 +1,7 @@
 import { FC, FormEvent, useRef, useState } from 'react'
 import { MdOutlineImage } from 'react-icons/md'
 import { createPost, mutateAllPages, uploadMultipleImagesRequest } from '@twitt-duck/services'
+
 import {
   Box,
   Button,
@@ -146,6 +147,8 @@ export const NewPost: FC = () => {
         onFocus={ () => removePlaceholder() }
         onBlur={ () => setPlaceholder() }
         minHeight='3rem'
+        data-test-id='create-post'
+        id='create-post'
       >
         ¿Que está pasando?
       </Box>
@@ -205,6 +208,7 @@ export const NewPost: FC = () => {
               style={{ display: 'none' }}
               ref={inputImagesRef}
               onChange={ () => onInputFileChange() }
+              data-test-id="select-img"
               multiple
             />
           </Flex>

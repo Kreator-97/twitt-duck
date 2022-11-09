@@ -61,7 +61,13 @@ export const NotificationPage = () => {
         </Heading>
         <Text
           textAlign='center'
-        >Tienes {notificationsNoRead.length} notificaciones no leídas
+        >
+          {
+            notificationsNoRead.length === 0
+              ? 'No tienes notificaciones'
+              : `Tienes ${notificationsNoRead.length} notificaciones no leídas`
+          }
+
         </Text>
       </Box>
       {

@@ -128,6 +128,7 @@ export const FormChangeProfileInfo: FC<Props> = ({user, setIsLoading, onComplete
       maxWidth='480px'
       m='0 auto'
       onSubmit={ onSaveProfile }
+      data-test-id="form-profile-info"
     >
       <Flex
         gridTemplateColumns='1fr'
