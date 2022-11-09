@@ -169,7 +169,7 @@ export const addSubcomment = async (req: Request, res: Response) => {
       },
     })
 
-    return res.status(200).json({
+    return res.status(201).json({
       ok: true,
       msg: 'subcomentario creado',
       comment

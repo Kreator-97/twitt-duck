@@ -1,20 +1,53 @@
-import { FC, useMemo } from 'react'
-import { useAppSelector, User } from '@twitt-duck/state'
-import { HiUser } from 'react-icons/hi'
+import { FC, useContext, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Box, Button, Grid, Image, Text } from '@chakra-ui/react'
+import { SocketContext, useAppSelector, User } from '@twitt-duck/state'
+import { HiUser } from 'react-icons/hi'
+import { createFollow, unfollowUser } from '../utils'
+import { mutateFollows } from '@twitt-duck/services'
 
 interface Props {
   user?: User;
 }
 
 export const UserDetail: FC<Props> = ({ user }) => {
+  const { socket } = useContext(SocketContext)
   const { pathname } = useLocation()
   const { user: userAuth } = useAppSelector(state => state.auth)
 
   const isFollowing = useMemo( () => user?.followers.some(
     (follower) => follower.userId === userAuth?.id
-  ), [user])
+  ), [user, userAuth])
+
+  const onFollow = async () => {
+    const token = localStorage.getItem('token')
+
+    if( !user ) return
+    if( !userAuth ) return
+    if( !token ) return
+
+    try {
+      await createFollow(user.username, token, socket)
+      mutateFollows(userAuth.username)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onUnfollow = async () => {
+    const token = localStorage.getItem('token')
+
+    if( !user ) return
+    if( !userAuth ) return
+    if( !token ) return
+
+    try {
+      await unfollowUser(user.username, token, socket)
+      mutateFollows(userAuth.username)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Grid
@@ -100,6 +133,7 @@ export const UserDetail: FC<Props> = ({ user }) => {
           color='#fff'
           bgGradient='linear(to-r, blue.400, cyan.400)'
           _hover={{ bgGradient: 'linear(to-b, blue.500, cyan.500)'}}
+          onClick={() => isFollowing ? onUnfollow() : onFollow() }
         >
           { isFollowing ? 'Siguiendo' : 'Seguir' }
         </Button>

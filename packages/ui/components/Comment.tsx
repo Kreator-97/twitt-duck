@@ -40,6 +40,7 @@ export const Comment: FC<Props> = ({comment}) => {
         backgroundColor: 'rgb(238, 245, 255)'
       }}
     >
+      {/* header row */}
       <Box>
         <UserAvatar
           imgURL={author.profilePic}
@@ -69,6 +70,8 @@ export const Comment: FC<Props> = ({comment}) => {
           </Text>
         </Text>
       </Box>
+
+      {/* content row */}
       <Box />
       <Box
         minHeight='3rem'
@@ -77,6 +80,8 @@ export const Comment: FC<Props> = ({comment}) => {
       >
         <Text whiteSpace='pre'>{ comment.content }</Text>
       </Box>
+
+      {/* footer row */}
       <Box />
       <PostActions
         type='comment'

@@ -24,7 +24,7 @@ export const getUserFeed = async (req: Request, res: Response) => {
   if( !userId ) {
     return res.status(400).json({
       ok: false,
-      msg: 'userid dentro del token no es válido'
+      msg: 'userId dentro del token no es válido'
     })
   }
 

@@ -1,13 +1,13 @@
 import { FC, MouseEvent } from 'react'
 import { Flex, Icon, Text } from '@chakra-ui/react'
-import {  IconType } from 'react-icons'
+import { IconType } from 'react-icons'
 
 interface Props {
-  title?: string;
-  count?: number;
-  icon?: IconType;
-  onClick?: (e:MouseEvent<HTMLDivElement>) => void
-  active?: boolean;
+  title   ?: string;
+  count   ?: number;
+  icon    ?: IconType;
+  onClick ?: (e:MouseEvent<HTMLDivElement>) => void
+  active  ?: boolean;
 }
 
 export const PostIcon: FC<Props> = ({ icon, title, count, onClick, active = false }) => {
@@ -27,6 +27,7 @@ export const PostIcon: FC<Props> = ({ icon, title, count, onClick, active = fals
       }}
     >
       <Icon
+        name={ title }
         color={ active ? 'red.400' : 'inherit' }
         as={icon}
         boxSize={{

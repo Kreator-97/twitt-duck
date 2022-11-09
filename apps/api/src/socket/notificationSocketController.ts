@@ -251,7 +251,11 @@ export const createRepostNotification = async(notificationInfo: NotificationInfo
 export const createFollowerNotification = async (notificationInfo: NotificationInfo, userId: string):Promise<Notification> => {
 
   const user = await prisma.user.findUnique({ where: { id: userId }})
-  const username = notificationInfo.id
+  const username = notificationInfo.username
+
+  if( !username ) {
+    return Promise.reject('Username debe de ser válido')
+  }
 
   if( !user ) {
     return Promise.reject('No existe el usuario con el id proporcionado')
@@ -269,10 +273,9 @@ export const createFollowerNotification = async (notificationInfo: NotificationI
     const notification = await prisma.notification.create({
       data: {
         fromUserId: user.id,
-        title: `El usuario ${user.username} ha comenzado a seguirte`,
+        title: `El usuario @${user.username} ha comenzado a seguirte`,
         type: 'USER',
         userId: userToNotificate.id,
-        actionId: user.username
       }
     })
 
@@ -283,8 +286,16 @@ export const createFollowerNotification = async (notificationInfo: NotificationI
   }
 }
 
-export const removeNotification = async (notificationInfo: NotificationInfo, userId: string):Promise<Notification| null> => {
-  const { type, id } = notificationInfo
+export const removeNotification = async (notificationInfo: NotificationInfo, userId: string):Promise<Notification | null> => {
+  const { type, id, username } = notificationInfo
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId }
+  })
+
+  if( !user ) {
+    return Promise.reject(`No existe el usuario con el id ${userId}`)
+  }
 
   if( type === 'post') {
     const notification = await prisma.notification.findFirst({
@@ -313,6 +324,28 @@ export const removeNotification = async (notificationInfo: NotificationInfo, use
     if( notification ) {
       await prisma.notification.delete({where: { id: notification.id }})
       return notification
+    }
+  }
+
+  if( type === 'user' ) {
+    const notificationUser = await prisma.user.findUnique({ where: { username } })
+
+    const notification = await prisma.notification.findFirst({
+      where: {
+        userId: notificationUser.id,
+        fromUserId: user.id,
+        type: 'USER',
+      }
+    })
+
+    if( !notification ) return null
+
+    try {
+      await prisma.notification.delete({ where: { id: notification.id }})
+      return notification
+    } catch(error) {
+      console.log(error)
+      return null
     }
   }
 

@@ -1,11 +1,11 @@
 import { FormEvent, useState } from 'react'
 import { changePasswordRequest } from '@twitt-duck/services'
-import { Box, Button, FormControl, FormLabel, Grid, Input, InputGroup, useToast } from '@chakra-ui/react'
-
-// TODO: si el usuario tiene credenciales de google no puede cambiar su contraseña
+import { Box, Button, FormControl, FormLabel, Grid, Input, InputGroup, Text, useToast } from '@chakra-ui/react'
+import { useAppSelector } from '@twitt-duck/state'
 
 export const FormChangePassword = () => {
   const toast = useToast()
+  const user = useAppSelector(state => state.auth.user)
   const [ showPassword, setShowPassword ] = useState(false)
   const [ newPassword, setNewPassword] = useState('')
   const [ currentPassword, setCurrentPassword] = useState('')
@@ -19,7 +19,7 @@ export const FormChangePassword = () => {
 
     if( required.some(value => !value || value.trim() === '' || value.length <=7 ) ) {
       toast({
-        title: 'La conrtaseña tiene que tener 8 o más caracteres',
+        title: 'La contraseña tiene que tener 8 o más caracteres',
         isClosable: true,
         position: 'top',
         duration: 3000,
@@ -50,6 +50,15 @@ export const FormChangePassword = () => {
       })
     }
   }
+
+  if( user?.provider === 'GOOGLE' ) {
+    return (
+      <Box>
+        <Text fontSize='sm' textAlign='center' fontWeight='bold'>Los usuarios que utilizan GOOGLE para iniciar sesión no pueden cambiar su contraseña.</Text>
+      </Box>
+    )
+  }
+
   return (
     <FormControl
       as='form'

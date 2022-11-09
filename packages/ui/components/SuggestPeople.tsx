@@ -20,12 +20,12 @@ export const SuggestPeople: FC = () => {
       >
         <Text
           as='h2'
-          fontSize='xl'
+          fontSize='lg'
           fontWeight='bold'
           textAlign='center'
           mb='2'
           color='#333'
-        >¿A quien seguir?</Text>
+        >A quien seguir</Text>
       </Box>
       <Box>
         {

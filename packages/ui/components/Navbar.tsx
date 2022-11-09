@@ -68,6 +68,7 @@ export const Navbar = () => {
               aria-label='Options'
               icon={<HamburgerIcon />}
               variant='outline'
+              data-test-id="menu-app"
             />
             <MenuList>
               <MenuItem onClick={ () => navigate('/profile') }>
@@ -99,6 +100,7 @@ export const Navbar = () => {
 
         <Flex justifyContent='end' gap='1rem' maxWidth='250px'>
           <Input
+            type='search'
             placeholder='Buscar'
             display={{ base: 'none', lg: 'block' }}
             onChange={ (e) => setQuery(e.target.value) }

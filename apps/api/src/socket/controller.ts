@@ -87,10 +87,18 @@ export const socketController = async (socket:Socket) => {
   })
 
   socket.on('user-notification-follower', async (payload) => {
-    console.log(payload)
     try {
       const notification = await createFollowerNotification(payload, user.id)
       socket.to(notification.userId).emit('notification', notification)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+  socket.on('remove-notification', async (payload: NotificationInfo) => {
+    try {
+      const notification = await removeNotification(payload, user.id)
+      socket.to(notification.userId).emit('notification', {})
     } catch (error) {
       console.log(error)
     }

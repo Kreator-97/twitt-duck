@@ -32,7 +32,11 @@ export const searchQuery = async (req: Request, res: Response) => {
           user: true,
         }
       },
-      reposts: true,
+      reposts: {
+        include: {
+          author: true,
+        }
+      },
     }
   })
 

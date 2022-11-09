@@ -98,3 +98,55 @@ export const addFollower = async (req: Request, res: Response) => {
     })
   }
 }
+
+export const unfollowUser = async (req: Request, res: Response) => {
+  const userId = req.userId
+  const username = req.params.username
+
+  const user = await prisma.user.findUnique({where: { id: userId }})
+  
+  if( !user ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `No existe el usuario con el id ${userId}`
+    })
+  }
+
+  const userToUnfollow = await prisma.user.findUnique({where: { username }})
+
+  if( !userToUnfollow ) {
+    return res.status(404).json({
+      ok: false,
+      msg: `No existe el usuario con el nombre de usuario ${username}`
+    })
+  }
+
+  try {
+    const follow = await prisma.follow.findFirst({
+      where: {
+        userId,
+        followingId: userToUnfollow.id
+      }
+    })
+
+    if( !follow ) {
+      return res.status(400).json({
+        ok: false,
+        msg: `El usuario no es seguidor de @${username}`
+      })
+    }
+
+    await prisma.follow.delete({where: { id: follow.id }})
+
+    return res.status(202).json({
+      ok: true,
+      msg: `Se ha dejado de seguir al usuario ${username}`
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      ok: false,
+      msg: 'Ocurrió un error al intentar remover el follow del usuario'
+    })
+  }
+}

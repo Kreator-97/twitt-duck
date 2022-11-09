@@ -35,10 +35,10 @@ export const PostPage = () => {
     if( !token ) return
 
     try {
-      const { msg } = await createComment(post.id, content, token )
+      await createComment(post.id, content, token )
       
       toast({
-        title: msg,
+        title: 'Comentario agregado',
         position: 'top',
         status: 'success',
         duration: 3000,

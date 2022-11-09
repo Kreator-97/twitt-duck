@@ -56,12 +56,12 @@ model Notification {
   type        NotificationType
 
   // not relation needed for the followings fields
+  // this is for the user who trigger notification
   fromUserId  String
+
+  // this id can represent a comment, post, repost
+  // depending of the type notification
   actionId    String?
-  // commentId   String?
-  // postId      String?
-  // repostId    String?
-  // followeerId String?
 }
 
 model Follow {

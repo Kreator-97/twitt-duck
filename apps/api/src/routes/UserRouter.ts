@@ -4,6 +4,7 @@ import { body, param } from 'express-validator'
 import {
   changeBackgroundPicture,
   changePassword,
+  deleteTestUser,
   getUserByUsername,
   getUserInfo,
   updateUserByUsername
@@ -43,4 +44,9 @@ UserRouter.put('/change-background-picture', [
   body('backgroundPic', 'backgroundPic es requerido').notEmpty(),
   validateFields,
 ], changeBackgroundPicture)
+
+UserRouter.delete('/test/:email', [
+  param('email', 'email es obligatorio').notEmpty(),
+  validateFields,
+], deleteTestUser)
 

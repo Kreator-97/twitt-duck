@@ -1,11 +1,10 @@
 import { User } from '@twitt-duck/state'
 import { mutate as mutateSWR } from 'swr'
 
-// this custom mutate works to re-fetch all the pages depending on current pathname page
-
 const BASE_URL = import.meta.env.VITE_BASE_URL || ''
 
 export const mutateAllPages = (pathname: string) => {
+  // this custom mutate works to re-fetch all the pages depending on current pathname page
   const token = localStorage.getItem('token')
   mutateSWR([`${BASE_URL}/api/feed/`, {
     headers: {

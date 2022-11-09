@@ -7,8 +7,35 @@
     "lint": {
       "outputs": []
     },
-    "build":{
+    "test": {},
+    "cypress:open": {},
+    "cypress:e2e": {},
+    "start-test-server": {},
+    "seed:test": {},
+    "seed:dev": {},
+    "test:web": {
+      "dependsOn": ["start-test-server", "twitt-duck-web#cypress:e2e", "twitt-duck-web#dev"]
+    },
+    "test:cypress": {
+      "dependsOn": ["start-test-server", "twitt-duck-web#cypress:open", "twitt-duck-web#dev"]
+    },
+    "test:api": {
+      "dependsOn": ["start-test-server","twitt-duck-api#test"]
+    },
+    "build": {
       "dependsOn": ["^build"]
+    },
+    "build:web": {
+      "cache": false,
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "build:api": {
+      "cache": false,
+      "outputs": [
+        "dist/**"
+      ]
     },
     "start": {
       "outputs": []
