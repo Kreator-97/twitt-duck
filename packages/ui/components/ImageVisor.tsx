@@ -16,7 +16,7 @@ export const ImageVisor = () => {
         onClose={onClose}
         isOpen={ imageVisor.isOpen }
         motionPreset='slideInBottom'
-        size={{ base: 'lg', md: 'xl', lg: '3xl'}}
+        size={{ base: 'xl', md: '2xl', lg: '3xl' }}
       >
         <ModalOverlay
           backgroundColor='blackAlpha.600'

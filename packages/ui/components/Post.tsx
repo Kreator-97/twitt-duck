@@ -37,7 +37,8 @@ export const Post: FC<Props> = ({ post }) => {
         backgroundColor: 'rgb(238, 245, 255)'
       }}
     >
-      <Box width='48px'>
+      {/* header row */}
+      <Box>
         <Avatar
           size='md'
           name={ author.fullname }
@@ -78,7 +79,9 @@ export const Post: FC<Props> = ({ post }) => {
           }
         </Text>
       </Box>
-      <Box gridRowStart={ images.length === 0 ? 'span 1' : 'span 2'} />
+
+      {/* content row */}
+      <Box />
       <Box>
         <Text
           fontWeight='normal'
@@ -91,15 +94,20 @@ export const Post: FC<Props> = ({ post }) => {
           { content }
         </Text>
       </Box>
-      {
-        images.length > 0 && (
-          <Box
-            onMouseUp={ (e) => e.stopPropagation() }
-          >
-            <Gallery images={images} />
-          </Box>
-        )
-      }
+
+      {/* gallery row */}
+      <Box
+        display={{ base: 'none', md: images.length === 0 ? 'none' : 'block'  }}
+      />
+      <Box
+        display={ images.length === 0 ? 'none' : 'block' }
+        gridColumnStart={{ base: 'span 2', md: 'span 1' }}
+        onMouseUp={ (e) => e.stopPropagation() }
+      >
+        <Gallery images={images} />
+      </Box>
+
+      {/* footer row */}
       <Box />
       <Box
         onMouseUp={ (e) => e.stopPropagation() }
