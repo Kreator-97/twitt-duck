@@ -51,6 +51,7 @@ export const ConfirmLogout = () => {
               bg='red.400'
               onClick={() => onLogout()}
               data-test-id='confirm-logout'
+              _hover={{ bg: 'red.500' }}
             >
               Cerrar sesión
             </Button>
