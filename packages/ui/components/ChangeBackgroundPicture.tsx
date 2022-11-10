@@ -42,6 +42,7 @@ export const ChangeBackgroundPicture: FC<Props> = ({user, setIsLoading}) => {
       if( typeof error === 'string' ) {
         toast({
           title: 'Ocurrió un error al intentar cambiar la imagen',
+          description: error,
           status: 'error',
           position: 'top',
           isClosable: true,

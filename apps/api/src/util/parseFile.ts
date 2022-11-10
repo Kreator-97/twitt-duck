@@ -6,7 +6,7 @@ export const parseFile = async(req: Request):Promise<formidable.File> => {
 
     const form = formidable({ 
       multiples: false,
-      maxFileSize: 1048576,
+      maxFileSize: 2097152,
       filter: ({mimetype}) => {
         if( mimetype ) {
           return mimetype.includes('image')
