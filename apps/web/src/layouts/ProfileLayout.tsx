@@ -34,7 +34,6 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
     : pathname.split('/')[pathname.split('/').length-1]
 
   const { user: userDetail, isLoading } = useUser(username)
-
   if( isLoading ) return <Loader />
 
   const onSuccess = () => {
@@ -60,7 +59,7 @@ export const ProfileLayout: FC<Props> = ({ children }) => {
           objectFit='cover'
           style={{
             objectFit: 'cover',
-            backgroundImage: user.backgroundPic ? `url(${user.backgroundPic})` : 'url(/images/default-bg.jpg)',
+            backgroundImage: userDetail?.backgroundPic ? `url(${userDetail.backgroundPic})` : 'url(/images/default-bg.jpg)',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
           }}
