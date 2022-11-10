@@ -21,7 +21,6 @@ import {
   NotificationRouter,
   DBRouter
 } from '../routes'
-// import { resetDB } from '../controllers/resetController'
 
 dotenv.config()
 
