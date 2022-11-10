@@ -20,7 +20,13 @@ export const uploadImages = async (req: Request, res: Response) => {
     })
 
   } catch (error) {
-    console.log(error)
+    console.error(error)
+    if( error?.message.includes('options.maxFileSize') ) {
+      return res.status(500).json({
+        msg: 'Elige otra imagen que pese menos de 2mb',
+        ok: false
+      })
+    }
     return res.status(500).json({
       msg: 'Ocurrió un error al hacer la carga de la imagen',
       ok: false

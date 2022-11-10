@@ -46,7 +46,7 @@ export const uploadMultipleImagesRequest = async (fileList: FileList, token: str
 
       if( !data.ok ) {
         console.log(data)
-        throw new Error('No se pudo subir la imagen de perfil')
+        return Promise.reject(data.msg)
       }
 
       images.push(data.msg)

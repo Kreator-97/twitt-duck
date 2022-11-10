@@ -53,8 +53,28 @@ export const NewPost: FC = () => {
     const fileList = inputImagesRef.current?.files
     const content = contentElementRef.current?.innerText
 
-    if( !content || content.trim() === '') return
-    if( content === placeholder ) return
+    if( !content || content.trim() === '') {
+      toast({
+        duration: 3000,
+        title: 'El contenido no puede estar vacio',
+        description: 'Agrega el contenido de tu publicación',
+        status: 'info',
+        isClosable: true,
+        position: 'top'
+      })
+      return
+    }
+    if( content === placeholder ) {
+      toast({
+        duration: 3000,
+        title: 'El contenido no puede estar vacio',
+        description: 'Agrega el contenido de tu publicación',
+        status: 'info',
+        isClosable: true,
+        position: 'top'
+      })
+      return
+    }
 
     if( Number(fileList?.length) > 4 ) {
       toast({
@@ -84,8 +104,24 @@ export const NewPost: FC = () => {
 
     let images: string[] = []
 
-    if( fileList ) {
-      images = await uploadMultipleImagesRequest( fileList, token || '' )
+    try {
+      if( fileList ) {
+        images = await uploadMultipleImagesRequest( fileList, token || '' )
+      }
+    } catch (error) {
+      console.log(error)
+      setCreatePostLoading(false)
+      if( typeof error === 'string' ) {
+        toast({
+          status: 'warning',
+          title: 'Ocurrió un error al cargar la imagen',
+          description: error,
+          duration: 10000,
+          isClosable: true,
+          position: 'top'
+        })
+      }
+      return
     }
 
     try {
