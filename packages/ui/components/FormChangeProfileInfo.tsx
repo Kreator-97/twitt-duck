@@ -30,9 +30,17 @@ export const FormChangeProfileInfo: FC<Props> = ({user, setIsLoading, onComplete
 
   const onSaveProfile = async (e: FormEvent ) => {
     e.preventDefault()
-    const required = [username, fullname, description]
+    const required = [username, fullname]
 
     if( required.some( (value) => !value || value.trim() === '') ) {
+      toast({
+        isClosable: true,
+        duration: 3000,
+        position: 'top',
+        status: 'warning',
+        title: 'Validación',
+        description: 'Los campos nombre completo y nombre de usuario no pueden estar vacios'
+      })
       return
     }
 

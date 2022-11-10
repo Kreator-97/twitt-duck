@@ -28,7 +28,6 @@ UserRouter.put('/', [
   verifyUser,
   body('fullname', 'fullname es requerido').notEmpty(),
   body('username', 'username es requerido').notEmpty(),
-  body('description', 'description es requerido').notEmpty(),
   validateFields,
 ], updateUserByUsername)
 
