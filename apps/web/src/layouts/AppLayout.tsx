@@ -56,13 +56,12 @@ export const AppLayout: FC<Props> = ({children }) => {
         </main>
         <Box
           as='aside'
-          p={0}
           position='sticky'
           top='.5rem'
           height='100vh'
           display={{ base: 'none', xl: 'block' }}
           overflowY='scroll'
-          pb='2rem'
+          p='0 .5rem 2rem 0'
         >
           {
             <Box>
