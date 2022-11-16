@@ -13,6 +13,8 @@
     "start-test-server": {},
     "seed:test": {},
     "seed:dev": {},
+    "migrate:dev": {},
+    "migrate:test": {},
     "test:web": {
       "dependsOn": ["start-test-server", "twitt-duck-web#cypress:e2e", "twitt-duck-web#dev"]
     },
@@ -21,9 +23,6 @@
     },
     "test:api": {
       "dependsOn": ["start-test-server","twitt-duck-api#test"]
-    },
-    "build": {
-      "dependsOn": ["^build"]
     },
     "build:web": {
       "cache": false,
@@ -35,7 +34,8 @@
       "cache": false,
       "outputs": [
         "dist/**"
-      ]
+      ],
+      "dependsOn": ["build:web"]
     },
     "start": {
       "outputs": []

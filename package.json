@@ -17,8 +17,11 @@
     "test:api": "turbo run test:api",
     "test:cypress": "turbo run test:cypress",
     "test:web": "turbo run test:web",
+    "migrate:dev": "turbo run migrate:dev",
+    "migrate:test": "turbo run migrate:test",
     "build:web": "turbo run build:web",
     "build:api": "turbo run build:api",
+    "build": "turbo run build:web && turbo run build:api",
     "seed:test": "turbo run seed:test",
     "seed:dev": "turbo run seed:dev"
   },
