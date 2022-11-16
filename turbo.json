@@ -24,9 +24,6 @@
     "test:api": {
       "dependsOn": ["start-test-server","twitt-duck-api#test"]
     },
-    "build": {
-      "dependsOn": ["^build"]
-    },
     "build:web": {
       "cache": false,
       "outputs": [
@@ -37,7 +34,8 @@
       "cache": false,
       "outputs": [
         "dist/**"
-      ]
+      ],
+      "dependsOn": ["build:web"]
     },
     "start": {
       "outputs": []
