@@ -12,6 +12,7 @@
     "migrate:test": "dotenv -e .env.test -- yarn prisma db push",
     "migrate:dev": "dotenv -e .env.development -- yarn prisma db push",
     "build:api": "yarn prepare-build && tsc -p .",
+    "build": "tsc -p .",
     "lint": "eslint ./src",
     "clean-public": "rm -rf ./src/public/*",
     "copy-react-app": "cp -r ../web/dist/* ./src/public/",
