@@ -3,6 +3,7 @@ Twitt Duck es una Clon de twitter realizado para propósitos educativos.
 
 Puedes iniciar un sesión o crear una cuenta de usuario para comenzar a realizar publicaciones y ver que dicen las personas a las que sigues.
 
+[https://twitt-duck.herokuapp.com/](https://twitt-duck.herokuapp.com/)
 ## Tecnologías
 Este proyecto esta realizado utilizando las siguientes tecnologías:
 
