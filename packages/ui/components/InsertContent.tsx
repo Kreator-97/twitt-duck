@@ -1,7 +1,9 @@
 import { FC, useRef } from 'react'
 import { Box, Button, Flex, Grid } from '@chakra-ui/react'
 import { User } from '@twitt-duck/state'
+
 import { UserAvatar } from '.'
+import { pasteOnlyText } from '../utils'
 
 interface Props {
   user: User;
@@ -44,12 +46,9 @@ export const InsertContent: FC<Props> = ({onSubmit, user}) => {
   }
   
   const onPaste = () => {
-    setTimeout(() => {
-      if( contentElementRef.current ) {
-        const innerText = contentElementRef.current.innerText
-        contentElementRef.current.innerText = innerText
-      }
-    }, 0)
+    const contentDiv = contentElementRef.current
+    if( !contentDiv ) return
+    pasteOnlyText( contentDiv )
   }
 
   return (
@@ -70,7 +69,7 @@ export const InsertContent: FC<Props> = ({onSubmit, user}) => {
         borderBottom='1px solid #CCC'
         onFocus={ () => removePlaceholder() }
         onBlur={ () => setPlaceholder() }
-        onPaste={onPaste}
+        onPaste={ onPaste }
         _focus={{ outline: 'none', borderBottom: '1px solid #CCC'}}
         data-test-id='create-subcomment'
       >

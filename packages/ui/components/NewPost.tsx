@@ -16,6 +16,7 @@ import {
 
 import { Loader } from '.'
 import { useLocation } from 'react-router-dom'
+import { pasteOnlyText } from '../utils'
 
 export const NewPost: FC = () => {
   const toast = useToast()
@@ -162,6 +163,12 @@ export const NewPost: FC = () => {
     setFilesSelectedLength(filesLength|| 0)
   }
 
+  const onPaste = () => {
+    const contentDiv = contentElementRef.current
+    if( !contentDiv ) return
+    pasteOnlyText( contentDiv )
+  }
+
   return (
     <Grid
       gridTemplateColumns={{ base: '1fr', sm: '1fr'}}
@@ -182,9 +189,11 @@ export const NewPost: FC = () => {
         suppressContentEditableWarning
         onFocus={ () => removePlaceholder() }
         onBlur={ () => setPlaceholder() }
+        onPaste={ onPaste }
         minHeight='3rem'
         data-test-id='create-post'
         id='create-post'
+        whiteSpace={'pre'}
       >
         ¿Que está pasando?
       </Box>
