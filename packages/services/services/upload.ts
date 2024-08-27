@@ -17,6 +17,8 @@ export const updateProfileImageRequest = async (fileList: FileList, token: strin
     token,
   })
 
+  console.log(data)
+
   if( !data.ok ) {
     console.log(data)
     Promise.reject('No se pudo subir la imagen de perfil')

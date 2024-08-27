@@ -4,6 +4,7 @@
     "web",
     "api",
     "services",
-    "hooks"
+    "hooks",
+    "global"
   ]
 }

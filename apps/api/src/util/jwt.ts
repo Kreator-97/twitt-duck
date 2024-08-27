@@ -17,16 +17,18 @@ export const signToken = (payload: {[key: string]: string}) => {
 export const validateToken = (token: string):Promise<{id: string}> => {
   return new Promise((resolve, reject) => {
 
+    console.log({ secret })
+
     if( !secret ) {
       throw new Error('SECRET is not defined')
     }
 
     try {
-      const payload = jwt.verify(token, secret ) as { id: string }
+      const payload = jwt.verify(token, secret) as { id: string }
       return resolve(payload)
       
     } catch (error) {
-      console.error(error)
+      console.error('ERROR unknow:', error)
       reject((error as { message: string }).message )
     }
   })

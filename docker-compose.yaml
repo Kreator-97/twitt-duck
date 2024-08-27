@@ -1,18 +1,22 @@
-version: '3.1'
+version: '3.9'
 services:
   twitt-duck-db:
-    image: mysql:8.0
+    image: postgres:16.1
     ports:
-      - 3307:3306
+      - 5450:5432
     volumes:
-      - /var/lib/app/twitt-duck-db/sql-data/db:/var/lib/mysql
+      - ./data:/var/lib/postgresql/data
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: super-password-root
+      POSTGRES_USER: root
+      POSTGRES_DB: development
   twitt-duck-db-test:
-    image: mysql:8.0
+    image: postgres:16.1
     ports:
-      - 3308:3306
+      - 5451:5432
     volumes:
-      - /var/lib/app/twitt-duck-db-test/sql-data/db:/var/lib/mysql
+      - ./data:/var/lib/postgresql/data
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: super-password-root
+      POSTGRES_USER: root
+      POSTGRES_DB: development
