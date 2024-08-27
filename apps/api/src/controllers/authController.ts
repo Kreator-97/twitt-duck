@@ -15,6 +15,8 @@ interface UserResponse extends ApiResponse {
 export const register = async (req: Request, res: Response<UserResponse>) => {
   const { fullname, email, password } = req.body
 
+  console.log(req.body)
+
   const isThisEmailExists = await prisma.user.findUnique({ where: { email }})
 
   if( isThisEmailExists ) {

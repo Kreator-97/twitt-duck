@@ -16,7 +16,10 @@ cloudinary.config({
 
 export const uploadCloudinary = async (req: Request, type: 'profile' | 'image') => {
   try {
+    console.log({ type })
     const files = await parseFile(req)
+
+    console.log({ files })
     const url = await saveInCloudinary(files, type)
     return url
   } catch (error) {
@@ -24,11 +27,12 @@ export const uploadCloudinary = async (req: Request, type: 'profile' | 'image') 
   }
 }
 
-export const saveInCloudinary = async (file: Formidable.File, type: 'profile' | 'image'):Promise<string> => {
+export const saveInCloudinary = async (file: Formidable.File[], type: 'profile' | 'image'):Promise<string> => {
   let url = ''
 
   if( type === 'profile' ) {
-    const res = await cloudinary.uploader.upload( file.filepath, {
+    console.log({ file: file[0].filepath })
+    const res = await cloudinary.uploader.upload( file[0].filepath, {
       folder: 'twitt-duck/users/profiles',
       transformation: {
         width: 250,
@@ -41,7 +45,7 @@ export const saveInCloudinary = async (file: Formidable.File, type: 'profile' | 
   }
   
   if( type === 'image' ) {
-    const res = await cloudinary.uploader.upload( file.filepath, { folder: 'twitt-duck/media/images' } )
+    const res = await cloudinary.uploader.upload( file[0].filepath, { folder: 'twitt-duck/media/images' } )
     url = res.secure_url
   }
   

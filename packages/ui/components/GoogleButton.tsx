@@ -14,6 +14,7 @@ export const GoogleButton: FC<Props> = ({onSignIn}) => {
       window.google.accounts.id.initialize({
         client_id: '843346613507-555meqlnppf2cq289rcmd1ariul2suo4.apps.googleusercontent.com',
         callback: (res, error) => { // eslint-disable-line
+          console.error('error', error)
           onSignIn && onSignIn(res.credential)
         },
       })

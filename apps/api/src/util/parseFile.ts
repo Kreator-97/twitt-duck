@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import formidable from 'formidable'
 
-export const parseFile = async(req: Request):Promise<formidable.File> => {
+export const parseFile = async(req: Request):Promise<formidable.File[]> => {
   return new Promise((resolve, reject) => {
 
     const form = formidable({ 
@@ -25,7 +25,7 @@ export const parseFile = async(req: Request):Promise<formidable.File> => {
       }
 
       try {
-        resolve((files?.image) as formidable.File)
+        resolve((files?.image) as formidable.File[])
       } catch(err) {
         return reject(err)
       }

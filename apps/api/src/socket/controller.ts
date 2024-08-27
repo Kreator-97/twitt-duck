@@ -2,6 +2,7 @@ import { Socket } from 'socket.io'
 import { NotificationInfo } from '../interfaces'
 import prisma from '../lib/prisma'
 import { validateToken } from '../util/jwt'
+import { User } from '@prisma/client'
 
 import {
   createCommentNotification,
@@ -15,13 +16,23 @@ export const socketController = async (socket:Socket) => {
   console.log('Cliente conectado', socket.id)
   const token = socket.handshake.headers.token?.toString()
 
+  console.log({ token })
+
   if( !token ) {
     socket.disconnect()
     return
   }
 
-  const payload = await validateToken(token)
-  const user = await prisma.user.findUnique({ where: { id: payload.id} })
+  let user: User
+
+  try {
+    const payload = await validateToken(token)
+    user = await prisma.user.findUnique({ where: { id: payload.id} })
+    
+  } catch (error) {
+    console.log(error)
+    return
+  }
 
   if( !user ) {
     console.log('Socket no autorizado')
